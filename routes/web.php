@@ -14,3 +14,33 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/dashboard', function () {
+    return view('dashboard');
+});
+
+Route::get('/barang', function () {
+    return view('barang');
+});
+
+Route::get('/bazzar', function () {
+    return view('bazzar');
+});
+
+Route::get('/user', function () {
+    return view('user');
+});
+
+Route::get('/supplier', function () {
+    return view('supplier');
+});
+
+Route::get('/bazzar/tambah', function () {
+    return view('tambah-bazzar');
+});
+
+Route::get('/bazzar/tambah/barang-keluar', function () {
+    return view('keluar-bazzar');
+});
+
+
