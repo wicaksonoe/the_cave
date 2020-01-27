@@ -9,6 +9,10 @@ class Barang_masuk extends Model
 {
 	use SoftDeletes;
 
+	protected $primaryKey = 'barcode';
+	protected $keyType = 'string';
+	public $incrementing = false;
+
 	protected $fillable = [
 		'barcode', 'namabrg', 'id_jenis', 'id_tipe', 'id_sup', 'jumlah', 'hpp', 'hjual', 'grosir', 'partai', 'tgl',
 	];

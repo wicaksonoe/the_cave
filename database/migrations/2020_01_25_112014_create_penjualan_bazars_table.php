@@ -16,10 +16,8 @@ class CreatePenjualanBazarsTable extends Migration
         Schema::create('penjualan_bazars', function (Blueprint $table) {
 						$table->bigIncrements('id');
 						$table->integer('id_bazar');
-						$table->date('tgl');
 						$table->string('barcode');
-						$table->integer('hpp');
-						$table->integer('hjual');
+						$table->date('tgl');
 						$table->timestamps();
 						$table->softDeletes();
         });
