@@ -10,7 +10,7 @@ class Bazar extends Model
 		use SoftDeletes;
 		
 		protected $fillable = [
-			'nama_bazzar', 'alamat', 'tgl', 'potongan'
+			'nama_bazar', 'alamat', 'tgl', 'potongan'
 		];
 
 		public function include_staff_bazar()

@@ -22,7 +22,7 @@ class BarangController extends Controller
 			// UPDATE USING YAJRA
 			$data_barang = Barang_masuk::all();
 		} else {
-			$data_barang = Barang_masuk::find($barcode);
+			$data_barang = Barang_masuk::findOrFail($barcode);
 		}
 
 		return response()->json([
@@ -34,7 +34,7 @@ class BarangController extends Controller
 	public function create(BarangMasukRequest $request)
 	{
 		$validatedData = $request->validate([
-			'barcode'  => 'required|string|unique:barang_masuks,barcode',
+			'barcode'  => 'string|unique:barang_masuks,barcode',
 		]);
 
 		Barang_masuk::create($request->all());
@@ -48,11 +48,12 @@ class BarangController extends Controller
 	public function update(BarangMasukRequest $request, $barcode)
 	{
 		$validatedData = $request->validate([
-			'barcode'  => 'required|string',
+			'barcode'  => 'string',
 		]);
 
-		Barang_masuk::where('barcode', $barcode)
-			->update([
+		$barang = Barang_masuk::findOrFail($barcode);
+		
+		$barang->update([
 				'namabrg'  => $request->namabrg,
 				'id_jenis' => $request->id_jenis,
 				'id_tipe'  => $request->id_tipe,
@@ -67,7 +68,7 @@ class BarangController extends Controller
 
 		return response()->json([
 			'success' => true,
-			'message' => 'Data barang berhasil diupdate'
+			'message' => 'Data barang berhasil diubah'
 		]);
 	}
 
