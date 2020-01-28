@@ -24,12 +24,12 @@ class RegistrationFormRequest extends FormRequest
     public function rules()
     {
         return [
-					'username' => 'required|string|unique:users,username',
-					'password' => 'required|string',
-					'nama'     => 'required|string',
-					'alamat'   => 'required|string',
-					'telp'     => 'required',
-					'role'     => 'required',
+					'username'              => 'required|string|unique:users,username',
+					'password'              => 'required|string|min:6|confirmed',
+					'nama'                  => 'required|string',
+					'alamat'                => 'required|string',
+					'telp'                  => 'required',
+					'role'                  => 'required|in:pegawai,admin',
         ];
     }
 }

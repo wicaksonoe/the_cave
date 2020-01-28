@@ -260,8 +260,7 @@ ALTER TABLE `barang_masuk`
 --
 ALTER TABLE `penjualan_bazar`
   ADD CONSTRAINT `penjualan_bazar_ibfk_1` FOREIGN KEY (`id_bazar`) REFERENCES `bazar` (`id`),
-  ADD CONSTRAINT `penjualan_bazar_ibfk_2` FOREIGN KEY (`barcode`) REFERENCES `barang_masuk` (`barcode`),
-  ADD CONSTRAINT `penjualan_bazar_ibfk_3` FOREIGN KEY (`barcode`) REFERENCES `barang_masuk` (`barcode`);
+  ADD CONSTRAINT `penjualan_bazar_ibfk_3` FOREIGN KEY (`barcode`) REFERENCES `barang_   masuk` (`barcode`);
 
 --
 -- Constraints for table `staff_bazar`
