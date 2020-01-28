@@ -36,4 +36,26 @@ Route::group([
 		Route::put('/{barcode}', 'BarangController@update');
 		Route::delete('/{barcode}', 'BarangController@delete');
 	});
+
+	Route::group([
+		'prefix' => 'supplier',
+		'middleware' => 'auth:api',
+	], function () {
+		Route::post('/', 'SupplierController@create');	
+		Route::get('/', 'SupplierController@get');	
+		Route::get('/{id}', 'SupplierController@get');
+		Route::put('/{id}', 'SupplierController@update');
+		Route::delete('/{id}', 'SupplierController@delete');
+	});
+
+	Route::group([
+		'prefix' => 'bazar',
+		'middleware' => 'auth:api',
+	], function () {
+		Route::post('/', 'BazarController@create');	
+		Route::get('/', 'BazarController@get');	
+		Route::get('/{id}', 'BazarController@get');
+		Route::put('/{id}', 'BazarController@update');
+		Route::delete('/{id}', 'BazarController@delete');
+	});
 });
