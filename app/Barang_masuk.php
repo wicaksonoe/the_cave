@@ -22,6 +22,11 @@ class Barang_masuk extends Model
 		return $this->hasMany('App\Penjualan_bazar', 'barcode', 'barcode');
 	}
 
+	public function include_keluar_bazar()
+	{
+		return $this->hasMany('App\Keluar_bazar', 'barcode', 'barcode');
+	}
+
 	public function include_suplier()
 	{
 		return $this->belongsTo('App\Suplier', 'id_sup');

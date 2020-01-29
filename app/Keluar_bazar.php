@@ -11,5 +11,15 @@ class Keluar_bazar extends Model
 
 	protected $fillable = [
 		'id_bazar', 'date', 'barcode', 'jml',
-	];
+    ];
+    
+    public function include_bazar()
+	{
+		return $this->belongsTo('App\Bazar', 'id_bazar');
+	}
+
+	public function include_barang_masuk()
+	{
+		return $this->belongsTo('App\Barang_masuk', 'barcode', 'barcode');
+	}
 }
