@@ -15,10 +15,7 @@
             </div>
             <!-- /.card-header -->
             <div class="card-body">
-                <div class="form-group">
-                    <label for="id">ID</label>
-                    <input class="form-control" id="id" placeholder="ID Keluar Bazzar">
-                </div>
+
                 <div class="form-group">
                     <label for="id_bazzar">ID Bazzar</label>
                     <input type="number" hidden readonly id="id_bazzar" >
