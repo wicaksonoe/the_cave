@@ -49,7 +49,7 @@ Route::group([
 	});
 
 	Route::group([
-		'prefix' => 'bazar',
+		'prefix' => 'bazzar',
 		'middleware' => 'auth:api',
 	], function () {
 		Route::post('/', 'BazarController@create');	
@@ -57,5 +57,15 @@ Route::group([
 		Route::get('/{id}', 'BazarController@get');
 		Route::put('/{id}', 'BazarController@update');
 		Route::delete('/{id}', 'BazarController@delete');
+	});
+
+	Route::group([
+		'prefix' => 'users',
+		'middleware' => 'auth:api'
+	], function () {
+		Route::post('/', 'UserController@create');	
+		Route::get('/', 'UserController@get');	
+		Route::get('/{username}', 'UserController@get');
+		Route::put('/{username}', 'UserController@update');
 	});
 });

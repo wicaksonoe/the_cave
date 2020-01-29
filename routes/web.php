@@ -43,4 +43,10 @@ Route::get('/bazzar/tambah/barang-keluar', function () {
     return view('keluar-bazzar');
 });
 
+Route::get('/register', function () {
+		return view('auth.register');
+});
 
+Route::get('/login', function () {
+		return view('auth.login0');
+});
