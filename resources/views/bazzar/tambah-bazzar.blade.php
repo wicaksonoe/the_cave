@@ -9,8 +9,7 @@
             </div>
 
             <div class="modal-body">
-                <form method="post" id="tambahBazzar" class="form-horizontal" data-toggle="validator">
-                    {{ csrf_field() }} {{ method_field('POST') }}
+                <form id="tambahBazzarForm" class="form-horizontal" data-toggle="validator">
 
                 <div class="form-group">
                     <label for="nama">Nama Bazzar</label>
@@ -22,7 +21,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="tanggal"> Tanggal</label>
+                    <label for="tgl"> Tanggal</label>
                     <input type = 'date' class="form-control" id="tgl" placeholder="Tanggal Bazzar">
                 </div>
 
@@ -30,13 +29,10 @@
                     <label for="potongan"> Potongan</label>
                     <input class="form-control"  id="potongan" placeholder="Potongan Harga">
                 </div>
-                <div class="form-group">
-                    <label for="status"> Status</label><br>
-                    <input type="checkbox" checked class="form-control" data-toggle="toggle"  id="status" placeholder="Status Bazzar">
-                </div>
+
 
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary" onclick="tambahBarang()">Simpan</button>
+                    <button type="submit" class="btn btn-primary" onclick="tambahBazzar()">Simpan</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
                 </div>
             </form>

@@ -46,21 +46,44 @@
         </div>
     </div>
 </div>
-
-@stop
-
-@section('css')
-<link rel="stylesheet" href="/css/admin_custom.css">
 @stop
 
 @section('js')
 <script>
-    console.log('Hi!');
-</script>
-<script>
+    $(document).ready(function () {
+        get_data();
+    });
     $(".form-control").focus(function(e){
         $(e.target).removeClass("is-invalid")
     })
+
+    function get_data() {
+        var settings = {
+            "url": "{{ url('api/v1/barang') }}",
+            "method": "GET",
+            "timeout": 0,
+            "headers": {
+                "Accept": "application/json",
+                "Authorization": "Bearer " + sessionStorage.getItem('access_token')
+            },
+        };
+        $('#tabelBazzar').DataTable().clear().destroy();
+        $('#tabelBazzar').DataTable({
+            processing: false,
+            serverSide: true,
+            ajax: settings,
+            columns: [
+                {width: '10%', data: 'aksi', name: 'aksi'},
+                {width: '30%', data: 'nama_bazar', name: 'nama_bazar'},
+                {width: '30%', data: 'alamat', name: 'alamat'},
+                {width: '10%', data: 'potongan', name: 'potongan'},
+                {width: '20%', data: 'tgl', name: 'tgl'},
+            ],
+            order: [1, 'asc'],
+            responsive: true
+        });
+    }
+
     $('#tambahBarang').submit(function(e) {
         e.preventDefault()
     })
