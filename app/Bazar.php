@@ -21,5 +21,10 @@ class Bazar extends Model
 		public function include_penjualan_bazar()
 		{
 			return $this->hasMany('App\Penjualan_bazar', 'id_bazar');
+        }
+        
+		public function include_keluar_bazar()
+		{
+			return $this->hasMany('App\Keluar_bazar', 'id_bazar');
 		}
 }

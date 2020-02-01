@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class RegistrationFormRequest extends FormRequest
+class KeluarBazzarRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,7 +13,7 @@ class RegistrationFormRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return false;
     }
 
     /**
@@ -24,12 +24,10 @@ class RegistrationFormRequest extends FormRequest
     public function rules()
     {
         return [
-					'username'              => 'required|string',
-					'password'              => 'required|string|min:6|confirmed',
-					'nama'                  => 'required|string',
-					'alamat'                => 'required|string',
-					'telp'                  => 'required',
-					'role'                  => 'required|in:pegawai,admin',
+            'id_bazar' => 'required',
+            'date'     => 'required',
+            'barcode'  => 'required',
+            'jml'      => 'required',
         ];
     }
 }
