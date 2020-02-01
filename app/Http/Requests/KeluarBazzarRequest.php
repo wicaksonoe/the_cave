@@ -13,7 +13,7 @@ class KeluarBazzarRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,10 +24,9 @@ class KeluarBazzarRequest extends FormRequest
     public function rules()
     {
         return [
-            'id_bazar' => 'required',
-            'date'     => 'required',
-            'barcode'  => 'required',
-            'jml'      => 'required',
+            'date'     => 'required|date',
+            'barcode'  => 'required|string',
+            'jml'      => 'required|integer',
         ];
     }
 }

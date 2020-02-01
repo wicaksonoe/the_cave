@@ -15,7 +15,7 @@ class Keluar_bazar extends Model
     
     public function include_bazar()
 	{
-		return $this->belongsTo('App\Bazar', 'id_bazar');
+		return $this->belongsTo('App\Bazar', 'id_bazar')->withTrashed();
 	}
 
 	public function include_barang_masuk()

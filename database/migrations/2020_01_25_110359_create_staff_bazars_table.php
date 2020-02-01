@@ -14,10 +14,11 @@ class CreateStaffBazarsTable extends Migration
     public function up()
     {
         Schema::create('staff_bazars', function (Blueprint $table) {
-						$table->integer('id_bazar');
-						$table->string('username');
-						$table->timestamps();
-						$table->softDeletes();
+            $table->increments('id');
+            $table->integer('id_bazar');
+            $table->string('username');
+            $table->timestamps();
+            $table->softDeletes();
         });
     }
 
