@@ -31,16 +31,16 @@ Route::get('/barang', function () {
     return view('barang.barang', compact('jenis',"tipe","supp"));
 });
 
-Route::get('/bazzar', function () {
-    return view('bazzar.bazzar');
-});
-
 Route::get('/user', function () {
     return view('user.user');
 });
 
 Route::get('/supplier', function () {
     return view('supplier.supplier');
+});
+
+Route::get('/bazzar', function () {
+    return view('bazzar.bazzar');
 });
 
 Route::get('/bazzar/tambah', function () {
