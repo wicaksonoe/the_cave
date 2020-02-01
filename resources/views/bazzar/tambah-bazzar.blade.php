@@ -15,10 +15,7 @@
             </div>
             <!-- /.card-header -->
             <div class="card-body">
-                <div class="form-group">
-                    <label for="id">ID Bazzar</label>
-                    <input class="form-control" id="id" placeholder="ID Bazzar">
-                </div>
+
                 <div class="form-group">
                     <label for="nama">Nama Bazzar</label>
                     <input class="form-control" id="nama_bazzar" placeholder="Nama Bazzar">
@@ -61,6 +58,52 @@
 @section('js')
     <script> console.log('Hi!'); </script>
     <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+    <script>
+        $(".form-control").focus(function(e){
+            $(e.target).removeClass("is-invalid")
+        })
+        $('#tambahBazzar').submit(function(e) {
+            e.preventDefault()
+        })
+        function tambahBarang() {
+            $.ajax({
+                method: "POST",
+                url: "{{ url ('api/v1/barang')}}",
+                data: {
+                    barcode: $('#barcode').val(),
+                    namabrg: $('#namabrg').val(),
+                    id_jenis: $('#id_jenis').val(),
+                    id_tipe: $('#id_tipe').val(),
+                    id_sup: $('#id_sup').val(),
+                    jumlah: $('#jumlah').val(),
+                    hpp: $('#hpp').val(),
+                    hjual: $('#hjual').val(),
+                    grosir: $('#grosir').val(),
+                    partai: $('#partai').val(),
+                    tgl: $('#tgl').val(),
+                }
+                })
+                .done(function( msg ) {
+                    $('#tambahBarang').modal('hide')
+                    swal.fire({
+                        title: 'Berhasil',
+                        text: msg.message,
+                        type : "success"
+                    })
+                })
+                .fail(function( msg ) {
+                    swal.fire({
+                        title: 'Error!',
+                        text: 'Terjadi Kesalahan',
+                        type : "error"
+                    })
+
+                    $.each(msg.responseJSON.errors, function(key, value){
+                        $("#"+key).addClass("is-invalid")
+                    })
+                });
+            }
+    </script>
 @stop
 
 

@@ -28,10 +28,10 @@ Route::group([
 
 	Route::group([
 		'prefix' => 'barang',
-		'middleware' => 'auth:api',
+		// 'middleware' => 'auth:api',
 	], function () {
-		Route::post('/', 'BarangController@create');	
-		Route::get('/', 'BarangController@get');	
+		Route::post('/', 'BarangController@create');
+		Route::get('/', 'BarangController@get');
 		Route::get('/{barcode}', 'BarangController@get');
 		Route::put('/{barcode}', 'BarangController@update');
 		Route::delete('/{barcode}', 'BarangController@delete');
@@ -39,10 +39,10 @@ Route::group([
 
 	Route::group([
 		'prefix' => 'supplier',
-		'middleware' => 'auth:api',
+		// 'middleware' => 'auth:api',
 	], function () {
-		Route::post('/', 'SupplierController@create');	
-		Route::get('/', 'SupplierController@get');	
+		Route::post('/', 'SupplierController@create');
+		Route::get('/', 'SupplierController@get');
 		Route::get('/{id}', 'SupplierController@get');
 		Route::put('/{id}', 'SupplierController@update');
 		Route::delete('/{id}', 'SupplierController@delete');
@@ -52,11 +52,11 @@ Route::group([
 		'prefix' => 'bazzar',
 		'middleware' => 'auth:api',
 	], function () {
-		Route::post('/', 'BazarController@create');	
-		Route::get('/', 'BazarController@get');	
-		Route::get('/{id}', 'BazarController@get');
-		Route::put('/{id}', 'BazarController@update');
-		Route::delete('/{id}', 'BazarController@delete');
+		Route::post('/', 'BazzarController@create');
+		Route::get('/', 'BazzarController@get');
+		Route::get('/{id}', 'BazzarController@get');
+		Route::put('/{id}', 'BazzarController@update');
+		Route::delete('/{id}', 'BazzarController@delete');
 	});
 
 	Route::group([
