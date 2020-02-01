@@ -17,7 +17,7 @@
                 <a href="{{ url ('/bazzar/tambah') }}"><button type="button" style="margin-bottom: 10px" class="btn btn-primary">
                     <i class="fa fa-plus-square" aria-hidden="true"></i> Tambah Bazzar Baru
                 </button></a>
-                <table id="tabel" class="table table-bordered table-striped">
+                <table id="tabel" class="table table-bordered table-striped table-responsive">
                     <thead>
                         <tr>
                             <th>Aksi</th>
@@ -46,4 +46,5 @@
 
 @section('js')
     <script> console.log('Hi!'); </script>
+
 @stop

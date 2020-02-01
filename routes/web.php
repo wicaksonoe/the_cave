@@ -11,6 +11,10 @@
 |
 */
 
+use App\Jenis;
+use App\Supplier;
+use App\Tipe;
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -20,27 +24,31 @@ Route::get('/dashboard', function () {
 });
 
 Route::get('/barang', function () {
-    return view('barang');
+    $jenis = Jenis::all();
+    $tipe = Tipe::all();
+    $supp = Supplier::all();
+
+    return view('barang.barang', compact('jenis',"tipe","supp"));
 });
 
 Route::get('/bazzar', function () {
-    return view('bazzar');
+    return view('bazzar.bazzar');
 });
 
 Route::get('/user', function () {
-    return view('user');
+    return view('user.user');
 });
 
 Route::get('/supplier', function () {
-    return view('supplier');
+    return view('supplier.supplier');
 });
 
 Route::get('/bazzar/tambah', function () {
-    return view('tambah-bazzar');
+    return view('bazzar.tambah-bazzar');
 });
 
 Route::get('/bazzar/tambah/barang-keluar', function () {
-    return view('keluar-bazzar');
+    return view('bazzar.keluar-bazzar');
 });
 
 Route::get('/register', function () {
@@ -48,5 +56,5 @@ Route::get('/register', function () {
 });
 
 Route::get('/login', function () {
-		return view('auth.login0');
+		return view('auth.login');
 });
