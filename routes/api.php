@@ -50,12 +50,22 @@ Route::group([
 
 	Route::group([
 		'prefix' => 'bazzar',
-		// 'middleware' => 'auth:api',
+		'middleware' => 'auth:api',
 	], function () {
 		Route::post('/', 'BazzarController@create');
 		Route::get('/', 'BazzarController@get');
 		Route::get('/{id}', 'BazzarController@get');
 		Route::put('/{id}', 'BazzarController@update');
 		Route::delete('/{id}', 'BazzarController@delete');
+	});
+
+	Route::group([
+		'prefix' => 'users',
+		'middleware' => 'auth:api'
+	], function () {
+		Route::post('/', 'UserController@create');	
+		Route::get('/', 'UserController@get');	
+		Route::get('/{username}', 'UserController@get');
+		Route::put('/{username}', 'UserController@update');
 	});
 });
