@@ -9,6 +9,7 @@ use Tymon\JWTAuth\Exceptions\JWTException;
 use App\Http\Requests\RegistrationFormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Symfony\Component\HttpFoundation\Response;
 
 class APIController extends Controller
 {
@@ -19,11 +20,12 @@ class APIController extends Controller
 
 	protected function respondWithToken($token)
 	{
-		return response()->json([
+		return response()
+		->json([
 			'access_token' => $token,
 			'token_type' => 'bearer',
 			'expires_in' => $this->guard()->factory()->getTTL() * 60
-		]);
+			]);
 	}
 
 	public function guard()
@@ -57,6 +59,9 @@ class APIController extends Controller
 
 	public function register(RegistrationFormRequest $request)
 	{
+		$validateRequest = $request->validate([
+			'username' => 'unique:users,username'
+		]);
 
 		User::create(
 			[

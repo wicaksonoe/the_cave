@@ -10,7 +10,7 @@ class Penjualan_bazar extends Model
 	use SoftDeletes;
 
 	protected $fillable = [
-		'id_bazar', 'tgl', 'barcode', 'hpp', 'hjual'
+		'id_bazar', 'tgl', 'barcode', 'jml'
 	];
 
 	public function include_bazar()
