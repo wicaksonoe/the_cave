@@ -9,7 +9,7 @@
             </div>
 
             <div class="modal-body">
-                <form method="post" id="tambahSupplier" class="form-horizontal" data-toggle="validator">
+                <form method="post" id="tambahSupplierForm" class="form-horizontal" data-toggle="validator">
                     {{ csrf_field() }} {{ method_field('POST') }}
 
                     <div class="form-group">

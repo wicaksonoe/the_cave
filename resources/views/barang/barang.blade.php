@@ -23,7 +23,7 @@
                             <i class="fa fa-plus-square" aria-hidden="true"></i> Tambah
                         </button></a>
 
-                    <table id="tabel" class="table table-bordered table-striped table-responsive">
+                    <table id="tabelBarang" class="table table-bordered table-striped table-responsive">
                         <thead>
                             <tr>
                                 <th>Aksi</th>
@@ -67,51 +67,62 @@
                 "Authorization": "Bearer " + sessionStorage.getItem('access_token')
             },
         };
-        $('#tabelBazzar').DataTable().clear().destroy();
-        $('#tabelBazzar').DataTable({
+        $('#tabelBarang').DataTable().clear().destroy();
+        $('#tabelBarang').DataTable({
             processing: false,
             serverSide: true,
             ajax: settings,
             columns: [
-                {width: '10%', data: 'aksi', name: 'aksi'},
-                {width: '30%', data: 'nama_bazar', name: 'nama_bazar'},
-                {width: '30%', data: 'alamat', name: 'alamat'},
-                {width: '10%', data: 'potongan', name: 'potongan'},
-                {width: '20%', data: 'tgl', name: 'tgl'},
+                {width: '10%', data: 'barcode', name: 'barcode'},
+                {width: '30%', data: 'namabrg', name: 'namabrg'},
+                {width: '10%', data: 'id_jenis', name: 'id_jenis'},
+                {width: '10%', data: 'id_tipe', name: 'id_tipe'},
+                {width: '10%', data: 'jumlah', name: 'jumlah'},
+                {width: '10%', data: 'hpp', name: 'hpp'},
+                {width: '10%', data: 'hjual', name: 'hjual'},
+                {width: '10%', data: 'tgl', name: 'tgl'},
             ],
             order: [1, 'asc'],
             responsive: true
         });
     }
 
-    $('#tambahBarang').submit(function(e) {
-        e.preventDefault()
-    })
     function tambahBarang() {
-        $.ajax({
-            method: "POST",
-            url: "{{ url ('api/v1/barang')}}",
-            data: {
-                barcode: $('#barcode').val(),
-                namabrg: $('#namabrg').val(),
-                id_jenis: $('#id_jenis').val(),
-                id_tipe: $('#id_tipe').val(),
-                id_sup: $('#id_sup').val(),
-                jumlah: $('#jumlah').val(),
-                hpp: $('#hpp').val(),
-                hjual: $('#hjual').val(),
-                grosir: $('#grosir').val(),
-                partai: $('#partai').val(),
-                tgl: $('#tgl').val(),
-            }
-            })
-            .done(function( msg ) {
+        $('#tambahBarang').submit(function(e) {
+        e.preventDefault();
+        var settings = {
+        "url": "{{ url ('api/v1/barang')}}",
+        "method": "POST",
+        "timeout": 0,
+        "headers": {
+            "Accept": "application/json",
+            "Content-Type": "application/x-www-form-urlencoded",
+            "Authorization": "Bearer " + sessionStorage.getItem('access_token')
+        },
+        data: {
+            "barcode": $('#barcode').val(),
+            "namabrg": $('#namabrg').val(),
+            "id_jenis": $('#id_jenis').val(),
+            "id_tipe": $('#id_tipe').val(),
+            "id_sup": $('#id_sup').val(),
+            "jumlah": $('#jumlah').val(),
+            "hpp": $('#hpp').val(),
+            "hjual": $('#hjual').val(),
+            "grosir": $('#grosir').val(),
+            "partai": $('#partai').val(),
+            "tgl": $('#tgl').val(),
+        }
+        };
+
+        $.ajax(settings).done(function( msg ) {
                 $('#tambahBarang').modal('hide')
                 swal.fire({
                     title: 'Berhasil',
                     text: msg.message,
                     type : "success"
-                })
+                });
+                document.getElementById("tambahBarangForm").reset();
+                get_data();
             })
             .fail(function( msg ) {
                 swal.fire({
@@ -124,6 +135,7 @@
                     $("#"+key).addClass("is-invalid")
                 })
             });
-        }
+        });
+    }
 </script>
 @stop

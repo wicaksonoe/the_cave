@@ -9,7 +9,7 @@
             </div>
 
             <div class="modal-body">
-                <form method="post" id="tambahBarang" class="form-horizontal" data-toggle="validator">
+                <form id="tambahBarangForm" class="form-horizontal" data-toggle="validator">
                     {{ csrf_field() }} {{ method_field('POST') }}
                     <div class="form-group">
                         <label for="id">Barcode</label>
