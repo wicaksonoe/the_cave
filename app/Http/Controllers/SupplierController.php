@@ -34,7 +34,17 @@ class SupplierController extends Controller
 	{
 		if ($id == null) {
 			# REPLACE WITH YAJRA
-			$data_supplier = Supplier::all();
+            $data_supplier = Supplier::all();
+            
+            return DataTables::of($data_supplier)
+                ->addColumn('aksi', function ($data_supplier) {
+                    return '
+                        <button class="btn btn-sm btn-info" value="{$data_supplier->id}" onclick="editBarangKeluar(this.value)">Edit</button>
+                        <button class="btn btn-sm btn-danger" value="{$data_supplier->id}" onclick="deleteBarangKeluar(this.value) style="margin-left:1rem">Hapus</button>
+                        ';
+                })
+                ->rawColumns(['aksi'])
+                ->make(true);
 		} else {
 			$data_supplier = Supplier::findOrFail($id);
 		}

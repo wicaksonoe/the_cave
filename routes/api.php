@@ -71,7 +71,6 @@ Route::group([
         ], function () {
             Route::post('/{id_bazzar}', 'BazarController@create_barang');
             Route::get('/{id_bazzar}', 'BazarController@get_barang');
-            // Route::get('/{id_bazzar}/{id}', 'BazarController@get_barang');
             Route::put('/{id_bazzar}/{id}', 'BazarController@update_barang');
             Route::delete('/{id_bazzar}/{id}', 'BazarController@delete_barang');
         });
