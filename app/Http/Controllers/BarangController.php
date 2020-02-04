@@ -6,6 +6,7 @@ use App\Barang_masuk;
 use App\Http\Requests\BarangMasukRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Yajra\DataTables\DataTables;
 
 class BarangController extends Controller
 {
@@ -20,7 +21,14 @@ class BarangController extends Controller
 	{
 		if ($barcode == null) {
 			// UPDATE USING YAJRA
-			$data_barang = Barang_masuk::all();
+            $data_barang = Barang_masuk::all();
+            
+            return DataTables::of($data_barang)
+                ->addColumn('aksi', function ($data_barang) {
+                    return '<button class="btn btn-sm btn-info" value="" onclick="editBarang(this.value)">Edit</button>';
+                })
+                ->rawColumns(['aksi'])
+                ->make(true);
 		} else {
 			$data_barang = Barang_masuk::findOrFail($barcode);
 		}
