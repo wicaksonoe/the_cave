@@ -6,6 +6,7 @@ use App\Http\Requests\SupplierRequest;
 use App\Supplier;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Yajra\DataTables\DataTables;
 
 class SupplierController extends Controller
 {
@@ -35,7 +36,7 @@ class SupplierController extends Controller
 		if ($id == null) {
 			# REPLACE WITH YAJRA
             $data_supplier = Supplier::all();
-            
+
             return DataTables::of($data_supplier)
                 ->addColumn('aksi', function ($data_supplier) {
                     return '

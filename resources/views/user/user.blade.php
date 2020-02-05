@@ -61,7 +61,7 @@
 
     function get_data() {
         var settings = {
-            "url": "{{ url('api/v1/user') }}",
+            "url": "{{ url('api/v1/users') }}",
             "method": "GET",
             "timeout": 0,
             "headers": {
@@ -75,7 +75,7 @@
             serverSide: true,
             ajax: settings,
             columns: [
-                {width: '10%', data: 'password', name: 'password'},
+                {width: '10%', data: 'aksi', name: 'aksi'},
                 {width: '20%', data: 'username', name: 'username'},
                 {width: '30%', data: 'nama', name: 'nama'},
                 {width: '20%', data: 'alamat', name: 'alamat'},
