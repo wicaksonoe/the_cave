@@ -13,7 +13,7 @@
 
                 <div class="form-group">
                     <label for="nama">Nama Bazzar</label>
-                    <input class="form-control" id="nama_bazzar" placeholder="Nama Bazzar">
+                    <input class="form-control" id="nama_bazar" placeholder="Nama Bazzar">
                 </div>
                 <div class="form-group">
                     <label for="alamat"> Alamat Bazzar</label>
