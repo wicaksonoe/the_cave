@@ -22,10 +22,10 @@ class UserController extends Controller
 	{
 		if ($username === null) {
 			return DataTables::of(User::all())
-				->addColumn('action', function ($data) {
-					return null;
+				->addColumn('aksi', function ($data) {
+					return '<button class="btn btn-sm btn-info" value="{$data->username}" onclick="editUser(this.value)">Edit</button>';
 				})
-				->rawColumns(['action'])
+				->rawColumns(['aksi'])
 				->make(true);
 		} else {
 			$data_user = User::findOrFail($username);

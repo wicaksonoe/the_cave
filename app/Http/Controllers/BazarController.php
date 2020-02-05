@@ -39,7 +39,7 @@ class BazarController extends Controller
 
             return DataTables::of($bazar)
                 ->addColumn('aksi', function ($bazar) {
-                    return '<a href="{{ route("bazzar.kelola-barang") }}" class="btn btn-sm btn-primary">Kelola</a>';
+                    return '<a href="{{ route("bazzar.kelola-barang", {$bazar->id}) }}" class="btn btn-sm btn-info">Kelola</a>';
                 })
                 ->rawColumns(['aksi'])
                 ->make(true);
@@ -120,7 +120,7 @@ class BazarController extends Controller
                 return $data->include_user->nama;
             })
             ->addColumn('aksi', function ($data) {
-                return null;
+                return '<button class="btn btn-sm btn-danger" value="{$data->username}" onclick="deleteStaff(this.value)">Hapus</button>';
             })
             ->rawColumns(['nama_pegawai', 'aksi'])
             ->make(true);
@@ -216,7 +216,10 @@ class BazarController extends Controller
 
             return DataTables::of($data_barang)
                 ->addColumn('aksi', function ($data_barang) {
-                    return null;
+                    return '
+                        <button class="btn btn-sm btn-info" value="{$data_barang->id}" onclick="editBarangKeluar(this.value)">Edit</button>
+                        <button class="btn btn-sm btn-danger" value="{$data_barang->id}" onclick="deleteBarangKeluar(this.value) style="margin-left:1rem">Hapus</button>
+                        ';
                 })
                 ->rawColumns(['aksi'])
                 ->make(true);
