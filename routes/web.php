@@ -47,7 +47,7 @@ Route::get('/bazzar/tambah', function () {
     return view('bazzar.tambah-bazzar');
 });
 
-Route::get('/bazzar/tambah/barang-keluar', function () {
+Route::get('/bazzar/kelola', function () {
     return view('bazzar.keluar-bazzar');
 });
 

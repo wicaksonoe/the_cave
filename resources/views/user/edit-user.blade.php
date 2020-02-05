@@ -9,14 +9,24 @@
             </div>
 
             <div class="modal-body">
-                <form id="tambahUserForm" class="form-horizontal" data-toggle="validator">
+                <form id="form-edit-user" class="form-horizontal" data-toggle="validator">
                     <div class="form-group">
-                        <label for="id">Username</label>
+                        <label for="username">Username</label>
                         <input class="form-control" id="edit-username" placeholder="Username">
                     </div>
                     <div class="form-group">
                         <label for="password">Password</label>
-                        <input class="form-control" id="edit-password" placeholder="Password">
+                        <input type="password" name="password" class="form-control" id="edit-password" placeholder="Password">
+                    </div>
+                    <div class="input-group mb-3">
+                        <label for="password">Masukkan Ulang Password</label>
+                        <input type="password" name="password_confirmation" class="form-control"
+                            placeholder="Masukkan Ulang Password">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-lock"></span>
+                            </div>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label for="nama">Nama</label>
