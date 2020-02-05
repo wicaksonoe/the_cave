@@ -50,6 +50,7 @@
 
 @section('js')
 <script>
+    const BASE_URL_API = "{{ url('api/v1/') }}"
     $(document).ready(function () {
         get_data();
     });
@@ -131,6 +132,112 @@
                     })
                 });
         });
+    }
+    function editUser(id_user) {
+        var settings = {
+            "url": BASE_URL_API + "/users/" + id_user,
+            "method": "GET",
+            "timeout": 0,
+            "headers": {
+                "Accept": "application/json",
+                "Authorization": "Bearer " + sessionStorage.getItem('access_token')
+            },
+        };
+
+        $.ajax(settings)
+            .done(function (response) {
+                $('#edit-username').val(response.data.username)
+                $('#edit-password').val(response.data.password)
+                $('#edit-password_confirmation').val(response.data.password_confirmation)
+                $('#edit-nama').val(response.data.nama)
+                $('#edit-alamat').html(response.data.alamat)
+                $('#edit-telp').val(response.data.telp)
+                $('#edit-role').val(response.data.role)
+                $('#update-button').val(response.data.id)
+                $('#modal-edit-user').modal('show');
+
+            })
+            .fail(function (response) {
+                swal.fire({
+                    title: 'Error!',
+                    text: 'Terjadi Kesalahan',
+                    type: "error"
+                })
+            });
+    }
+
+    function updateUser(id_user) {
+        var settings = {
+            "url": BASE_URL_API + "/users/" + id_user,
+            "method": "PUT",
+            "timeout": 0,
+            "headers": {
+                "Accept": "application/json",
+                "Content-Type": "application/x-www-form-urlencoded",
+                "Authorization": "Bearer " + sessionStorage.getItem('access_token')
+            },
+            "data": {
+                "username": $('#edit-username').val(),
+                "password": $('#edit-password').val(),
+                "password_confirmation": $('#edit-password_confirmation').val(),
+                "nama": $('#edit-nama').val(),
+                "alamat": $('#edit-alamat').val(),
+                "telp": $('#edit-telp').val(),
+                "role": $('#edit-role').val(),
+            }
+        };
+
+        $.ajax(settings)
+            .done(function (msg) {
+                $('#modal-edit-user').modal('hide');
+                swal.fire({
+                    title: 'Berhasil',
+                    text: msg.message,
+                    type: "success"
+                });
+                document.getElementById("form-edit-user").reset();
+                get_data();
+            })
+            .fail(function (msg) {
+                swal.fire({
+                    title: 'Error!',
+                    text: 'Terjadi Kesalahan',
+                    type: "error"
+                })
+
+                $.each(msg.responseJSON.errors, function (key, value) {
+                    $("#edit-" + key).addClass("is-invalid")
+                })
+            });
+    }
+
+    function deleteUser(id_user) {
+        var settings = {
+            "url": BASE_URL_API + "/users/" + id_user,
+            "method": "DELETE",
+            "timeout": 0,
+            "headers": {
+                "Accept": "application/json",
+                "Authorization": "Bearer " + sessionStorage.getItem('access_token')
+            },
+        };
+
+        $.ajax(settings)
+            .done(function (msg) {
+                swal.fire({
+                    title: 'Berhasil',
+                    text: msg.message,
+                    type: "success"
+                });
+                get_data();
+            })
+            .fail(function (msg) {
+                swal.fire({
+                    title: 'Error!',
+                    text: 'Terjadi Kesalahan',
+                    type: "error"
+                });
+            });
     }
 
 </script>
