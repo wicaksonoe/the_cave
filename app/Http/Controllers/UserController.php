@@ -23,7 +23,7 @@ class UserController extends Controller
 		if ($username === null) {
 			return DataTables::of(User::all())
 				->addColumn('aksi', function ($data) {
-					return '<button class="btn btn-sm btn-info" value="{$data->username}" onclick="editUser(this.value)">Edit</button>';
+					return '<button class="btn btn-sm btn-info" value="'.$data->username.'" onclick="editUser(this.value)">Edit</button>';
 				})
 				->rawColumns(['aksi'])
 				->make(true);
