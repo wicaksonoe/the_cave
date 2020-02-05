@@ -19,13 +19,29 @@ class BarangController extends Controller
 
 	public function get($barcode = null)
 	{
+        $data = [];
+
 		if ($barcode == null) {
 			// UPDATE USING YAJRA
             $data_barang = Barang_masuk::all();
             
-            return DataTables::of($data_barang)
+            foreach ($data_barang as $key => $value) {
+                $data[$key] = [
+                    'namabrg'         => $value->namabrg,
+                    'jenis_barang'    => $value->include_jenis->nama_jenis,
+                    'tipe_barang'     => $value->include_tipe->nama_tipe,
+                    'supplier_barang' => $value->include_supplier->nama,
+                    'jumlah'          => $value->jumlah,
+                    'hpp'             => $value->hpp,
+                    'hjual'           => $value->hjual,
+                    'grosir'          => $value->grosir,
+                    'partai'          => $value->partai,
+                    'tgl'             => $value->tgl,
+                ];
+            }
+            return DataTables::of($data)
                 ->addColumn('aksi', function ($data_barang) {
-                    return '<button class="btn btn-sm btn-info" value="" onclick="editBarang(this.value)">Edit</button>';
+                    return '<button class="btn btn-sm btn-info" value="'.$data_barang->barcode.'" onclick="editBarang(this.value)">Edit</button>';
                 })
                 ->rawColumns(['aksi'])
                 ->make(true);

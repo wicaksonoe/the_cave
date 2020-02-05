@@ -39,7 +39,7 @@ class BazarController extends Controller
 
             return DataTables::of($bazar)
                 ->addColumn('aksi', function ($bazar) {
-                    return '<a href="{{ route("bazzar.kelola-barang", {$bazar->id}) }}" class="btn btn-sm btn-info">Kelola</a>';
+                    return '<a href="'.route("bazzar.kelola-barang", $bazar->id).'" class="btn btn-sm btn-info">Kelola</a>';
                 })
                 ->rawColumns(['aksi'])
                 ->make(true);
@@ -120,7 +120,7 @@ class BazarController extends Controller
                 return $data->include_user->nama;
             })
             ->addColumn('aksi', function ($data) {
-                return '<button class="btn btn-sm btn-danger" value="{$data->username}" onclick="deleteStaff(this.value)">Hapus</button>';
+                return '<button class="btn btn-sm btn-danger" value="'.$data->username.'" onclick="deleteStaff(this.value)">Hapus</button>';
             })
             ->rawColumns(['nama_pegawai', 'aksi'])
             ->make(true);
@@ -194,35 +194,44 @@ class BazarController extends Controller
         }
     }
 
-    public function get_barang($id_bazzar)
+    public function get_barang($id_bazzar, $id = null)
     {
         $data_barang = [];
         $keluar_bazar = Keluar_bazar::where(['id_bazar' => $id_bazzar])->withTrashed()->get();
 
         if ($keluar_bazar) {
-            foreach ($keluar_bazar as $key => $value) {
-                $data_barang[$key] = [
-                    'id'              => $value->id,
-                    'id_bazar'        => $value->id_bazar,
-                    'barcode'         => $value->barcode,
-                    'nama_bazzar'     => $value->include_bazar->nama_bazar,
-                    'nama_barang'     => $value->include_barang_masuk->namabrg,
-                    'jenis_barang'    => $value->include_barang_masuk->include_jenis->nama_jenis,
-                    'tipe_barang'     => $value->include_barang_masuk->include_tipe->nama_tipe,
-                    'supplier_barang' => $value->include_barang_masuk->include_supplier->nama,
-                    'jumlah'          => $value->jml,
-                ];
-            }
+            if ($id == null) {
+            
+                foreach ($keluar_bazar as $key => $value) {
+                    $data_barang[$key] = [
+                        'id'              => $value->id,
+                        'id_bazar'        => $value->id_bazar,
+                        'nama_barang'     => $value->include_barang_masuk->namabrg,
+                        'jenis_barang'    => $value->include_barang_masuk->include_jenis->nama_jenis,
+                        'tipe_barang'     => $value->include_barang_masuk->include_tipe->nama_tipe,
+                        'jumlah'          => $value->jml,
+                        'date'            => $value->date,
+                    ];
+                }
 
-            return DataTables::of($data_barang)
-                ->addColumn('aksi', function ($data_barang) {
-                    return '
-                        <button class="btn btn-sm btn-info" value="{$data_barang->id}" onclick="editBarangKeluar(this.value)">Edit</button>
-                        <button class="btn btn-sm btn-danger" value="{$data_barang->id}" onclick="deleteBarangKeluar(this.value) style="margin-left:1rem">Hapus</button>
-                        ';
-                })
-                ->rawColumns(['aksi'])
-                ->make(true);
+                return DataTables::of($data_barang)
+                    ->addColumn('aksi', function ($data_barang) {
+                        return '
+                            <button class="btn btn-sm btn-info" value="'.$data_barang->id.'" onclick="editBarangKeluar(this.value)">Edit</button>
+                            <button class="btn btn-sm btn-danger" value="'.$data_barang->id.'" onclick="deleteBarangKeluar(this.value) style="margin-left:1rem">Hapus</button>
+                            ';
+                    })
+                    ->rawColumns(['aksi'])
+                    ->make(true);
+        
+            } else {
+                $data = Keluar_bazar::find($id);
+
+                return response()->json([
+                    'success' => true,
+                    'data' => $data
+                ]);
+            }
         }
     }
 
