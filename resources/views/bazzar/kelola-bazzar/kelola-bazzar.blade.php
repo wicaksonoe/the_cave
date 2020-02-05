@@ -27,10 +27,12 @@
                         <thead>
                             <tr>
                                 <th>Aksi</th>
-                                <th>Nama Bazzar</th>
-                                <th>Tanggal</th>
+                                <th>Barcode</th>
                                 <th>Nama Barang</th>
+                                <th>Jenis Barang</th>
+                                <th>Tipe Barang</th>
                                 <th>Jumlah Barang</th>
+                                <th>Tanggal Barang Keluar</th>
                         </thead>
                         <tbody>
                         </tbody>
