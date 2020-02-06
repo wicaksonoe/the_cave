@@ -21,7 +21,7 @@
                 <div class="card-body">
                     <a onclick="$('#tambahKelolaBarang').modal('show')"><button type="button" class="btn btn-primary"
                             style="margin-bottom: 10px">
-                            <i class="fa fa-plus-square" aria-hidden="true"></i> Tambah
+                            <i class="fa fa-plus-square" aria-hidden="true"></i>Tambah
                         </button></a>
                     <table id="tabelKelolaBarang" class="table table-bordered table-striped table-responsive">
                         <thead>
@@ -32,6 +32,8 @@
                                 <th>Jenis Barang</th>
                                 <th>Tipe Barang</th>
                                 <th>Jumlah Barang</th>
+                                <th>Harga Pokok Penjualan</th>
+                                <th>Harga Jual</th>
                                 <th>Tanggal Barang Keluar</th>
                         </thead>
                         <tbody>
@@ -59,7 +61,7 @@
 
     function get_data() {
         var settings = {
-            "url": "{{ url('api/v1/bazzar/barang/{id_bazzar}') }}",
+            "url": "{{ url('api/v1/bazzar/barang/') }}" + "{{ $id_bazzar }}",
             "method": "GET",
             "timeout": 0,
             "headers": {
@@ -76,11 +78,13 @@
 
                 {width: '10%', data: 'aksi', name: 'aksi'},
                 {width: '10%', data: 'barcode', name: 'barcode'},
-                {width: '35%', data: 'namabrg', name: 'namabrg'},
+                {width: '20%', data: 'namabrg', name: 'namabrg'},
                 {width: '10%', data: 'id_jenis', name: 'id_jenis'},
                 {width: '10%', data: 'id_tipe', name: 'id_tipe'},
                 {width: '10%', data: 'jml', name: 'jml'},
-                {width: '15%', data: 'date', name: 'date'},
+                {width: '10%', data: 'hpp', name: 'hpp'},
+                {width: '10%', data: 'hjual', name: 'hjual'},
+                {width: '10%', data: 'date', name: 'date'},
 
             ],
             order: [1, 'asc'],

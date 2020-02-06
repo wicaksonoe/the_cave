@@ -1,15 +1,14 @@
-<div class="modal fade" id="tambahBarang" tabindex="1" role="dialog" aria-hidden="true" data-backdrop="static">
+<div class="modal fade" id="tambahKelolaBarang" tabindex="1" role="dialog" aria-hidden="true" data-backdrop="static">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
+                <h3 class="modal-title">Tambah Barang Keluar Bazzar</h3>
                 <button type="button" class="close" data-dismiss="modal" aria-label="close">
-                    <span aria-hidden="true"> &times; </span>
+                    <span aria-hidden="true"> &times;</span>
                 </button>
-                <h3 class="modal-title"></h3>
             </div>
-
             <div class="modal-body">
-                <form id="tambahBarangForm" class="form-horizontal" data-toggle="validator">
+                <form id="tambahKelolaBarangForm" class="form-horizontal" data-toggle="validator">
                     {{ csrf_field() }} {{ method_field('POST') }}
                     <div class="form-group">
                         <label for="id">Barcode</label>
@@ -39,16 +38,6 @@
                         </select>
                     </div>
 
-                    <div class="form-group col-md-4">
-                        <label for="supplier">Supplier</label>
-                        <select id="id_sup" class="form-control">
-                            <option selected disabled>Pilih Supplier Barang...</option>
-                            @foreach ($supp as $item)
-                                <option value="{{ $item->id }}">{{ ucfirst($item->nama) }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-
                     <div class="form-group">
                         <label for="jumlah">Jumlah Barang</label>
                         <input type="number" class="form-control" id="jumlah" placeholder="Jumlah Barang">
@@ -65,22 +54,12 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="grosir">Harga Grosir</label>
-                        <input type="number" class="form-control" id="grosir" placeholder="Harga Grosir">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="partai">Harga Partai</label>
-                        <input type="number" class="form-control" id="partai" placeholder="Harga Partai">
-                    </div>
-
-                    <div class="form-group">
                         <label for="tanggal"> Tanggal</label>
                         <input type='date' class="form-control" id="tgl" placeholder="Tanggal Barang Masuk">
                     </div>
 
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary" onclick="tambahBarang()">Simpan</button>
+                        <button type="submit" class="btn btn-primary" onclick="tambahKelolaBarang()">Simpan</button>
                         <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
                     </div>
                 </form>

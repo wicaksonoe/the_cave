@@ -11,6 +11,7 @@
 |
 */
 
+use App\Barang_masuk;
 use App\Jenis;
 use App\Supplier;
 use App\Tipe;
@@ -47,9 +48,14 @@ Route::get('/bazzar/tambah', function () {
     return view('bazzar.tambah-bazzar');
 });
 
-Route::get('/bazzar/kelola-barang', function () {
-    return view('bazzar.kelola-barang.kelola-barang');
-});
+Route::get('/bazzar/kelola-barang/{id_bazzar}', function ($id_bazzar) {
+    $barang = Barang_masuk::all();
+    $jenis = Jenis::all();
+    $tipe = Tipe::all();
+    $supp = Supplier::all();
+    return view('bazzar.kelola-barang.kelola-barang', compact('barang','id_bazzar', 'jenis', 'tipe', 'supp'));
+
+})->name('bazzar.kelola-barang');
 
 Route::get('/bazzar/kelola-staff', function () {
     return view('bazzar.kelola-staff.kelola-staff');
