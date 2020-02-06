@@ -17,11 +17,6 @@ class IsAlreadyLogin
      */
     public function handle($request, Closure $next)
     {
-        $current_url = url()->current();
-        if ($current_url == url('login') || $current_url == url('register')) {
-            return $next($request);
-        }
-
         try {
             $cookie_array = explode('; ', $request->header('cookie'));
             
