@@ -119,6 +119,12 @@ class BazarController extends Controller
         $data_staff_bazzar = Staff_bazar::where(['id_bazar' => $id_bazzar])->get();
 
         return DataTables::of($data_staff_bazzar)
+            ->addColumn('alamat', function ($data) {
+                return $data->include_user->alamat;
+            })
+            ->addColumn('telp', function ($data) {
+                return $data->include_user->telp;
+            })
             ->addColumn('nama_pegawai', function ($data) {
                 return $data->include_user->nama;
             })
