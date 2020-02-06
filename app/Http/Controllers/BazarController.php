@@ -203,14 +203,20 @@ class BazarController extends Controller
             if ($id == null) {
             
                 foreach ($keluar_bazar as $key => $value) {
+                    $hjual_asli = $value->include_barang_masuk->hjual;
+                    $potongan = $value->include_bazar->potongan;
+                    $hjual_setelah_diskon = $hjual_asli - ($hjual_asli * ($potongan / 100));
+
                     $data_barang[$key] = [
-                        'id'              => $value->id,
-                        'id_bazar'        => $value->id_bazar,
-                        'nama_barang'     => $value->include_barang_masuk->namabrg,
-                        'jenis_barang'    => $value->include_barang_masuk->include_jenis->nama_jenis,
-                        'tipe_barang'     => $value->include_barang_masuk->include_tipe->nama_tipe,
-                        'jumlah'          => $value->jml,
-                        'date'            => $value->date,
+                        'id'           => $value->id,
+                        'id_bazar'     => $value->id_bazar,
+                        'nama_barang'  => $value->include_barang_masuk->namabrg,
+                        'jenis_barang' => $value->include_barang_masuk->include_jenis->nama_jenis,
+                        'tipe_barang'  => $value->include_barang_masuk->include_tipe->nama_tipe,
+                        'hpp'          => $value->include_barang_masuk->hpp,
+                        'hjual'        => $hjual_setelah_diskon,
+                        'jumlah'       => $value->jml,
+                        'date'         => $value->date,
                     ];
                 }
 

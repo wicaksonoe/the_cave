@@ -16,15 +16,39 @@ class IsAlreadyLogin
      */
     public function handle($request, Closure $next)
     {
-        $current_url = url()->current();
-        if ($current_url == url('login') || $current_url == url('register')) {
-            return $next($request);
+        dd($request);
+        $cookie_array = explode('; ', $request->header('cookie'));
+
+        foreach ($cookie_array as $value) {
+            $data = explode('=', $value);
+            $cookie[$data[0]] = $data[1];
         }
 
-        if (Auth::guard()->user() == NULL) {
-            return redirect('login');
-        }
+        dd(Auth::guard());
 
-        return $next($request);
+        // Check if access_token available
+        // if (isset($cookie['access_token'])) {
+        //     # code...
+        // }
+        // true = validate access_token
+
+        // check if access_token valid
+
+        // true = redirect to dahsboard
+
+
+        // redirect to login
+
+
+        // $current_url = url()->current();
+        // if ($current_url == url('login') || $current_url == url('register')) {
+        //     return $next($request);
+        // }
+
+        // if (Auth::guard()->user() == NULL) {
+        //     return redirect('login');
+        // }
+
+        // return $next($request);
     }
 }
