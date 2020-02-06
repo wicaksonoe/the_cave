@@ -27,6 +27,7 @@ class BarangController extends Controller
             
             foreach ($data_barang as $key => $value) {
                 $data[$key] = [
+                    'barcode'         => $value->barcode,
                     'namabrg'         => $value->namabrg,
                     'jenis_barang'    => $value->include_jenis->nama_jenis,
                     'tipe_barang'     => $value->include_tipe->nama_tipe,

@@ -39,7 +39,10 @@ class BazarController extends Controller
 
             return DataTables::of($bazar)
                 ->addColumn('aksi', function ($bazar) {
-                    return '<a href="'.route("bazzar.kelola-barang", $bazar->id).'" class="btn btn-sm btn-info">Kelola</a>';
+                    return '
+                        <a href="'.route("bazzar.kelola-barang", $bazar->id).'" class="btn btn-sm btn-info">Kelola</a>
+                        <button class="btn btn-sm btn-warning" value="'. $bazar->id.'" onclick="editBazzar(this.value)">Edit</button>
+                        ';
                 })
                 ->rawColumns(['aksi'])
                 ->make(true);
@@ -222,6 +225,7 @@ class BazarController extends Controller
 
                 return DataTables::of($data_barang)
                     ->addColumn('aksi', function ($data_barang) {
+                        return '';
                         return '
                             <button class="btn btn-sm btn-info" value="'.$data_barang->id.'" onclick="editBarangKeluar(this.value)">Edit</button>
                             <button class="btn btn-sm btn-danger" value="'.$data_barang->id.'" onclick="deleteBarangKeluar(this.value) style="margin-left:1rem">Hapus</button>
