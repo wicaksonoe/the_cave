@@ -147,13 +147,11 @@
         $.ajax(settings)
             .done(function (response) {
                 $('#edit-username').val(response.data.username)
-                $('#edit-password').val(response.data.password)
-                $('#edit-password_confirmation').val(response.data.password_confirmation)
                 $('#edit-nama').val(response.data.nama)
                 $('#edit-alamat').html(response.data.alamat)
                 $('#edit-telp').val(response.data.telp)
                 $('#edit-role').val(response.data.role)
-                $('#update-button').val(response.data.id)
+                $('#update-button').val(response.data.username)
                 $('#modal-edit-user').modal('show');
 
             })

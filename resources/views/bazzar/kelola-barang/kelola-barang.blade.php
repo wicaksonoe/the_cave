@@ -32,7 +32,7 @@
                                 <th>Tipe Barang</th>
                                 <th>Jumlah Barang</th>
                                 <th>Harga Pokok Penjualan</th>
-                                <th>Harga Jual</th>
+                            <th>Harga Jual <span class="badge badge-danger">{{$bazzar->potongan}}% Off</span></th>
                                 <th>Tanggal Barang Keluar</th>
                         </thead>
                         <tbody>
@@ -76,10 +76,10 @@
             columns: [
 
                 {width: '15%', data: 'aksi', name: 'aksi'},
-                {width: '20%', data: 'namabrg', name: 'namabrg'},
-                {width: '10%', data: 'id_jenis', name: 'id_jenis'},
-                {width: '10%', data: 'id_tipe', name: 'id_tipe'},
-                {width: '10%', data: 'jml', name: 'jml'},
+                {width: '20%', data: 'nama_barang', name: 'nama_barang'},
+                {width: '10%', data: 'jenis_barang', name: 'jenis_barang'},
+                {width: '10%', data: 'tipe_barang', name: 'tipe_barang'},
+                {width: '10%', data: 'jumlah', name: 'jumlah'},
                 {width: '10%', data: 'hpp', name: 'hpp'},
                 {width: '10%', data: 'hjual', name: 'hjual'},
                 {width: '15%', data: 'date', name: 'date'},
@@ -135,9 +135,9 @@
         });
     }
 
-    function editKelolaBazzar(id_KelolaBazzar) {
+    function editKelolaBarang(id_KelolaBarang) {
         var settings = {
-            "url": BASE_URL_API + "/KelolaBazzar/" + id_KelolaBazzar,
+            "url": BASE_URL_API + "/bazzar/barang/"+ "{{$id_bazzar}}" + "/" + id_KelolaBarang,
             "method": "GET",
             "timeout": 0,
             "headers": {
@@ -148,12 +148,11 @@
 
         $.ajax(settings)
             .done(function (response) {
-                $('#edit-nama_bazar').val(response.data.nama_bazar)
-                $('#edit-alamat').html(response.data.alamat)
-                $('#edit-tgl').val(response.data.tgl)
-                $('#edit-potongan').val(response.data.potongan)
+                $('#edit-barcode').val(response.data.barcode)
+                $('#edit-jml').val(response.data.jml)
+                $('#edit-date').val(response.data.date)
                 $('#update-button').val(response.data.id)
-                $('#modal-edit-KelolaBazzar').modal('show');
+                $('#modal-edit-KelolaBarang').modal('show');
             })
             .fail(function (response) {
                 swal.fire({
@@ -164,9 +163,9 @@
             });
     }
 
-    function updateKelolaBazzar(id_KelolaBazzar) {
+    function updateKelolaBarang(id_KelolaBarang) {
         var settings = {
-            "url": BASE_URL_API + "/KelolaBazzar/" + id_KelolaBazzar,
+            "url": BASE_URL_API + "/bazzar/barang/"+ "{{$id_bazzar}}" + "/" + id_KelolaBarang,
             "method": "PUT",
             "timeout": 0,
             "headers": {
@@ -175,22 +174,20 @@
                 "Authorization": "Bearer " + sessionStorage.getItem('access_token')
             },
             "data": {
-                "nama_bazar": $('#edit-nama_bazar').val(),
-                "alamat": $('#edit-alamat').val(),
-                "tgl": $('#edit-tgl').val(),
-                "potongan": $('#edit-potongan').val(),
+                "barcode": $('#edit-barcode').val(),
+                "jml": $('#edit-jml').val(),
             }
         };
 
         $.ajax(settings)
             .done(function (msg) {
-                $('#modal-edit-KelolaBazzar').modal('hide');
+                $('#modal-edit-KelolaBarang').modal('hide');
                 swal.fire({
                     title: 'Berhasil',
                     text: msg.message,
                     type: "success"
                 });
-                document.getElementById("form-edit-KelolaBazzar").reset();
+                document.getElementById("form-edit-KelolaBarang").reset();
                 get_data();
             })
             .fail(function (msg) {
@@ -206,9 +203,9 @@
             });
     }
 
-    function deleteKelolaBazzar(id_KelolaBazzar) {
+    function deleteKelolaBarang(id_KelolaBarang) {
         var settings = {
-            "url": BASE_URL_API + "/supplier/" + id_KelolaBazzar,
+            "url": BASE_URL_API + "/bazzar/barang/"+ "{{$id_bazzar}}" + "/" + id_KelolaBarang,
             "method": "DELETE",
             "timeout": 0,
             "headers": {

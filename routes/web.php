@@ -12,6 +12,7 @@
 */
 
 use App\Barang_masuk;
+use App\Bazar;
 use App\Jenis;
 use App\Supplier;
 use App\Tipe;
@@ -53,7 +54,8 @@ Route::get('/bazzar/kelola-barang/{id_bazzar}', function ($id_bazzar) {
     $jenis = Jenis::all();
     $tipe = Tipe::all();
     $supp = Supplier::all();
-    return view('bazzar.kelola-barang.kelola-barang', compact('barang','id_bazzar', 'jenis', 'tipe', 'supp'));
+    $bazzar = Bazar::find($id_bazzar);
+    return view('bazzar.kelola-barang.kelola-barang', compact('bazzar', 'barang','id_bazzar', 'jenis', 'tipe', 'supp'));
 
 })->name('bazzar.kelola-barang');
 

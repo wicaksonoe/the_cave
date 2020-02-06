@@ -1,4 +1,4 @@
-<div class="modal fade" id="modal-edit-supplier" tabindex="1" role="dialog" aria-hidden="true" aria-labelledby="modelTitleId">
+<div class="modal fade" id="modal-edit-user" tabindex="1" role="dialog" aria-hidden="true" aria-labelledby="modelTitleId">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -18,15 +18,10 @@
                         <label for="password">Password</label>
                         <input type="password" name="password" class="form-control" id="edit-password" placeholder="Password">
                     </div>
-                    <div class="input-group mb-3">
+                    <div class="form-group">
                         <label for="password">Masukkan Ulang Password</label>
-                        <input type="password" name="password_confirmation" class="form-control"
+                        <input type="password" name="password_confirmation" class="form-control" id="edit-password_confirmation"
                             placeholder="Masukkan Ulang Password">
-                        <div class="input-group-append">
-                            <div class="input-group-text">
-                                <span class="fas fa-lock"></span>
-                            </div>
-                        </div>
                     </div>
                     <div class="form-group">
                         <label for="nama">Nama</label>
@@ -44,8 +39,8 @@
                         <label for="role">Jabatan</label>
                         <select id="edit-role" class="form-control">
                             <option selected disabled>Pilih Jabatan...</option>
-                            <option value="Admin">Admin</option>
-                            <option value="Pegawai">Pegawai</option>
+                            <option value="admin">Admin</option>
+                            <option value="pegawai">Pegawai</option>
                         </select>
                     </div>
                     <div class="modal-footer">
