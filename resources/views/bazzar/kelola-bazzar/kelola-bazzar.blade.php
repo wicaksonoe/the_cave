@@ -59,7 +59,7 @@
 
     function get_data() {
         var settings = {
-            "url": "{{ url('api/v1/KelolaBazzar') }}",
+            "url": "{{ url('api/v1/bazzar/barang') }}",
             "method": "GET",
             "timeout": 0,
             "headers": {
