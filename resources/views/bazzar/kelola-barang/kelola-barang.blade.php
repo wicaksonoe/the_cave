@@ -1,29 +1,29 @@
 @extends ('adminlte::page')
 
-@section('title', 'KELOLA BAZZAR')
+@section('title', 'KELOLA BARANG BAZZAR')
 
 @section('content_header')
-<h1>Kelola Bazzar</h1>
+<h1>Kelola Barang Bazzar</h1>
 @stop
 
 @section('content')
 
-@include('bazzar.kelola-bazzar.tambah-kelola-bazzar')
-@include('bazzar.kelola-bazzar.edit-kelola-bazzar')
+@include('bazzar.kelola-barang.tambah-kelola-barang')
+@include('bazzar.kelola-barang.edit-kelola-barang')
 <div class="container">
     <div class="row">
         <div class="col">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title"> Barang Keluar Bazzar</h3>
+                    <h3 class="card-title">Kelola Barang Bazzar</h3>
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body">
-                    <a onclick="$('#tambahKelolaBazzar').modal('show')"><button type="button" class="btn btn-primary"
+                    <a onclick="$('#tambahKelolaBarang').modal('show')"><button type="button" class="btn btn-primary"
                             style="margin-bottom: 10px">
                             <i class="fa fa-plus-square" aria-hidden="true"></i> Tambah
                         </button></a>
-                    <table id="tabelKelolaBazzar" class="table table-bordered table-striped table-responsive">
+                    <table id="tabelKelolaBarang" class="table table-bordered table-striped table-responsive">
                         <thead>
                             <tr>
                                 <th>Aksi</th>
@@ -59,7 +59,7 @@
 
     function get_data() {
         var settings = {
-            "url": "{{ url('api/v1/bazzar/barang') }}",
+            "url": "{{ url('api/v1/bazzar/barang/{id_bazzar}') }}",
             "method": "GET",
             "timeout": 0,
             "headers": {
@@ -67,28 +67,32 @@
                 "Authorization": "Bearer " + sessionStorage.getItem('access_token')
             },
         };
-        $('#tabelKelolaBazzar').DataTable().clear().destroy();
-        $('#tabelKelolaBazzar').DataTable({
+        $('#tabelKelolaBarang').DataTable().clear().destroy();
+        $('#tabelKelolaBarang').DataTable({
             processing: false,
             serverSide: true,
             ajax: settings,
             columns: [
+
                 {width: '10%', data: 'aksi', name: 'aksi'},
-                {width: '30%', data: 'nama_bazar', name: 'nama_bazar'},
-                {width: '30%', data: 'alamat', name: 'alamat'},
-                {width: '10%', data: 'potongan', name: 'potongan'},
-                {width: '20%', data: 'tgl', name: 'tgl'},
+                {width: '10%', data: 'barcode', name: 'barcode'},
+                {width: '35%', data: 'namabrg', name: 'namabrg'},
+                {width: '10%', data: 'id_jenis', name: 'id_jenis'},
+                {width: '10%', data: 'id_tipe', name: 'id_tipe'},
+                {width: '10%', data: 'jml', name: 'jml'},
+                {width: '15%', data: 'date', name: 'date'},
+
             ],
             order: [1, 'asc'],
             responsive: true
         });
     }
 
-    function tambahKelolaBazzar() {
-        $('#tambahKelolaBazzar').submit(function (e) {
+    function tambahKelolaBarang() {
+        $('#tambahKelolaBarang').submit(function (e) {
             e.preventDefault();
             var settings = {
-            "url": "{{ url ('api/v1/KelolaBazzar')}}",
+            "url": "{{ url ('api/v1/bazzar/barang/{id_bazzar}')}}",
             "method": "POST",
             "timeout": 0,
             "headers": {
@@ -97,10 +101,10 @@
                 "Authorization": "Bearer " + sessionStorage.getItem('access_token')
             },
             data: {
-                "nama_bazar": $('#nama_bazar').val(),
-                "alamat": $('#alamat').val(),
-                "tgl": $('#tgl').val(),
-                "potongan": $('#potongan').val()
+                "id_bazzar": $('#id_bazzar').val()
+                "date": $('#date').val()
+                "barcode": $('#barcode').val()
+                "jml": $('#jml').val()
             }
             };
 

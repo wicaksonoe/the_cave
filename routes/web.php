@@ -47,8 +47,12 @@ Route::get('/bazzar/tambah', function () {
     return view('bazzar.tambah-bazzar');
 });
 
-Route::get('/bazzar/kelola', function () {
-    return view('bazzar.keluar-bazzar');
+Route::get('/bazzar/kelola-barang', function () {
+    return view('bazzar.kelola-barang.kelola-barang');
+});
+
+Route::get('/bazzar/kelola-staff', function () {
+    return view('bazzar.kelola-staff.kelola-staff');
 });
 
 Route::get('/register', function () {
