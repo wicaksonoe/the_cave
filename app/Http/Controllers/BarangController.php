@@ -42,6 +42,7 @@ class BarangController extends Controller
             }
             return DataTables::of($data)
                 ->addColumn('aksi', function ($data_barang) {
+                    $data_barang = (object) $data_barang;
                     return '<button class="btn btn-sm btn-info" value="'.$data_barang->barcode.'" onclick="editBarang(this.value)">Edit</button>';
                 })
                 ->rawColumns(['aksi'])

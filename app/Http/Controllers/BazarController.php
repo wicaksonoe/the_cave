@@ -40,8 +40,8 @@ class BazarController extends Controller
             return DataTables::of($bazar)
                 ->addColumn('aksi', function ($bazar) {
                     return '
-                        <a href="'.route("bazzar.kelola-barang", $bazar->id).'" class="btn btn-sm btn-info">Kelola</a>
-                        <button class="btn btn-sm btn-warning" value="'. $bazar->id.'" onclick="editBazzar(this.value)">Edit</button>
+                        <a href="' . route("bazzar.kelola-barang", $bazar->id) . '" class="btn btn-sm btn-info">Kelola</a>
+                        <button class="btn btn-sm btn-warning" value="' . $bazar->id . '" onclick="editBazzar(this.value)">Edit</button>
                         ';
                 })
                 ->rawColumns(['aksi'])
@@ -123,7 +123,7 @@ class BazarController extends Controller
                 return $data->include_user->nama;
             })
             ->addColumn('aksi', function ($data) {
-                return '<button class="btn btn-sm btn-danger" value="'.$data->username.'" onclick="deleteStaff(this.value)">Hapus</button>';
+                return '<button class="btn btn-sm btn-danger" value="' . $data->username . '" onclick="deleteStaff(this.value)">Hapus</button>';
             })
             ->rawColumns(['nama_pegawai', 'aksi'])
             ->make(true);
@@ -174,7 +174,7 @@ class BazarController extends Controller
                 'message' => 'Data barang untuk bazzar ini sudah ada. Silahkan ubah jumlah barang saja.'
             ], 422);
         } else {
-            $cek_stock = $this->kurangi_stock($request);
+            $cek_stock = $this->kurangi_stock($request->barcode, $request->jml);
 
             if (!$cek_stock) {
                 return response()->json([
@@ -204,7 +204,7 @@ class BazarController extends Controller
 
         if ($keluar_bazar) {
             if ($id == null) {
-            
+
                 foreach ($keluar_bazar as $key => $value) {
                     $hjual_asli = $value->include_barang_masuk->hjual;
                     $potongan = $value->include_bazar->potongan;
@@ -225,15 +225,14 @@ class BazarController extends Controller
 
                 return DataTables::of($data_barang)
                     ->addColumn('aksi', function ($data_barang) {
-                        return '';
+                        $data_barang = (object) $data_barang;
                         return '
-                            <button class="btn btn-sm btn-info" value="'.$data_barang->id.'" onclick="editBarangKeluar(this.value)">Edit</button>
-                            <button class="btn btn-sm btn-danger" value="'.$data_barang->id.'" onclick="deleteBarangKeluar(this.value) style="margin-left:1rem">Hapus</button>
+                            <button class="btn btn-sm btn-info" value="' . $data_barang->id . '" onclick="editBarangKeluar(this.value)">Edit</button>
+                            <button class="btn btn-sm btn-danger" value="' . $data_barang->id . '" onclick="deleteBarangKeluar(this.value) style="margin-left:1rem">Hapus</button>
                             ';
                     })
                     ->rawColumns(['aksi'])
                     ->make(true);
-        
             } else {
                 $data = Keluar_bazar::find($id);
 
@@ -257,20 +256,45 @@ class BazarController extends Controller
             $barang_bazzar_exist = Keluar_bazar::findOrFail($id);
 
             if ($barang_bazzar_exist) {
+                /*
+                cek jumlah input lebih atau kurang dari value sebelumnya
+                kalau lebih dari = cari selisihnya, lalu ambil barang dari gudang sesuai selisih
+                kalau kurang dari = cari selsihnya, lalu kembalikan barang ke gudang sesuai selisih
+                */
+
                 $jumlah_sebelumnya = $barang_bazzar_exist->jml;
 
-                $cek_stock = $this->kurangi_stock($request);
+                if ($request->jml > $jumlah_sebelumnya) {
+                    $selisih = $request->jml - $jumlah_sebelumnya;
 
-                if (!$cek_stock) {
-                    return response()->json([
-                        'success' => false,
-                        'message' => 'Stock barang di gudang kurang dari jumlah yang diminta.'
-                    ], 422);
+                    $cek_stock = $this->kurangi_stock($request->barcode, $selisih);
+
+                    if (!$cek_stock) {
+                        return response()->json([
+                            'success' => false,
+                            'message' => 'Stock barang di gudang kurang dari jumlah yang diminta.'
+                        ], 422);
+                    } else {
+                        $barang_bazzar_exist->update([
+                            'jml' => $jumlah_sebelumnya + $selisih
+                        ]);
+                    }
+                } else if ($request->jml < $jumlah_sebelumnya) {
+                    $selisih = $jumlah_sebelumnya - $request->jml;
+
+                    $cek_stock = $this->kembalikan_stock($request->barcode, $selisih);
+
+                    if (!$cek_stock) {
+                        return response()->json([
+                            'success' => false,
+                            'message' => 'Terjadi kesalahan.'
+                        ], 422);
+                    } else {
+                        $barang_bazzar_exist->update([
+                            'jml' => $jumlah_sebelumnya - $selisih
+                        ]);
+                    }
                 }
-
-                $barang_bazzar_exist->update([
-                    'jml' => $jumlah_sebelumnya + $request->jml
-                ]);
 
                 return response()->json([
                     'success' => true,
@@ -320,13 +344,13 @@ class BazarController extends Controller
         }
     }
 
-    protected function kurangi_stock($request)
+    protected function kurangi_stock($barcode, $jml)
     {
-        $data_barang = Barang_masuk::findOrFail($request->barcode);
+        $data_barang = Barang_masuk::findOrFail($barcode);
 
-        if ($data_barang->jumlah - $request->jml >= 0) {
+        if ($data_barang->jumlah - $jml >= 0) {
             $data_barang->update([
-                'jumlah' => $data_barang->jumlah - $request->jml
+                'jumlah' => $data_barang->jumlah - $jml
             ]);
 
             return true;
