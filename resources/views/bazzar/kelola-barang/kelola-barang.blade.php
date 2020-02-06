@@ -1,37 +1,39 @@
 @extends ('adminlte::page')
 
-@section('title', 'BAZZAR')
+@section('title', 'KELOLA BARANG BAZZAR')
 
 @section('content_header')
-<h1>Data Bazzar</h1>
+<h1>Kelola Barang Bazzar</h1>
 @stop
 
 @section('content')
 
-@include('bazzar.tambah-bazzar')
-@include('bazzar.edit-bazzar')
+@include('bazzar.kelola-barang.tambah-kelola-barang')
+@include('bazzar.kelola-barang.edit-kelola-barang')
 <div class="container">
     <div class="row">
         <div class="col">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Data Bazzar</h3>
+                    <h3 class="card-title">Kelola Barang Bazzar</h3>
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body">
-                    <a onclick="$('#tambahBazzar').modal('show')"><button type="button" class="btn btn-primary"
+                    <a onclick="$('#tambahKelolaBarang').modal('show')"><button type="button" class="btn btn-primary"
                             style="margin-bottom: 10px">
-                            <i class="fa fa-plus-square" aria-hidden="true"></i> Tambah
+                            <i class="fa fa-plus-square" aria-hidden="true"></i>Tambah
                         </button></a>
-                    <table id="tabelBazzar" class="table table-bordered table-striped table-responsive">
+                    <table  id="tabelKelolaBarang" class="table table-bordered table-striped table-responsive">
                         <thead>
                             <tr>
                                 <th>Aksi</th>
-                                <th>Nama Bazzar</th>
-                                <th>Alamat</th>
-                                <th>Potongan</th>
-                                <th>Tanggal</th>
-                            </tr>
+                                <th>Nama Barang</th>
+                                <th>Jenis Barang</th>
+                                <th>Tipe Barang</th>
+                                <th>Jumlah Barang</th>
+                                <th>Harga Pokok Penjualan</th>
+                            <th>Harga Jual <span class="badge badge-danger">{{$bazzar->potongan}}% Off</span></th>
+                                <th>Tanggal Barang Keluar</th>
                         </thead>
                         <tbody>
                         </tbody>
@@ -58,7 +60,7 @@
 
     function get_data() {
         var settings = {
-            "url": "{{ url('api/v1/bazzar') }}",
+            "url": "{{ url('api/v1/bazzar/barang').'/'.$id_bazzar }}" ,
             "method": "GET",
             "timeout": 0,
             "headers": {
@@ -66,28 +68,33 @@
                 "Authorization": "Bearer " + sessionStorage.getItem('access_token')
             },
         };
-        $('#tabelBazzar').DataTable().clear().destroy();
-        $('#tabelBazzar').DataTable({
+        $('#tabelKelolaBarang').DataTable().clear().destroy();
+        $('#tabelKelolaBarang').DataTable({
             processing: false,
             serverSide: true,
             ajax: settings,
             columns: [
-                {width: '10%', data: 'aksi', name: 'aksi'},
-                {width: '30%', data: 'nama_bazar', name: 'nama_bazar'},
-                {width: '30%', data: 'alamat', name: 'alamat'},
-                {width: '10%', data: 'potongan', name: 'potongan'},
-                {width: '20%', data: 'tgl', name: 'tgl'},
+
+                {width: '15%', data: 'aksi', name: 'aksi'},
+                {width: '20%', data: 'nama_barang', name: 'nama_barang'},
+                {width: '10%', data: 'jenis_barang', name: 'jenis_barang'},
+                {width: '10%', data: 'tipe_barang', name: 'tipe_barang'},
+                {width: '10%', data: 'jumlah', name: 'jumlah'},
+                {width: '10%', data: 'hpp', name: 'hpp'},
+                {width: '10%', data: 'hjual', name: 'hjual'},
+                {width: '15%', data: 'date', name: 'date'},
+
             ],
             order: [1, 'asc'],
             responsive: true
         });
     }
 
-    function tambahBazzar() {
-        $('#tambahBazzar').submit(function (e) {
+    function tambahKelolaBarang() {
+        $('#tambahKelolaBarang').submit(function (e) {
             e.preventDefault();
             var settings = {
-            "url": "{{ url ('api/v1/bazzar')}}",
+            "url": "{{ url ('api/v1/bazzar/barang').'/'.$id_bazzar }}" ,
             "method": "POST",
             "timeout": 0,
             "headers": {
@@ -96,27 +103,28 @@
                 "Authorization": "Bearer " + sessionStorage.getItem('access_token')
             },
             data: {
-                "nama_bazar": $('#nama_bazar').val(),
-                "alamat": $('#alamat').val(),
-                "tgl": $('#tgl').val(),
-                "potongan": $('#potongan').val()
+                "id_bazzar": $('#id_bazzar').val(),
+                "date": $('#date').val(),
+                "barcode": $('#barcode').val(),
+                "jml": $('#jml').val(),
             }
             };
 
             $.ajax(settings).done(function (msg) {
-                $('#tambahBazzar').modal('hide');
+                $('#tambahKelolaBarang').modal('hide');
                 swal.fire({
                     title: 'Berhasil',
                     text: msg.message,
                     type: "success"
                 });
-                document.getElementById("tambahBazzarForm").reset();
+                document.getElementById("tambahKelolaBarangForm").reset();
                 get_data();
             })
                 .fail(function (msg) {
+                    console.log(msg)
                     swal.fire({
                         title: 'Error!',
-                        text: 'Terjadi Kesalahan',
+                        text: msg.responseJSON.message,
                         type: "error"
                     })
 
@@ -127,9 +135,9 @@
         });
     }
 
-    function editBazzar(id_bazzar) {
+    function editKelolaBarang(id_KelolaBarang) {
         var settings = {
-            "url": BASE_URL_API + "/bazzar/" + id_bazzar,
+            "url": BASE_URL_API + "/bazzar/barang/"+ "{{$id_bazzar}}" + "/" + id_KelolaBarang,
             "method": "GET",
             "timeout": 0,
             "headers": {
@@ -140,12 +148,11 @@
 
         $.ajax(settings)
             .done(function (response) {
-                $('#edit-nama_bazar').val(response.data.nama_bazar)
-                $('#edit-alamat').html(response.data.alamat)
-                $('#edit-tgl').val(response.data.tgl)
-                $('#edit-potongan').val(response.data.potongan)
+                $('#edit-barcode').val(response.data.barcode)
+                $('#edit-jml').val(response.data.jml)
+                $('#edit-date').val(response.data.date)
                 $('#update-button').val(response.data.id)
-                $('#modal-edit-bazzar').modal('show');
+                $('#modal-edit-KelolaBarang').modal('show');
             })
             .fail(function (response) {
                 swal.fire({
@@ -156,9 +163,9 @@
             });
     }
 
-    function updateBazzar(id_bazzar) {
+    function updateKelolaBarang(id_KelolaBarang) {
         var settings = {
-            "url": BASE_URL_API + "/bazzar/" + id_bazzar,
+            "url": BASE_URL_API + "/bazzar/barang/"+ "{{$id_bazzar}}" + "/" + id_KelolaBarang,
             "method": "PUT",
             "timeout": 0,
             "headers": {
@@ -167,22 +174,20 @@
                 "Authorization": "Bearer " + sessionStorage.getItem('access_token')
             },
             "data": {
-                "nama_bazar": $('#edit-nama_bazar').val(),
-                "alamat": $('#edit-alamat').val(),
-                "tgl": $('#edit-tgl').val(),
-                "potongan": $('#edit-potongan').val(),
+                "barcode": $('#edit-barcode').val(),
+                "jml": $('#edit-jml').val(),
             }
         };
 
         $.ajax(settings)
             .done(function (msg) {
-                $('#modal-edit-bazzar').modal('hide');
+                $('#modal-edit-KelolaBarang').modal('hide');
                 swal.fire({
                     title: 'Berhasil',
                     text: msg.message,
                     type: "success"
                 });
-                document.getElementById("form-edit-bazzar").reset();
+                document.getElementById("form-edit-KelolaBarang").reset();
                 get_data();
             })
             .fail(function (msg) {
@@ -198,9 +203,9 @@
             });
     }
 
-    function deleteBazzar(id_bazzar) {
+    function deleteKelolaBarang(id_KelolaBarang) {
         var settings = {
-            "url": BASE_URL_API + "/supplier/" + id_bazzar,
+            "url": BASE_URL_API + "/bazzar/barang/"+ "{{$id_bazzar}}" + "/" + id_KelolaBarang,
             "method": "DELETE",
             "timeout": 0,
             "headers": {

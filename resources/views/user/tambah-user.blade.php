@@ -9,15 +9,15 @@
             </div>
 
             <div class="modal-body">
-                <form method="post" class="form-horizontal" data-toggle="validator">
+                <form id="tambahUserForm" class="form-horizontal" data-toggle="validator">
                     {{ csrf_field() }} {{ method_field('POST') }}
                     <div class="form-group">
                         <label for="id">Username</label>
-                        <input class="form-control" id="id" placeholder="Username">
+                        <input class="form-control" id="username" placeholder="Username">
                     </div>
                     <div class="form-group">
                         <label for="password">Password</label>
-                        <input class="form-control" id="namabrg" placeholder="Password">
+                        <input class="form-control" id="password" placeholder="Password">
                     </div>
                     <div class="form-group">
                         <label for="nama">Nama</label>

@@ -11,6 +11,8 @@
 |
 */
 
+use App\Barang_masuk;
+use App\Bazar;
 use App\Jenis;
 use App\Supplier;
 use App\Tipe;
@@ -44,6 +46,25 @@ Route::group(['middleware' => ['isAlreadyLogin', 'auth.jwt']], function () {
     Route::get('/bazzar', function () {
         return view('bazzar.bazzar');
     });
+
+    Route::get('/bazzar/tambah', function () {
+        return view('bazzar.tambah-bazzar');
+    });
+
+    Route::get('/bazzar/kelola-barang/{id_bazzar}', function ($id_bazzar) {
+        $barang = Barang_masuk::all();
+        $jenis = Jenis::all();
+        $tipe = Tipe::all();
+        $supp = Supplier::all();
+        $bazzar = Bazar::find($id_bazzar);
+        return view('bazzar.kelola-barang.kelola-barang', compact('bazzar', 'barang','id_bazzar', 'jenis', 'tipe', 'supp'));
+
+    })->name('bazzar.kelola-barang');
+
+    Route::get('/bazzar/kelola-staff', function () {
+        return view('bazzar.kelola-staff.kelola-staff');
+    });
+
 
     Route::get('/user', function () {
         return view('user.user');

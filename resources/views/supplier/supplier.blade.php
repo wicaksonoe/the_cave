@@ -8,6 +8,7 @@
 
 @section('content')
 
+@include('supplier.edit-supplier')
 @include('supplier.tambah-supplier')
 <div class="container">
     <div class="row">
@@ -22,7 +23,7 @@
                             style="margin-bottom: 10px">
                             <i class="fa fa-plus-square" aria-hidden="true"></i> Tambah
                         </button></a>
-                    <table id="tabel" class="table table-bordered table-striped table-responsive">
+                    <table id="tabelSupplier" class="table table-bordered table-striped table-responsive">
                         <thead>
                             <tr>
                                 <th>Aksi</th>
@@ -40,51 +41,186 @@
         </div>
     </div>
 </div>
-<script>
 
-</script>
-
-@stop
-
-@section('css')
-<link rel="stylesheet" href="/css/admin_custom.css">
 @stop
 
 @section('js')
 <script>
-    console.log('Hi!');
-</script>
-<script>
+    const BASE_URL_API = "{{ url('api/v1/') }}"
+    $(document).ready(function () {
+        get_data();
+    });
+
     $(".form-control").focus(function(e){
         $(e.target).removeClass("is-invalid")
     })
-    $('#tambahSupplier').submit(function(e) {
-        e.preventDefault()
-    })
+
+    function get_data() {
+        var settings = {
+            "url": "{{ url('api/v1/supplier') }}",
+            "method": "GET",
+            "timeout": 0,
+            "headers": {
+                "Accept": "application/json",
+                "Authorization": "Bearer " + sessionStorage.getItem('access_token')
+            },
+        };
+        $('#tabelSupplier').DataTable().clear().destroy();
+        $('#tabelSupplier').DataTable({
+            processing: false,
+            serverSide: true,
+            ajax: settings,
+            columns: [
+                {width: '10%', data: 'aksi', name: 'aksi'},
+                {width: '40%', data: 'nama', name: 'nama'},
+                {width: '40%', data: 'alamat', name: 'alamat'},
+                {width: '10%', data: 'telp', name: 'telp'},
+            ],
+            order: [1, 'asc'],
+            responsive: true
+        });
+    }
+
     function tambahSupplier() {
-        $.ajax({
-            method: "POST",
-            url: "{{ url ('api/v1/supplier')}}",
+        $('#tambahSupplier').submit(function (e) {
+            e.preventDefault();
+            var settings = {
+            "url": "{{ url ('api/v1/supplier/') }}",
+            "method": "POST",
+            "timeout": 0,
+            "headers": {
+                "Accept": "application/json",
+                "Content-Type": "application/x-www-form-urlencoded",
+                "Authorization": "Bearer " + sessionStorage.getItem('access_token')
+            },
             data: {
-                nama: $('#nama').val(),
-                alamat: $('#alamat').val(),
-                telp: $('#telp').val(),
+                "nama": $('#nama').val(),
+                "alamat": $('#alamat').val(),
+                "telp": $('#telp').val(),
             }
+            };
+
+            $.ajax(settings).done(function (msg) {
+                    $('#tambahSupplier').modal('hide');
+                    swal.fire({
+                        title: 'Berhasil',
+                        text: msg.message,
+                        type: "success"
+                    });
+                    document.getElementById("tambahSupplierForm").reset();
+                    get_data();
+                })
+                .fail(function (msg) {
+                    swal.fire({
+                        title: 'Error!',
+                        text: 'Terjadi Kesalahan',
+                        type: "error"
+                    })
+
+                    $.each(msg.responseJSON.errors, function (key, value) {
+                        $("#" + key).addClass("is-invalid")
+                    })
+                });
+        });
+    }
+
+    function editSupplier(id_supplier) {
+        var settings = {
+            "url": BASE_URL_API + "/supplier/" + id_supplier,
+            "method": "GET",
+            "timeout": 0,
+            "headers": {
+                "Accept": "application/json",
+                "Authorization": "Bearer " + sessionStorage.getItem('access_token')
+            },
+        };
+
+        $.ajax(settings)
+            .done(function (response) {
+                $('#edit-nama').val(response.data.nama)
+                $('#edit-alamat').html(response.data.alamat)
+                $('#edit-telp').val(response.data.telp)
+                $('#update-button').val(response.data.id)
+                $('#modal-edit-supplier').modal('show');
             })
-            .done(function( msg ) {
-                alert( "Data Disimpan: " + msg );
-            })
-            .fail(function( msg ) {
+            .fail(function (response) {
                 swal.fire({
                     title: 'Error!',
                     text: 'Terjadi Kesalahan',
-                    type : "error"
-                })
-
-                $.each(msg.responseJSON.errors, function(key, value){
-                    $("#"+key).addClass("is-invalid")
+                    type: "error"
                 })
             });
-        }
+    }
+
+    function updateSupplier(id_supplier) {
+        var settings = {
+            "url": BASE_URL_API + "/supplier/" + id_supplier,
+            "method": "PUT",
+            "timeout": 0,
+            "headers": {
+                "Accept": "application/json",
+                "Content-Type": "application/x-www-form-urlencoded",
+                "Authorization": "Bearer " + sessionStorage.getItem('access_token')
+            },
+            "data": {
+                "nama": $('#edit-nama').val(),
+                "alamat": $('#edit-alamat').val(),
+                "telp": $('#edit-telp').val(),
+            }
+        };
+
+        $.ajax(settings)
+            .done(function (msg) {
+                $('#modal-edit-supplier').modal('hide');
+                swal.fire({
+                    title: 'Berhasil',
+                    text: msg.message,
+                    type: "success"
+                });
+                document.getElementById("form-edit-supplier").reset();
+                get_data();
+            })
+            .fail(function (msg) {
+                swal.fire({
+                    title: 'Error!',
+                    text: 'Terjadi Kesalahan',
+                    type: "error"
+                })
+
+                $.each(msg.responseJSON.errors, function (key, value) {
+                    $("#edit-" + key).addClass("is-invalid")
+                })
+            });
+    }
+
+    function deleteSupplier(id_supplier) {
+        var settings = {
+            "url": BASE_URL_API + "/supplier/" + id_supplier,
+            "method": "DELETE",
+            "timeout": 0,
+            "headers": {
+                "Accept": "application/json",
+                "Authorization": "Bearer " + sessionStorage.getItem('access_token')
+            },
+        };
+
+        $.ajax(settings)
+            .done(function (msg) {
+                swal.fire({
+                    title: 'Berhasil',
+                    text: msg.message,
+                    type: "success"
+                });
+                get_data();
+            })
+            .fail(function (msg) {
+                swal.fire({
+                    title: 'Error!',
+                    text: 'Terjadi Kesalahan',
+                    type: "error"
+                });
+            });
+    }
+
 </script>
 @stop
