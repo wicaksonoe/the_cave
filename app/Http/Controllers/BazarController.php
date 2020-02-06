@@ -227,8 +227,8 @@ class BazarController extends Controller
                     ->addColumn('aksi', function ($data_barang) {
                         $data_barang = (object) $data_barang;
                         return '
-                            <button class="btn btn-sm btn-info" value="' . $data_barang->id . '" onclick="editBarangKeluar(this.value)">Edit</button>
-                            <button class="btn btn-sm btn-danger" value="' . $data_barang->id . '" onclick="deleteBarangKeluar(this.value) style="margin-left:1rem">Hapus</button>
+                            <button class="btn btn-sm btn-info" value="' . $data_barang->id . '" onclick="editKelolaBarang(this.value)">Edit</button>
+                            <button class="btn btn-sm btn-danger" value="' . $data_barang->id . '" onclick="deleteKelolaBarang(this.value)" style="margin-left:1rem">Hapus</button>
                             ';
                     })
                     ->rawColumns(['aksi'])
