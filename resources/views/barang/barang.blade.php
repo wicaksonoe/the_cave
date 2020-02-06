@@ -75,7 +75,7 @@
             serverSide: true,
             ajax: settings,
             columns: [
-                {width: '10%', data: 'barcode', name: 'barcode'},
+                {width: '10%', data: 'aksi', name: 'aksi'},
                 {width: '30%', data: 'namabrg', name: 'namabrg'},
                 {width: '10%', data: 'id_jenis', name: 'id_jenis'},
                 {width: '10%', data: 'id_tipe', name: 'id_tipe'},

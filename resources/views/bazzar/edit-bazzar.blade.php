@@ -26,8 +26,12 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="potongan"> Potongan</label>
-                        <input class="form-control" id="edit-potongan" placeholder="Potongan Harga">
+                        <div class="input-group mb-3">
+                            <input class="form-control col-4" id="edit-potongan" placeholder="Potongan Harga">
+                            <div class="input-group-append">
+                                <span class="input-group-text" id="basic-addon2">%</span>
+                            </div>
+                        </div>
                     </div>
 
 

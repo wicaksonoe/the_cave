@@ -23,11 +23,10 @@
                             style="margin-bottom: 10px">
                             <i class="fa fa-plus-square" aria-hidden="true"></i>Tambah
                         </button></a>
-                    <table id="tabelKelolaBarang" class="table table-bordered table-striped table-responsive">
+                    <table  id="tabelKelolaBarang" class="table table-bordered table-striped table-responsive">
                         <thead>
                             <tr>
                                 <th>Aksi</th>
-                                <th>Barcode</th>
                                 <th>Nama Barang</th>
                                 <th>Jenis Barang</th>
                                 <th>Tipe Barang</th>
@@ -61,7 +60,7 @@
 
     function get_data() {
         var settings = {
-            "url": "{{ url('api/v1/bazzar/barang/') }}" + "{{ $id_bazzar }}",
+            "url": "{{ url('api/v1/bazzar/barang').'/'.$id_bazzar }}" ,
             "method": "GET",
             "timeout": 0,
             "headers": {
@@ -76,15 +75,14 @@
             ajax: settings,
             columns: [
 
-                {width: '10%', data: 'aksi', name: 'aksi'},
-                {width: '10%', data: 'barcode', name: 'barcode'},
+                {width: '15%', data: 'aksi', name: 'aksi'},
                 {width: '20%', data: 'namabrg', name: 'namabrg'},
                 {width: '10%', data: 'id_jenis', name: 'id_jenis'},
                 {width: '10%', data: 'id_tipe', name: 'id_tipe'},
                 {width: '10%', data: 'jml', name: 'jml'},
                 {width: '10%', data: 'hpp', name: 'hpp'},
                 {width: '10%', data: 'hjual', name: 'hjual'},
-                {width: '10%', data: 'date', name: 'date'},
+                {width: '15%', data: 'date', name: 'date'},
 
             ],
             order: [1, 'asc'],
@@ -96,7 +94,7 @@
         $('#tambahKelolaBarang').submit(function (e) {
             e.preventDefault();
             var settings = {
-            "url": "{{ url ('api/v1/bazzar/barang/{id_bazzar}')}}",
+            "url": "{{ url ('api/v1/bazzar/barang').'/'.$id_bazzar }}" ,
             "method": "POST",
             "timeout": 0,
             "headers": {
@@ -105,27 +103,28 @@
                 "Authorization": "Bearer " + sessionStorage.getItem('access_token')
             },
             data: {
-                "id_bazzar": $('#id_bazzar').val()
-                "date": $('#date').val()
-                "barcode": $('#barcode').val()
-                "jml": $('#jml').val()
+                "id_bazzar": $('#id_bazzar').val(),
+                "date": $('#date').val(),
+                "barcode": $('#barcode').val(),
+                "jml": $('#jml').val(),
             }
             };
 
             $.ajax(settings).done(function (msg) {
-                $('#tambahKelolaBazzar').modal('hide');
+                $('#tambahKelolaBarang').modal('hide');
                 swal.fire({
                     title: 'Berhasil',
                     text: msg.message,
                     type: "success"
                 });
-                document.getElementById("tambahKelolaBazzarForm").reset();
+                document.getElementById("tambahKelolaBarangForm").reset();
                 get_data();
             })
                 .fail(function (msg) {
+                    console.log(msg)
                     swal.fire({
                         title: 'Error!',
-                        text: 'Terjadi Kesalahan',
+                        text: msg.responseJSON.message,
                         type: "error"
                     })
 
