@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Support\Facades\Auth;
+use JWTAuth;
 
 class IsAlreadyLogin
 {
@@ -16,39 +17,22 @@ class IsAlreadyLogin
      */
     public function handle($request, Closure $next)
     {
-        dd($request);
-        $cookie_array = explode('; ', $request->header('cookie'));
-
-        foreach ($cookie_array as $value) {
-            $data = explode('=', $value);
-            $cookie[$data[0]] = $data[1];
+        try {
+            $cookie_array = explode('; ', $request->header('cookie'));
+            
+            foreach ($cookie_array as $value) {
+                $data = explode('=', $value);
+                $cookie[$data[0]] = $data[1];
+            }
+        } catch (\Exception $th) {
+            return redirect()->back();
         }
 
-        dd(Auth::guard());
-
-        // Check if access_token available
-        // if (isset($cookie['access_token'])) {
-        //     # code...
-        // }
-        // true = validate access_token
-
-        // check if access_token valid
-
-        // true = redirect to dahsboard
-
-
-        // redirect to login
-
-
-        // $current_url = url()->current();
-        // if ($current_url == url('login') || $current_url == url('register')) {
-        //     return $next($request);
-        // }
-
-        // if (Auth::guard()->user() == NULL) {
-        //     return redirect('login');
-        // }
-
-        // return $next($request);
+        if (isset($cookie['access_token'])) {
+            $request->headers->set('Authorization', 'Bearer '.$cookie['access_token']);
+            return $next($request);
+        } else {
+            return redirect()->route('login');
+        }
     }
 }

@@ -78,7 +78,7 @@
                 text: 'Selamat datang.',
                 type: 'success',
                 onClose: () => {
-                    window.location.replace('{{ url("/dashboard") }}')
+                    window.location.replace('{{ url("/") }}')
                 }
             });
         })
