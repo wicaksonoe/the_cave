@@ -18,7 +18,7 @@ use App\Tipe;
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->middleware(['isAlreadyLogin', 'auth.jwt']);
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -67,4 +67,4 @@ Route::get('/register', function () {
 
 Route::get('/login', function () {
 		return view('auth.login');
-});
+})->name('login');
