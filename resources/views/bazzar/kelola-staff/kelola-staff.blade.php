@@ -1,15 +1,15 @@
 @extends ('adminlte::page')
 
-@section('title', 'KELOLA BARANG BAZZAR')
+@section('title', 'KELOLA STAFF BAZZAR')
 
 @section('content_header')
-<h1>Kelola Barang Bazzar</h1>
+<h1>Kelola Staff Bazzar</h1>
 @stop
 
 @section('content')
 
-@include('bazzar.kelola-barang.tambah-kelola-barang')
-@include('bazzar.kelola-barang.edit-kelola-barang')
+@include('bazzar.kelola-staff.tambah-kelola-staff')
+@include('bazzar.kelola-staff.edit-kelola-staff')
 <div class="container">
     <div class="row">
         <div class="col">
@@ -19,21 +19,17 @@
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body">
-                    <a onclick="$('#tambahKelolaBarang').modal('show')"><button type="button" class="btn btn-primary"
+                    <a onclick="$('#tambahKelolaStaff').modal('show')"><button type="button" class="btn btn-primary"
                             style="margin-bottom: 10px">
                             <i class="fa fa-plus-square" aria-hidden="true"></i>Tambah
                         </button></a>
-                    <table  id="tabelKelolaBarang" class="table table-bordered table-striped table-responsive">
+                    <table id="tabelKelolaStaff" class="table table-bordered table-striped table-responsive">
                         <thead>
                             <tr>
                                 <th>Aksi</th>
-                                <th>Nama Barang</th>
-                                <th>Jenis Barang</th>
-                                <th>Tipe Barang</th>
-                                <th>Jumlah Barang</th>
-                                <th>Harga Pokok Penjualan</th>
-                            <th>Harga Jual <span class="badge badge-danger">{{$bazzar->potongan}}% Off</span></th>
-                                <th>Tanggal Barang Keluar</th>
+                                <th>Nama Staff</th>
+                                <th>Telepon</th>
+                                <th>Alamat</th>
                         </thead>
                         <tbody>
                         </tbody>
@@ -60,7 +56,7 @@
 
     function get_data() {
         var settings = {
-            "url": "{{ url('api/v1/bazzar/barang').'/'.$id_bazzar }}" ,
+            "url": "{{ url('api/v1/bazzar/staff').'/'.$id_bazzar }}" ,
             "method": "GET",
             "timeout": 0,
             "headers": {
@@ -68,21 +64,17 @@
                 "Authorization": "Bearer " + sessionStorage.getItem('access_token')
             },
         };
-        $('#tabelKelolaBarang').DataTable().clear().destroy();
-        $('#tabelKelolaBarang').DataTable({
+        $('#tabelKelolaStaff').DataTable().clear().destroy();
+        $('#tabelKelolaStaff').DataTable({
             processing: false,
             serverSide: true,
             ajax: settings,
             columns: [
 
                 {width: '15%', data: 'aksi', name: 'aksi'},
-                {width: '20%', data: 'nama_barang', name: 'nama_barang'},
-                {width: '10%', data: 'jenis_barang', name: 'jenis_barang'},
-                {width: '10%', data: 'tipe_barang', name: 'tipe_barang'},
-                {width: '10%', data: 'jumlah', name: 'jumlah'},
-                {width: '10%', data: 'hpp', name: 'hpp'},
-                {width: '10%', data: 'hjual', name: 'hjual'},
-                {width: '15%', data: 'date', name: 'date'},
+                {width: '20%', data: 'nama_pegawai', name: 'nama_pegawai'},
+                {width: '10%', data: 'telp', name: 'telp'},
+                {width: '10%', data: 'alamat', name: 'alamat'},
 
             ],
             order: [1, 'asc'],
@@ -90,11 +82,11 @@
         });
     }
 
-    function tambahKelolaBarang() {
-        $('#tambahKelolaBarang').submit(function (e) {
+    function tambahKelolaStaff() {
+        $('#tambahKelolaStaff').submit(function (e) {
             e.preventDefault();
             var settings = {
-            "url": "{{ url ('api/v1/bazzar/barang').'/'.$id_bazzar }}" ,
+            "url": "{{ url ('api/v1/bazzar/staff').'/'.$id_bazzar }}" ,
             "method": "POST",
             "timeout": 0,
             "headers": {
@@ -111,13 +103,13 @@
             };
 
             $.ajax(settings).done(function (msg) {
-                $('#tambahKelolaBarang').modal('hide');
+                $('#tambahKelolaStaff').modal('hide');
                 swal.fire({
                     title: 'Berhasil',
                     text: msg.message,
                     type: "success"
                 });
-                document.getElementById("tambahKelolaBarangForm").reset();
+                document.getElementById("tambahKelolaStaffForm").reset();
                 get_data();
             })
                 .fail(function (msg) {
@@ -135,9 +127,9 @@
         });
     }
 
-    function editKelolaBarang(id_KelolaBarang) {
+    function editKelolaStaff(id_KelolaStaff) {
         var settings = {
-            "url": BASE_URL_API + "/bazzar/barang/"+ "{{$id_bazzar}}" + "/" + id_KelolaBarang,
+            "url": BASE_URL_API + "/bazzar/staff/"+ "{{$id_bazzar}}" + "/" + id_KelolaStaff,
             "method": "GET",
             "timeout": 0,
             "headers": {
@@ -152,7 +144,7 @@
                 $('#edit-jml').val(response.data.jml)
                 $('#edit-date').val(response.data.date)
                 $('#update-button').val(response.data.id)
-                $('#modal-edit-KelolaBarang').modal('show');
+                $('#modal-edit-KelolaStaff').modal('show');
             })
             .fail(function (response) {
                 swal.fire({
@@ -163,9 +155,9 @@
             });
     }
 
-    function updateKelolaBarang(id_KelolaBarang) {
+    function updateKelolaStaff(id_KelolaStaff) {
         var settings = {
-            "url": BASE_URL_API + "/bazzar/barang/"+ "{{$id_bazzar}}" + "/" + id_KelolaBarang,
+            "url": BASE_URL_API + "/bazzar/staff/"+ "{{$id_bazzar}}" + "/" + id_KelolaStaff,
             "method": "PUT",
             "timeout": 0,
             "headers": {
@@ -181,13 +173,13 @@
 
         $.ajax(settings)
             .done(function (msg) {
-                $('#modal-edit-KelolaBarang').modal('hide');
+                $('#modal-edit-KelolaStaff').modal('hide');
                 swal.fire({
                     title: 'Berhasil',
                     text: msg.message,
                     type: "success"
                 });
-                document.getElementById("form-edit-KelolaBarang").reset();
+                document.getElementById("form-edit-KelolaStaff").reset();
                 get_data();
             })
             .fail(function (msg) {
@@ -203,9 +195,9 @@
             });
     }
 
-    function deleteKelolaBarang(id_KelolaBarang) {
+    function deleteKelolaStaff(id_KelolaStaff) {
         var settings = {
-            "url": BASE_URL_API + "/bazzar/barang/"+ "{{$id_bazzar}}" + "/" + id_KelolaBarang,
+            "url": BASE_URL_API + "/bazzar/staff/"+ "{{$id_bazzar}}" + "/" + id_KelolaStaff,
             "method": "DELETE",
             "timeout": 0,
             "headers": {

@@ -16,6 +16,7 @@ use App\Bazar;
 use App\Jenis;
 use App\Supplier;
 use App\Tipe;
+use App\User;
 
 Route::get('/register', function () {
     return view('auth.register');
@@ -61,9 +62,11 @@ Route::group(['middleware' => ['isAlreadyLogin', 'auth.jwt']], function () {
 
     })->name('bazzar.kelola-barang');
 
-    Route::get('/bazzar/kelola-staff', function () {
-        return view('bazzar.kelola-staff.kelola-staff');
-    });
+    Route::get('/bazzar/kelola-staff/{id_bazzar}', function ($id_bazzar) {
+        $user = User::all();
+        $bazzar = Bazar::find($id_bazzar);
+        return view('bazzar.kelola-staff.kelola-staff', compact('bazzar', 'user'));
+    })->name('bazzar.kelola-staff');
 
 
     Route::get('/user', function () {
