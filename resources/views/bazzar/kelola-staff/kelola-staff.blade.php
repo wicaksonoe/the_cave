@@ -9,7 +9,7 @@
 @section('content')
 
 @include('bazzar.kelola-staff.tambah-kelola-staff')
-@include('bazzar.kelola-staff.edit-kelola-staff')
+{{-- @include('bazzar.kelola-staff.edit-kelola-staff') --}}
 <div class="container">
     <div class="row">
         <div class="col">
@@ -21,7 +21,7 @@
                 <div class="card-body">
                     <a onclick="$('#tambahKelolaStaff').modal('show')"><button type="button" class="btn btn-primary"
                             style="margin-bottom: 10px">
-                            <i class="fa fa-plus-square" aria-hidden="true"></i>Tambah
+                            <i class="fa fa-plus-square" aria-hidden="true"></i> Tambah
                         </button></a>
                     <table id="tabelKelolaStaff" class="table table-bordered table-striped table-responsive">
                         <thead>
@@ -83,8 +83,6 @@
     }
 
     function tambahKelolaStaff() {
-        $('#tambahKelolaStaff').submit(function (e) {
-            e.preventDefault();
             var settings = {
             "url": "{{ url ('api/v1/bazzar/staff').'/'.$id_bazzar }}" ,
             "method": "POST",
@@ -96,9 +94,7 @@
             },
             data: {
                 "id_bazzar": $('#id_bazzar').val(),
-                "date": $('#date').val(),
-                "barcode": $('#barcode').val(),
-                "jml": $('#jml').val(),
+                "username": $('#username').val(),
             }
             };
 
@@ -124,75 +120,6 @@
                         $("#" + key).addClass("is-invalid")
                     })
                 });
-        });
-    }
-
-    function editKelolaStaff(id_KelolaStaff) {
-        var settings = {
-            "url": BASE_URL_API + "/bazzar/staff/"+ "{{$id_bazzar}}" + "/" + id_KelolaStaff,
-            "method": "GET",
-            "timeout": 0,
-            "headers": {
-                "Accept": "application/json",
-                "Authorization": "Bearer " + sessionStorage.getItem('access_token')
-            },
-        };
-
-        $.ajax(settings)
-            .done(function (response) {
-                $('#edit-barcode').val(response.data.barcode)
-                $('#edit-jml').val(response.data.jml)
-                $('#edit-date').val(response.data.date)
-                $('#update-button').val(response.data.id)
-                $('#modal-edit-KelolaStaff').modal('show');
-            })
-            .fail(function (response) {
-                swal.fire({
-                    title: 'Error!',
-                    text: 'Terjadi Kesalahan',
-                    type: "error"
-                })
-            });
-    }
-
-    function updateKelolaStaff(id_KelolaStaff) {
-        var settings = {
-            "url": BASE_URL_API + "/bazzar/staff/"+ "{{$id_bazzar}}" + "/" + id_KelolaStaff,
-            "method": "PUT",
-            "timeout": 0,
-            "headers": {
-                "Accept": "application/json",
-                "Content-Type": "application/x-www-form-urlencoded",
-                "Authorization": "Bearer " + sessionStorage.getItem('access_token')
-            },
-            "data": {
-                "barcode": $('#edit-barcode').val(),
-                "jml": $('#edit-jml').val(),
-            }
-        };
-
-        $.ajax(settings)
-            .done(function (msg) {
-                $('#modal-edit-KelolaStaff').modal('hide');
-                swal.fire({
-                    title: 'Berhasil',
-                    text: msg.message,
-                    type: "success"
-                });
-                document.getElementById("form-edit-KelolaStaff").reset();
-                get_data();
-            })
-            .fail(function (msg) {
-                swal.fire({
-                    title: 'Error!',
-                    text: 'Terjadi Kesalahan',
-                    type: "error"
-                })
-
-                $.each(msg.responseJSON.errors, function (key, value) {
-                    $("#edit-" + key).addClass("is-invalid")
-                })
-            });
     }
 
     function deleteKelolaStaff(id_KelolaStaff) {

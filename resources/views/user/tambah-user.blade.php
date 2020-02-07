@@ -45,7 +45,7 @@
                         </select>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary" onclick="tambahUser()">Simpan</button>
+                        <button type="button" class="btn btn-primary" onclick="tambahUser()">Simpan</button>
                         <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
                     </div>
                 </form>

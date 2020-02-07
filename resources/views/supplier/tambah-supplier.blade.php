@@ -25,7 +25,7 @@
                         <input type="number" class="form-control" cols="30" id="telp" placeholder="Telepon">
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary" onclick="tambahSupplier()">Simpan</button>
+                        <button type="button" class="btn btn-primary" onclick="tambahSupplier()">Simpan</button>
                         <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
                     </div>
                 </form>

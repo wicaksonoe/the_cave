@@ -88,8 +88,6 @@
     }
 
     function tambahUser() {
-        $('#tambahUser').submit(function (e) {
-            e.preventDefault();
             var settings = {
             "url": "{{ url ('api/v1/users')}}",
             "method": "POST",
@@ -131,7 +129,7 @@
                         $("#" + key).addClass("is-invalid")
                     })
                 });
-        });
+
     }
     function editUser(id_user) {
         var settings = {

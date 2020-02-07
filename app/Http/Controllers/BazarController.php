@@ -129,7 +129,7 @@ class BazarController extends Controller
                 return $data->include_user->nama;
             })
             ->addColumn('aksi', function ($data) {
-                return '<button class="btn btn-sm btn-danger" value="' . $data->username . '" onclick="deleteStaff(this.value)">Hapus</button>';
+                return '<button class="btn btn-sm btn-danger" value="' . $data->username . '" onclick="deleteKelolaStaff(this.value)">Hapus</button>';
             })
             ->rawColumns(['nama_pegawai', 'aksi'])
             ->make(true);

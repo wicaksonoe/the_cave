@@ -24,7 +24,7 @@ class BarangController extends Controller
 		if ($barcode == null) {
 			// UPDATE USING YAJRA
             $data_barang = Barang_masuk::all();
-            
+
             foreach ($data_barang as $key => $value) {
                 $data[$key] = [
                     'barcode'         => $value->barcode,
@@ -78,7 +78,7 @@ class BarangController extends Controller
 		]);
 
 		$barang = Barang_masuk::findOrFail($barcode);
-		
+
 		$barang->update([
 				'namabrg'  => $request->namabrg,
 				'id_jenis' => $request->id_jenis,

@@ -21,9 +21,12 @@
                 <div class="card-body">
                     <a onclick="$('#tambahKelolaBarang').modal('show')"><button type="button" class="btn btn-primary"
                             style="margin-bottom: 10px">
-                            <i class="fa fa-plus-square" aria-hidden="true"></i>Tambah
+                            <i class="fa fa-plus-square" aria-hidden="true"></i> Tambah
                         </button></a>
-                    <table  id="tabelKelolaBarang" class="table table-bordered table-striped table-responsive">
+                    <a href="{{ route('bazzar.kelola-staff', $id_bazzar) }}" class="btn btn-info"
+                        style="margin-bottom: 10px">
+                        <i class="fa fa-plus-square" aria-hidden="true"></i> Kelola Staff</a>
+                    <table id="tabelKelolaBarang" class="table table-bordered table-striped table-responsive">
                         <thead>
                             <tr>
                                 <th>Aksi</th>
@@ -32,7 +35,7 @@
                                 <th>Tipe Barang</th>
                                 <th>Jumlah Barang</th>
                                 <th>Harga Pokok Penjualan</th>
-                            <th>Harga Jual <span class="badge badge-danger">{{$bazzar->potongan}}% Off</span></th>
+                                <th>Harga Jual <span class="badge badge-danger">{{$bazzar->potongan}}% Off</span></th>
                                 <th>Tanggal Barang Keluar</th>
                         </thead>
                         <tbody>
@@ -91,8 +94,6 @@
     }
 
     function tambahKelolaBarang() {
-        $('#tambahKelolaBarang').submit(function (e) {
-            e.preventDefault();
             var settings = {
             "url": "{{ url ('api/v1/bazzar/barang').'/'.$id_bazzar }}" ,
             "method": "POST",
@@ -132,7 +133,7 @@
                         $("#" + key).addClass("is-invalid")
                     })
                 });
-        });
+
     }
 
     function editKelolaBarang(id_KelolaBarang) {
