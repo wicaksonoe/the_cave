@@ -12,12 +12,17 @@
                 <form id="tambahUserForm" class="form-horizontal" data-toggle="validator">
                     {{ csrf_field() }} {{ method_field('POST') }}
                     <div class="form-group">
-                        <label for="id">Username</label>
+                        <label for="username">Username</label>
                         <input class="form-control" id="username" placeholder="Username">
                     </div>
                     <div class="form-group">
                         <label for="password">Password</label>
-                        <input class="form-control" id="password" placeholder="Password">
+                        <input type="password" class="form-control" id="password" placeholder="Password">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Masukkan Ulang Password</label>
+                        <input type="password" name="password_confirmation" class="form-control" id="password_confirmation"
+                            placeholder="Masukkan Ulang Password">
                     </div>
                     <div class="form-group">
                         <label for="nama">Nama</label>
@@ -35,12 +40,12 @@
                         <label for="role">Jabatan</label>
                         <select id="role" class="form-control">
                             <option selected disabled>Pilih Jabatan...</option>
-                            <option value="Admin">Admin</option>
-                            <option value="Pegawai">Pegawai</option>
+                            <option value="admin">Admin</option>
+                            <option value="pegawai">Pegawai</option>
                         </select>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary">Simpan</button>
+                        <button type="button" class="btn btn-primary" onclick="tambahUser()">Simpan</button>
                         <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
                     </div>
                 </form>

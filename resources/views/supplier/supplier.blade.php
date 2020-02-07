@@ -82,8 +82,6 @@
     }
 
     function tambahSupplier() {
-        $('#tambahSupplier').submit(function (e) {
-            e.preventDefault();
             var settings = {
             "url": "{{ url ('api/v1/supplier/') }}",
             "method": "POST",
@@ -121,7 +119,7 @@
                         $("#" + key).addClass("is-invalid")
                     })
                 });
-        });
+
     }
 
     function editSupplier(id_supplier) {

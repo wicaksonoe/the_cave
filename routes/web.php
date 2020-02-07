@@ -16,6 +16,10 @@ use App\Bazar;
 use App\Jenis;
 use App\Supplier;
 use App\Tipe;
+use App\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie;
 
 Route::get('/register', function () {
     return view('auth.register');
@@ -61,9 +65,11 @@ Route::group(['middleware' => ['isAlreadyLogin', 'auth.jwt']], function () {
 
     })->name('bazzar.kelola-barang');
 
-    Route::get('/bazzar/kelola-staff', function () {
-        return view('bazzar.kelola-staff.kelola-staff');
-    });
+    Route::get('/bazzar/kelola-staff/{id_bazzar}', function ($id_bazzar) {
+        $nama = User::where(['role'=>'pegawai'])->get();
+        $bazzar = Bazar::find($id_bazzar);
+        return view('bazzar.kelola-staff.kelola-staff', compact('id_bazzar', 'bazzar', 'nama'));
+    })->name('bazzar.kelola-staff');
 
 
     Route::get('/user', function () {
@@ -80,5 +86,11 @@ Route::group(['middleware' => ['isAlreadyLogin', 'auth.jwt']], function () {
 
     Route::get('/bazzar/tambah/barang-keluar', function () {
         return view('bazzar.keluar-bazzar');
+    });
+
+    Route::post('/logout', function (Request $request) {
+        Cookie::forget('access_token');
+        Auth::guard()->logout();
+        return redirect()->route('login');
     });
 });

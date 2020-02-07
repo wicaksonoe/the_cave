@@ -84,8 +84,6 @@
     }
 
     function tambahBazzar() {
-        $('#tambahBazzar').submit(function (e) {
-            e.preventDefault();
             var settings = {
             "url": "{{ url ('api/v1/bazzar')}}",
             "method": "POST",
@@ -124,7 +122,7 @@
                         $("#" + key).addClass("is-invalid")
                     })
                 });
-        });
+
     }
 
     function editBazzar(id_bazzar) {

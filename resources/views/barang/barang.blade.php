@@ -77,8 +77,8 @@
             columns: [
                 {width: '10%', data: 'aksi', name: 'aksi'},
                 {width: '30%', data: 'namabrg', name: 'namabrg'},
-                {width: '10%', data: 'id_jenis', name: 'id_jenis'},
-                {width: '10%', data: 'id_tipe', name: 'id_tipe'},
+                {width: '10%', data: 'jenis_barang', name: 'jenis_barang'},
+                {width: '10%', data: 'tipe_barang', name: 'tipe_barang'},
                 {width: '10%', data: 'jumlah', name: 'jumlah'},
                 {width: '10%', data: 'hpp', name: 'hpp'},
                 {width: '10%', data: 'hjual', name: 'hjual'},
@@ -90,8 +90,6 @@
     }
 
     function tambahBarang() {
-        $('#tambahBarang').submit(function(e) {
-        e.preventDefault();
         var settings = {
         "url": "{{ url ('api/v1/barang')}}",
         "method": "POST",
@@ -137,7 +135,7 @@
                     $("#"+key).addClass("is-invalid")
                 })
             });
-        });
+
     }
     function editBarang(id_barang) {
         var settings = {
