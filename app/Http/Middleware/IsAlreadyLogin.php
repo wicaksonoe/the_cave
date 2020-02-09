@@ -30,7 +30,14 @@ class IsAlreadyLogin
 
         if (isset($cookie['access_token'])) {
             $request->headers->set('Authorization', 'Bearer '.$cookie['access_token']);
-            return $next($request);
+            
+            $authenticated = JWTAuth::parseToken()->check();
+
+            if ($authenticated) {
+                return $next($request);
+            } else {
+                return redirect()->route('login');
+            }
         } else {
             return redirect()->route('login');
         }
