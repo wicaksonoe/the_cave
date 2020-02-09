@@ -32,7 +32,7 @@ Route::get('/login', function () {
 Route::group(['middleware' => ['isAlreadyLogin', 'auth.jwt']], function () {
 
     Route::get('/', function () {
-        return view('welcome');
+        return redirect('dashboard');
     });
 
     Route::get('/dashboard', function () {
