@@ -14,13 +14,14 @@ class CreateBazarsTable extends Migration
     public function up()
     {
         Schema::create('bazars', function (Blueprint $table) {
-						$table->bigIncrements('id');
-						$table->string('nama_bazar');
-						$table->string('alamat');
-						$table->date('tgl');
-						$table->integer('potongan');
-						$table->timestamps();
-						$table->softDeletes();
+            $table->bigIncrements('id');
+            $table->string('nama_bazar', 50);
+            $table->string('alamat', 120);
+            $table->date('tgl_mulai');
+            $table->date('tgl_akhir');
+            $table->integer('potongan');
+            $table->timestamps();
+            $table->softDeletes();
         });
     }
 

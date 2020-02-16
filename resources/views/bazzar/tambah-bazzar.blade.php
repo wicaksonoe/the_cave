@@ -9,28 +9,52 @@
             </div>
 
             <div class="modal-body">
-                <form id="tambahBazzarForm" class="form-horizontal" data-toggle="validator">
-
-                    <div class="form-group">
-                        <label for="nama">Nama Bazzar</label>
-                        <input class="form-control" id="nama_bazar" placeholder="Nama Bazzar">
+                <form id="tambahBazzarForm" data-toggle="validator">
+                    <div class="form-group row">
+                        <div class="col-2">
+                            <label for="nama">Nama Bazzar</label>
+                        </div>
+                        <div class="col-10">
+                            <input class="form-control" id="nama_bazar" placeholder="Nama Bazzar">
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="alamat"> Alamat Bazzar</label>
-                        <textarea class="form-control" rows="3" id="alamat" placeholder="Alamat Bazzar"></textarea>
+                    <div class="form-group row">
+                        <div class="col-2">
+                            <label for="alamat"> Alamat Bazzar</label>
+                        </div>
+                        <div class="col-10">
+                            <textarea class="form-control" rows="3" id="alamat" placeholder="Alamat Bazzar"></textarea>
+                        </div>
                     </div>
 
-                    <div class="form-group">
-                        <label for="tgl"> Tanggal</label>
-                        <input type='date' class="form-control" id="tgl" placeholder="Tanggal Bazzar">
+                    <div class="form-group row">
+                        <div class="col-2">
+                            <label for="tgl"> Tanggal Mulai</label>
+                        </div>
+                        <div class="col-10">
+                            <input type='date' class="form-control" id="tgl_mulai" placeholder="Tanggal Bazzar Dimulai">
+                        </div>
                     </div>
 
-                    <div class="form-group">
-                        <label for="potongan"> Potongan</label>
-                        <div class="input-group mb-3">
-                            <input class="form-control col-4" id="potongan" placeholder="Potongan Harga">
-                            <div class="input-group-append">
-                                <span class="input-group-text" id="basic-addon2">%</span>
+                    <div class="form-group row">
+                        <div class="col-2">
+                            <label for="tgl"> Tanggal Akhir</label>
+                        </div>
+                        <div class="col-10">
+                            <input type='date' class="form-control" id="tgl_akhir" placeholder="Tanggal Bazzar Berakhir">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-2">
+                            <label for="potongan"> Potongan</label>
+                        </div>
+                        <div class="col-10">
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="basic-addon2">Rp. </span>
+                                </div>
+                                <input class="form-control col-4 number" id="potongan" placeholder="Potongan Harga">
                             </div>
                         </div>
                     </div>

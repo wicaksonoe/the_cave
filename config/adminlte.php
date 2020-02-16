@@ -243,20 +243,20 @@ return [
         // ],
         // ['header' => 'labels'],
         [
+            'text'      => 'SUPPLIER',
+            'icon'      => 'fas fa-fw fa-box-open',
+            // 'can'        => 'admin',
+            'url'       => 'supplier',
+        ],
+        [
             'text'      => 'DATA BARANG',
             'icon'      => 'fas fa-fw fa-archive',
             'url'       => 'barang',
         ],
         [
-            'text'      => 'BAZZAR',
+            'text'      => 'BAZAR',
             'icon'      => 'fas fa-fw fa-store',
             'url'       => 'bazzar',
-        ],
-        [
-            'text'      => 'SUPPLIER',
-            'icon'      => 'fas fa-fw fa-box-open',
-            // 'can'        => 'admin',
-            'url'       => 'supplier',
         ],
         [
             'text'      => 'USER',

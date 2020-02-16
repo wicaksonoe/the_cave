@@ -24,9 +24,9 @@ class SupplierRequest extends FormRequest
     public function rules()
     {
         return [
-						'nama'	 => 'required',
-            'alamat' => 'required|string',
-            'telp'   => 'required|string',
+            'nama'   => 'required|max:50',
+            'alamat' => 'required|string|max:120',
+            'telp'   => 'required|string|max:12',
         ];
     }
 }

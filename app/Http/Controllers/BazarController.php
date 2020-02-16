@@ -38,13 +38,17 @@ class BazarController extends Controller
             $bazar = Bazar::all();
 
             return DataTables::of($bazar)
+                ->addColumn('potongan_harga', function ($bazar) {
+                    return number_format($bazar->potongan, 0, '.', ',');
+                })
                 ->addColumn('aksi', function ($bazar) {
                     return '
                         <a href="' . route("bazzar.kelola-barang", $bazar->id) . '" class="btn btn-sm btn-info">Kelola</a>
                         <button class="btn btn-sm btn-warning" value="' . $bazar->id . '" onclick="editBazzar(this.value)">Edit</button>
+                        <button class="btn btn-sm btn-danger" value="' . $bazar->id . '" onclick="summaryDelete(this.value)">Delete</button>
                         ';
                 })
-                ->rawColumns(['aksi'])
+                ->rawColumns(['aksi', 'potongan_harga'])
                 ->make(true);
         } else {
             $bazar = Bazar::findOrFail($id);
@@ -166,8 +170,6 @@ class BazarController extends Controller
             ], 422);
         }
 
-        $validatedRequest = $request->validated();
-
         $data_exist = Keluar_bazar::where([
             'id_bazar' => $id_bazzar,
             'barcode' => $request->barcode
@@ -180,21 +182,25 @@ class BazarController extends Controller
                 'message' => 'Data barang untuk bazzar ini sudah ada. Silahkan ubah jumlah barang saja.'
             ], 422);
         } else {
-            $cek_stock = $this->kurangi_stock($request->barcode, $request->jml);
 
-            if (!$cek_stock) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Stock barang di gudang kurang dari jumlah yang diminta.'
-                ], 422);
+            foreach ($request->barcode as $key => $value) {
+                
+                $cek_stock = $this->kurangi_stock($request->barcode[$key], $request->jml[$key]);
+
+                if (!$cek_stock) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Stock barang di gudang kurang dari jumlah yang diminta.'
+                    ], 422);
+                }
+
+                Keluar_bazar::create([
+                    'id_bazar' => $id_bazzar,
+                    'date'     => $request->date,
+                    'barcode'  => $request->barcode[$key],
+                    'jml'      => $request->jml[$key],
+                ]);
             }
-
-            Keluar_bazar::create([
-                'id_bazar' => $id_bazzar,
-                'date'     => $request->date,
-                'barcode'  => $request->barcode,
-                'jml'      => $request->jml,
-            ]);
 
             return response()->json([
                 'success' => true,
@@ -214,16 +220,17 @@ class BazarController extends Controller
                 foreach ($keluar_bazar as $key => $value) {
                     $hjual_asli = $value->include_barang_masuk->hjual;
                     $potongan = $value->include_bazar->potongan;
-                    $hjual_setelah_diskon = $hjual_asli - ($hjual_asli * ($potongan / 100));
+                    $hjual_setelah_diskon = $hjual_asli - $potongan;
 
                     $data_barang[$key] = [
                         'id'           => $value->id,
                         'id_bazar'     => $value->id_bazar,
+                        'barcode'      => $value->barcode,
                         'nama_barang'  => $value->include_barang_masuk->namabrg,
                         'jenis_barang' => $value->include_barang_masuk->include_jenis->nama_jenis,
                         'tipe_barang'  => $value->include_barang_masuk->include_tipe->nama_tipe,
-                        'hpp'          => $value->include_barang_masuk->hpp,
-                        'hjual'        => $hjual_setelah_diskon,
+                        'hpp'          => "Rp. ".number_format($value->include_barang_masuk->hpp, 0, '.', ','),
+                        'hjual'        => "Rp. ".number_format($hjual_setelah_diskon, 0, '.', ','),
                         'jumlah'       => $value->jml,
                         'date'         => $value->date,
                     ];
@@ -234,13 +241,13 @@ class BazarController extends Controller
                         $data_barang = (object) $data_barang;
                         return '
                             <button class="btn btn-sm btn-info" value="' . $data_barang->id . '" onclick="editKelolaBarang(this.value)">Edit</button>
-                            <button class="btn btn-sm btn-danger" value="' . $data_barang->id . '" onclick="deleteKelolaBarang(this.value)" style="margin-left:1rem">Hapus</button>
+                            <button class="btn btn-sm btn-danger" value="' . $data_barang->id . '" onclick="deleteKelolaBarang(this.value)" >Hapus</button>
                             ';
                     })
                     ->rawColumns(['aksi'])
                     ->make(true);
             } else {
-                $data = Keluar_bazar::find($id);
+                $data = Keluar_bazar::findOrFail($id);
 
                 return response()->json([
                     'success' => true,

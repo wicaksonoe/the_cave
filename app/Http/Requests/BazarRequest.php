@@ -24,10 +24,11 @@ class BazarRequest extends FormRequest
     public function rules()
     {
         return [
-						'nama_bazar' => 'required|string',
-						'alamat'     => 'required|string',
-						'tgl'        => 'required|date',
-						'potongan'   => 'required|numeric',
+            'nama_bazar' => 'required|string|max:50',
+            'alamat'     => 'required|string|max:120',
+            'tgl_mulai'  => 'required|date',
+            'tgl_akhir'  => 'required|date',
+            'potongan'   => 'required|numeric',
         ];
     }
 }

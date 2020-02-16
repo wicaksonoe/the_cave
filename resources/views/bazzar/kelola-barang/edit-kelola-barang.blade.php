@@ -11,31 +11,15 @@
             <div class="modal-body">
                 <form id="form-edit-KelolaBarang" class="form-horizontal" data-toggle="validator">
                     <div class="form-group">
-                        <label for="namabrg">Nama Barang</label>
-                        <select class="form-control" id="edit-barcode" class="js-example-basic-single" name="namabrg">
-                            <option selected disabled>Pilih Barang</option>
-                            @foreach ($barang as $item)
-                            <option value="{{ $item->barcode }}">{{ $item->barcode }}-{{ ucfirst($item->namabrg) }}
-                            </option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="form-group">
                         <label for="jumlah">Jumlah Barang</label>
                         <input type="number" class="form-control" id="edit-jml" placeholder="Jumlah Barang">
                     </div>
-
-                    <div class="form-group">
-                        <label for="tanggal"> Tanggal</label>
-                        <input type='date' class="form-control" id="edit-date" placeholder="Tanggal Barang Masuk">
-                    </div>
-
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                        <button type="button" class="btn btn-warning" value="" id="update-button"
-                            onclick="updateKelolaBarang(this.value)">Ubah</button>
-                    </div>
                 </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                <button type="button" class="btn btn-warning" value="" id="update-button"
+                    onclick="updateKelolaBarang(this.value)">Ubah</button>
             </div>
         </div>
     </div>

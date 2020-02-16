@@ -14,20 +14,20 @@ class CreateBarangMasuksTable extends Migration
     public function up()
     {
         Schema::create('barang_masuks', function (Blueprint $table) {
-						$table->string('barcode')->unique();
-						$table->string('namabrg');
-						$table->integer('id_jenis');
-						$table->integer('id_tipe');
-						$table->integer('id_sup');
-						$table->integer('jumlah');
-						$table->integer('hpp');
-						$table->integer('hjual');
-						$table->integer('grosir');
-						$table->integer('partai');
-						$table->date('tgl');
-						$table->timestamps();
-						$table->softDeletes();
-						$table->primary('barcode');
+            $table->string('barcode', 15)->unique();
+            $table->string('namabrg', 50);
+            $table->integer('id_jenis');
+            $table->integer('id_tipe');
+            $table->integer('id_sup');
+            $table->integer('jumlah');
+            $table->integer('hpp');
+            $table->integer('hjual');
+            $table->integer('grosir');
+            $table->integer('partai');
+            $table->date('tgl');
+            $table->timestamps();
+            $table->softDeletes();
+            $table->primary('barcode');
         });
     }
 

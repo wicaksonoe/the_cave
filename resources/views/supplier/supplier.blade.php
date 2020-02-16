@@ -23,18 +23,20 @@
                             style="margin-bottom: 10px">
                             <i class="fa fa-plus-square" aria-hidden="true"></i> Tambah
                         </button></a>
-                    <table id="tabelSupplier" class="table table-bordered table-striped table-responsive">
-                        <thead>
-                            <tr>
-                                <th>Aksi</th>
-                                <th>Nama Supplier</th>
-                                <th>Alamat</th>
-                                <th>Telepon</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
+                    <div class="table-responsive">
+                        <table id="tabelSupplier" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Nama Supplier</th>
+                                    <th>Alamat</th>
+                                    <th>Telepon</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
                 <!-- /.card-body -->
             </div>
@@ -71,12 +73,12 @@
             serverSide: true,
             ajax: settings,
             columns: [
-                {width: '10%', data: 'aksi', name: 'aksi'},
                 {width: '40%', data: 'nama', name: 'nama'},
-                {width: '40%', data: 'alamat', name: 'alamat'},
+                {width: '30%', data: 'alamat', name: 'alamat'},
                 {width: '10%', data: 'telp', name: 'telp'},
+                {width: '20%', data: 'aksi', name: 'aksi'},
             ],
-            order: [1, 'asc'],
+            order: [0, 'asc'],
             responsive: true
         });
     }
@@ -111,7 +113,7 @@
                 .fail(function (msg) {
                     swal.fire({
                         title: 'Error!',
-                        text: 'Terjadi Kesalahan',
+                        text: msg.responseJSON.message,
                         type: "error"
                     })
 
@@ -144,7 +146,7 @@
             .fail(function (response) {
                 swal.fire({
                     title: 'Error!',
-                    text: 'Terjadi Kesalahan',
+                    text: response.responseJSON.message,
                     type: "error"
                 })
             });
@@ -181,7 +183,7 @@
             .fail(function (msg) {
                 swal.fire({
                     title: 'Error!',
-                    text: 'Terjadi Kesalahan',
+                    text: msg.responseJSON.message,
                     type: "error"
                 })
 
@@ -214,7 +216,7 @@
             .fail(function (msg) {
                 swal.fire({
                     title: 'Error!',
-                    text: 'Terjadi Kesalahan',
+                    text: msg.responseJSON.message,
                     type: "error"
                 });
             });

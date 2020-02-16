@@ -14,10 +14,10 @@ class CreateTipesTable extends Migration
     public function up()
     {
         Schema::create('tipes', function (Blueprint $table) {
-						$table->bigIncrements('id');
-						$table->string('nama_tipe');
-						$table->timestamps();
-						$table->softDeletes();
+            $table->bigIncrements('id');
+            $table->string('nama_tipe', 50);
+            $table->timestamps();
+            $table->softDeletes();
         });
     }
 

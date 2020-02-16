@@ -14,10 +14,10 @@ class CreateJenisTable extends Migration
     public function up()
     {
         Schema::create('jenis', function (Blueprint $table) {
-						$table->bigIncrements('id');
-						$table->string('nama_jenis');
-						$table->timestamps();
-						$table->softDeletes();
+            $table->bigIncrements('id');
+            $table->string('nama_jenis', 50);
+            $table->timestamps();
+            $table->softDeletes();
         });
     }
 

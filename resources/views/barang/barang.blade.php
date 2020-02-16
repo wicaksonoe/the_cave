@@ -23,25 +23,25 @@
                             style="margin-bottom: 10px">
                             <i class="fa fa-plus-square" aria-hidden="true"></i> Tambah
                         </button></a>
-
-                    <table id="tabelBarang" class="table table-bordered table-striped table-responsive">
-                        <thead>
-                            <tr>
-                                <th>Aksi</th>
-                                <th>Nama Barang</th>
-                                <th>Jenis</th>
-                                <th>Tipe</th>
-                                <th>Jumlah</th>
-                                <th>Harga Pokok</th>
-                                <th>Harga Jual</th>
-                                <th>Tanggal</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
+                    <div class="table-responsive">
+                        <table id="tabelBarang" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Nama Barang</th>
+                                    <th>Jenis</th>
+                                    <th>Tipe</th>
+                                    <th>Jumlah</th>
+                                    <th>Harga Pokok</th>
+                                    <th>Harga Jual</th>
+                                    <th>Tanggal</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-
             </div>
 
         </div>
@@ -52,9 +52,35 @@
 @section('js')
 <script>
     const BASE_URL_API = "{{ url('api/v1/') }}"
+
+    function formatNumber(num) {
+        return num.toString().replace(',', '').replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+    }
+
+    function formatDate() {
+        var d = new Date(Date.now()),
+            month = '' + (d.getMonth() + 1),
+            day = '' + d.getDate(),
+            year = d.getFullYear();
+
+        if (month.length < 2) 
+            month = '0' + month;
+        if (day.length < 2) 
+            day = '0' + day;
+
+        return [year, month, day].join('-');
+    }
+
+    $('.number').on('change', (e) => {
+        e.target.value = formatNumber(e.target.value)
+    });
+
     $(document).ready(function () {
+        $('#tgl').val(formatDate());
+        $('#edit-tgl').val(formatDate());
         get_data();
     });
+
     $(".form-control").focus(function(e){
         $(e.target).removeClass("is-invalid")
     })
@@ -75,7 +101,6 @@
             serverSide: true,
             ajax: settings,
             columns: [
-                {width: '10%', data: 'aksi', name: 'aksi'},
                 {width: '30%', data: 'namabrg', name: 'namabrg'},
                 {width: '10%', data: 'jenis_barang', name: 'jenis_barang'},
                 {width: '10%', data: 'tipe_barang', name: 'tipe_barang'},
@@ -83,8 +108,9 @@
                 {width: '10%', data: 'hpp', name: 'hpp'},
                 {width: '10%', data: 'hjual', name: 'hjual'},
                 {width: '10%', data: 'tgl', name: 'tgl'},
+                {width: '10%', data: 'aksi', name: 'aksi'},
             ],
-            order: [1, 'asc'],
+            order: [0, 'asc'],
             responsive: true
         });
     }
@@ -100,17 +126,17 @@
             "Authorization": "Bearer " + sessionStorage.getItem('access_token')
         },
         data: {
-            "barcode": $('#barcode').val(),
-            "namabrg": $('#namabrg').val(),
+            "barcode" : $('#barcode').val(),
+            "namabrg" : $('#namabrg').val(),
             "id_jenis": $('#id_jenis').val(),
-            "id_tipe": $('#id_tipe').val(),
-            "id_sup": $('#id_sup').val(),
-            "jumlah": $('#jumlah').val(),
-            "hpp": $('#hpp').val(),
-            "hjual": $('#hjual').val(),
-            "grosir": $('#grosir').val(),
-            "partai": $('#partai').val(),
-            "tgl": $('#tgl').val(),
+            "id_tipe" : $('#id_tipe').val(),
+            "id_sup"  : $('#id_sup').val(),
+            "jumlah"  : $('#jumlah').val().replace(',',''),
+            "hpp"     : $('#hpp').val().replace(',',''),
+            "hjual"   : $('#hjual').val().replace(',',''),
+            "grosir"  : $('#grosir').val().replace(',',''),
+            "partai"  : $('#partai').val().replace(',',''),
+            "tgl"     : $('#tgl').val(),
         }
         };
 
@@ -127,7 +153,7 @@
             .fail(function( msg ) {
                 swal.fire({
                     title: 'Error!',
-                    text: 'Terjadi Kesalahan',
+                    text: msg.responseJSON.message,
                     type : "error"
                 })
 
@@ -137,6 +163,7 @@
             });
 
     }
+
     function editBarang(id_barang) {
         var settings = {
             "url": BASE_URL_API + "/barang/" + id_barang,
@@ -155,27 +182,26 @@
                 $('#edit-id_jenis').val(response.data.id_jenis)
                 $('#edit-id_tipe').val(response.data.id_tipe)
                 $('#edit-id_sup').val(response.data.id_sup)
-                $('#edit-jumlah').val(response.data.jumlah)
-                $('#edit-hpp').val(response.data.hpp)
-                $('#edit-hjual').val(response.data.hjual)
-                $('#edit-grosir').val(response.data.grosir)
-                $('#edit-partai').val(response.data.partai)
-                $('#edit-tgl').val(response.data.tgl)
-                $('#update-button').val(response.data.id)
+                $('#edit-jumlah').val(formatNumber(response.data.jumlah))
+                $('#edit-hpp').val(formatNumber(response.data.hpp))
+                $('#edit-hjual').val(formatNumber(response.data.hjual))
+                $('#edit-grosir').val(formatNumber(response.data.grosir))
+                $('#edit-partai').val(formatNumber(response.data.partai))
+                $('#update-button').val(response.data.barcode)
                 $('#modal-edit-barang').modal('show');
             })
             .fail(function (response) {
                 swal.fire({
                     title: 'Error!',
-                    text: 'Terjadi Kesalahan',
+                    text: msg.responseJSON.message,
                     type: "error"
                 })
             });
     }
 
-    function updateBarang(id_barang) {
+    function updateBarang(barcode) {
         var settings = {
-            "url": BASE_URL_API + "/barang/" + id_barang,
+            "url": BASE_URL_API + "/barang/" + barcode,
             "method": "PUT",
             "timeout": 0,
             "headers": {
@@ -184,17 +210,17 @@
                 "Authorization": "Bearer " + sessionStorage.getItem('access_token')
             },
             "data": {
-                "barcode": $('#barcode').val(),
-                "namabrg": $('#namabrg').val(),
-                "id_jenis": $('#id_jenis').val(),
-                "id_tipe": $('#id_tipe').val(),
-                "id_sup": $('#id_sup').val(),
-                "jumlah": $('#jumlah').val(),
-                "hpp": $('#hpp').val(),
-                "hjual": $('#hjual').val(),
-                "grosir": $('#grosir').val(),
-                "partai": $('#partai').val(),
-                "tgl": $('#tgl').val(),
+                "barcode" : $('#edit-barcode').val(),
+                "namabrg" : $('#edit-namabrg').val(),
+                "id_jenis": $('#edit-id_jenis').val(),
+                "id_tipe" : $('#edit-id_tipe').val(),
+                "id_sup"  : $('#edit-id_sup').val(),
+                "jumlah"  : $('#edit-jumlah').val().replace(',',''),
+                "hpp"     : $('#edit-hpp').val().replace(',',''),
+                "hjual"   : $('#edit-hjual').val().replace(',',''),
+                "grosir"  : $('#edit-grosir').val().replace(',',''),
+                "partai"  : $('#edit-partai').val().replace(',',''),
+                "tgl"     : $('#edit-tgl').val(),
             }
         };
 
@@ -212,7 +238,7 @@
             .fail(function (msg) {
                 swal.fire({
                     title: 'Error!',
-                    text: 'Terjadi Kesalahan',
+                    text: msg.responseJSON.message,
                     type: "error"
                 })
 
@@ -245,7 +271,7 @@
             .fail(function (msg) {
                 swal.fire({
                     title: 'Error!',
-                    text: 'Terjadi Kesalahan',
+                    text: msg.responseJSON.message,
                     type: "error"
                 });
             });

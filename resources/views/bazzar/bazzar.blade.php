@@ -3,11 +3,12 @@
 @section('title', 'BAZZAR')
 
 @section('content_header')
-<h1>Data Bazzar</h1>
+<h1>Data Bazar</h1>
 @stop
 
 @section('content')
 
+@include('bazzar.summary-delete-bazar')
 @include('bazzar.tambah-bazzar')
 @include('bazzar.edit-bazzar')
 <div class="container">
@@ -15,7 +16,7 @@
         <div class="col">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Data Bazzar</h3>
+                    <h3 class="card-title">Data Bazar</h3>
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body">
@@ -23,23 +24,24 @@
                             style="margin-bottom: 10px">
                             <i class="fa fa-plus-square" aria-hidden="true"></i> Tambah
                         </button></a>
-                    <table id="tabelBazzar" class="table table-bordered table-striped table-responsive">
-                        <thead>
-                            <tr>
-                                <th>Aksi</th>
-                                <th>Nama Bazzar</th>
-                                <th>Alamat</th>
-                                <th>Potongan</th>
-                                <th>Tanggal</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
+                    <div class="table-responsive">
+                        <table id="tabelBazzar" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Nama Bazar</th>
+                                    <th>Alamat</th>
+                                    <th>Potongan (Rp. )</th>
+                                    <th>Tanggal Mulai</th>
+                                    <th>Tanggal Akhir</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-
             </div>
-
         </div>
     </div>
 </div>
@@ -48,6 +50,15 @@
 @section('js')
 <script>
     const BASE_URL_API = "{{ url('api/v1/') }}"
+
+    function formatNumber(num) {
+        return num.toString().replace(',', '').replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+    }
+
+    $('.number').on('change', (e) => {
+        e.target.value = formatNumber(e.target.value)
+    });
+
     $(document).ready(function () {
         get_data();
     });
@@ -55,6 +66,33 @@
     $(".form-control").focus(function(e){
         $(e.target).removeClass("is-invalid")
     })
+
+    function summaryDelete(id_bazar) {
+        var settings = {
+            "url": BASE_URL_API + '/bazzar/barang/' + id_bazar,
+            "method": "GET",
+            "timeout": 0,
+            "headers": {
+                "Accept": "application/json",
+                "Authorization": "Bearer " + sessionStorage.getItem('access_token')
+            },
+        };
+        $('#tabel_hapus_bazar').DataTable().clear().destroy();
+        $('#tabel_hapus_bazar').DataTable({
+            processing: false,
+            serverSide: true,
+            ajax: settings,
+            columns: [
+                {width: '40%', data: 'barcode', name: 'barcode'},
+                {width: '40%', data: 'nama_barang', name: 'nama_barang'},
+                {width: '20%', data: 'jumlah', name: 'jumlah'},
+            ],
+            order: [0, 'asc'],
+            responsive: true
+        });
+        $('#confirmDelete').val(id_bazar);
+        $('#summaryDeleteBazar').modal('show');
+    }
 
     function get_data() {
         var settings = {
@@ -72,13 +110,14 @@
             serverSide: true,
             ajax: settings,
             columns: [
-                {width: '10%', data: 'aksi', name: 'aksi'},
-                {width: '30%', data: 'nama_bazar', name: 'nama_bazar'},
+                {width: '20%', data: 'nama_bazar', name: 'nama_bazar'},
                 {width: '30%', data: 'alamat', name: 'alamat'},
-                {width: '10%', data: 'potongan', name: 'potongan'},
-                {width: '20%', data: 'tgl', name: 'tgl'},
+                {width: '10%', data: 'potongan_harga', name: 'potongan_harga'},
+                {width: '10%', data: 'tgl_mulai', name: 'tgl_mulai'},
+                {width: '10%', data: 'tgl_akhir', name: 'tgl_akhir'},
+                {width: '30%', data: 'aksi', name: 'aksi'},
             ],
-            order: [1, 'asc'],
+            order: [0, 'asc'],
             responsive: true
         });
     }
@@ -95,9 +134,10 @@
             },
             data: {
                 "nama_bazar": $('#nama_bazar').val(),
-                "alamat": $('#alamat').val(),
-                "tgl": $('#tgl').val(),
-                "potongan": $('#potongan').val()
+                "alamat"    : $('#alamat').val(),
+                "tgl_mulai" : $('#tgl_mulai').val(),
+                "tgl_akhir" : $('#tgl_akhir').val(),
+                "potongan"  : $('#potongan').val().replace(',', '')
             }
             };
 
@@ -114,7 +154,7 @@
                 .fail(function (msg) {
                     swal.fire({
                         title: 'Error!',
-                        text: 'Terjadi Kesalahan',
+                        text: msg.responseJSON.message,
                         type: "error"
                     })
 
@@ -140,15 +180,16 @@
             .done(function (response) {
                 $('#edit-nama_bazar').val(response.data.nama_bazar)
                 $('#edit-alamat').html(response.data.alamat)
-                $('#edit-tgl').val(response.data.tgl)
-                $('#edit-potongan').val(response.data.potongan)
+                $('#edit-tgl_mulai').val(response.data.tgl_mulai)
+                $('#edit-tgl_akhir').val(response.data.tgl_akhir)
+                $('#edit-potongan').val(formatNumber(response.data.potongan))
                 $('#update-button').val(response.data.id)
                 $('#modal-edit-bazzar').modal('show');
             })
             .fail(function (response) {
                 swal.fire({
                     title: 'Error!',
-                    text: 'Terjadi Kesalahan',
+                    text: response.responseJSON.message,
                     type: "error"
                 })
             });
@@ -167,7 +208,8 @@
             "data": {
                 "nama_bazar": $('#edit-nama_bazar').val(),
                 "alamat": $('#edit-alamat').val(),
-                "tgl": $('#edit-tgl').val(),
+                "tgl_mulai": $('#edit-tgl_mulai').val().replace(',', ''),
+                "tgl_akhir": $('#edit-tgl_ahir').val().replace(',', ''),
                 "potongan": $('#edit-potongan').val(),
             }
         };
@@ -186,7 +228,7 @@
             .fail(function (msg) {
                 swal.fire({
                     title: 'Error!',
-                    text: 'Terjadi Kesalahan',
+                    text: msg.responseJSON.message,
                     type: "error"
                 })
 
@@ -198,7 +240,7 @@
 
     function deleteBazzar(id_bazzar) {
         var settings = {
-            "url": BASE_URL_API + "/supplier/" + id_bazzar,
+            "url": BASE_URL_API + "/bazzar/" + id_bazzar,
             "method": "DELETE",
             "timeout": 0,
             "headers": {
@@ -214,12 +256,13 @@
                     text: msg.message,
                     type: "success"
                 });
+                $('#summaryDeleteBazar').modal('hide');
                 get_data();
             })
             .fail(function (msg) {
                 swal.fire({
                     title: 'Error!',
-                    text: 'Terjadi Kesalahan',
+                    text: msg.responseJSON.message,
                     type: "error"
                 });
             });

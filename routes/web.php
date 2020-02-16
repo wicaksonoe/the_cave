@@ -21,10 +21,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
 
-Route::get('/register', function () {
-    return view('auth.register');
-});
-
 Route::get('/login', function () {
     return view('auth.login');
 })->name('login');
@@ -40,9 +36,9 @@ Route::group(['middleware' => ['isAlreadyLogin', 'auth.jwt']], function () {
     });
 
     Route::get('/barang', function () {
-        $jenis = Jenis::all();
-        $tipe = Tipe::all();
-        $supp = Supplier::all();
+        $jenis = Jenis::withTrashed()->get();
+        $tipe  = Tipe::withTrashed()->get();
+        $supp  = Supplier::withTrashed()->get();
 
         return view('barang.barang', compact('jenis', "tipe", "supp"));
     });
@@ -57,17 +53,18 @@ Route::group(['middleware' => ['isAlreadyLogin', 'auth.jwt']], function () {
 
     Route::get('/bazzar/kelola-barang/{id_bazzar}', function ($id_bazzar) {
         $barang = Barang_masuk::all();
-        $jenis = Jenis::all();
-        $tipe = Tipe::all();
-        $supp = Supplier::all();
-        $bazzar = Bazar::find($id_bazzar);
+        $jenis  = Jenis::all();
+        $tipe   = Tipe::all();
+        $supp   = Supplier::all();
+        $bazzar = Bazar::findOrFail($id_bazzar);
+        
         return view('bazzar.kelola-barang.kelola-barang', compact('bazzar', 'barang','id_bazzar', 'jenis', 'tipe', 'supp'));
-
     })->name('bazzar.kelola-barang');
 
     Route::get('/bazzar/kelola-staff/{id_bazzar}', function ($id_bazzar) {
-        $nama = User::where(['role'=>'pegawai'])->get();
-        $bazzar = Bazar::find($id_bazzar);
+        $nama   = User::where(['role'=>'pegawai'])->get();
+        $bazzar = Bazar::findOrFail($id_bazzar);
+
         return view('bazzar.kelola-staff.kelola-staff', compact('id_bazzar', 'bazzar', 'nama'));
     })->name('bazzar.kelola-staff');
 
