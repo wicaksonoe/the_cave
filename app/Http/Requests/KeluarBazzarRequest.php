@@ -24,9 +24,7 @@ class KeluarBazzarRequest extends FormRequest
     public function rules()
     {
         return [
-            'date'     => 'required|date',
-            'barcode'  => 'required|string',
-            'jml'      => 'required|integer',
+            'date'     => 'required|date'
         ];
     }
 }

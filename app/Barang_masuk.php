@@ -29,16 +29,16 @@ class Barang_masuk extends Model
 
 	public function include_supplier()
 	{
-		return $this->belongsTo('App\Supplier', 'id_sup');
+		return $this->belongsTo('App\Supplier', 'id_sup')->withTrashed();
 	}
 
 	public function include_tipe()
 	{
-		return $this->belongsTo('App\Tipe', 'id_tipe');
+		return $this->belongsTo('App\Tipe', 'id_tipe')->withTrashed();
 	}
 
 	public function include_jenis()
 	{
-		return $this->belongsTo('App\Jenis', 'id_jenis');
+		return $this->belongsTo('App\Jenis', 'id_jenis')->withTrashed();
 	}
 }

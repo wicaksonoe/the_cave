@@ -24,8 +24,8 @@ class BarangMasukRequest extends FormRequest
 	public function rules()
 	{
 		return [
-			'barcode'  => 'required',
-			'namabrg'  => 'required|string',
+			'barcode'  => 'required|max:15',
+			'namabrg'  => 'required|string|max:50',
 			'id_jenis' => 'required|numeric',
 			'id_tipe'  => 'required|numeric',
 			'id_sup'   => 'required|numeric',

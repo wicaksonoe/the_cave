@@ -32,11 +32,11 @@ class BarangController extends Controller
                     'jenis_barang'    => $value->include_jenis->nama_jenis,
                     'tipe_barang'     => $value->include_tipe->nama_tipe,
                     'supplier_barang' => $value->include_supplier->nama,
-                    'jumlah'          => $value->jumlah,
-                    'hpp'             => $value->hpp,
-                    'hjual'           => $value->hjual,
-                    'grosir'          => $value->grosir,
-                    'partai'          => $value->partai,
+                    'jumlah'          => number_format($value->jumlah, 0, '.', ','),
+                    'hpp'             => number_format($value->hpp, 0, '.', ','),
+                    'hjual'           => number_format($value->hjual, 0, '.', ','),
+                    'grosir'          => number_format($value->grosir, 0, '.', ','),
+                    'partai'          => number_format($value->partai, 0, '.', ','),
                     'tgl'             => $value->tgl,
                 ];
             }

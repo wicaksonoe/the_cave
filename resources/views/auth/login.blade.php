@@ -36,14 +36,6 @@
                     </div>
                 </div>
             </form>
-            <br>
-            @if (url('register'))
-            <p class="mb-0">
-                <a href="{{ url('/register') }}">
-                    {{ __('adminlte::adminlte.register_a_new_membership') }}
-                </a>
-            </p>
-            @endif
         </div>
     </div>
 </div>
@@ -77,7 +69,7 @@
                 title: 'Success!',
                 text: 'Selamat datang.',
                 type: 'success',
-                onClose: () => {
+                onOpen: () => {
                     window.location.replace('{{ url("/dashboard") }}')
                 }
             });
