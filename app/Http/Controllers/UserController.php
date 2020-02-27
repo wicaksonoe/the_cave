@@ -41,7 +41,7 @@ class UserController extends Controller
 	public function create(RegistrationFormRequest $request)
 	{
 		$validateRequest = $request->validate([
-			'username' => 'unique:users,username'
+			'username' => 'bail|unique:users,username'
 		]);
 
 		User::create(

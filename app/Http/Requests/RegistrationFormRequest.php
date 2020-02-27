@@ -24,12 +24,12 @@ class RegistrationFormRequest extends FormRequest
     public function rules()
     {
         return [
-            'username'              => 'required|string|max:20',
-            'password'              => 'required|string|min:6|confirmed',
-            'nama'                  => 'required|string|max:50',
-            'alamat'                => 'required|string|max:120',
-            'telp'                  => 'required|max:12',
-            'role'                  => 'required|in:pegawai,admin',
+            'username'              => 'bail|required|string|max:20',
+            'password'              => 'bail|required|string|min:6|confirmed',
+            'nama'                  => 'bail|required|string|max:50',
+            'alamat'                => 'bail|required|string|max:120',
+            'telp'                  => 'bail|required|max:12',
+            'role'                  => 'bail|required|in:pegawai,admin',
         ];
     }
 }
