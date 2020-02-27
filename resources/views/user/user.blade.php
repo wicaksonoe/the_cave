@@ -19,23 +19,26 @@
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body">
-                    <a onclick="$('#tambahUser').modal('show')"><button type="button" class="btn btn-primary" style="margin-bottom: 10px">
-                        <i class="fa fa-plus-square" aria-hidden="true"></i> Tambah
-                    </button></a>
-                    <table id="tabelUser" class="table table-bordered table-striped table-responsive">
-                        <thead>
-                            <tr>
-                                <th>Aksi</th>
-                                <th>Username</th>
-                                <th>Nama</th>
-                                <th>Alamat</th>
-                                <th>Telepon</th>
-                                <th>Jabatan</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
+                    <a onclick="$('#tambahUser').modal('show')"><button type="button" class="btn btn-primary"
+                            style="margin-bottom: 10px">
+                            <i class="fa fa-plus-square" aria-hidden="true"></i> Tambah
+                        </button></a>
+                    <div class="table-responsive">
+                        <table id="tabelUser" class="table table-bordered table-striped table-responsive">
+                            <thead>
+                                <tr>
+                                    <th>Aksi</th>
+                                    <th>Username</th>
+                                    <th>Nama</th>
+                                    <th>Alamat</th>
+                                    <th>Telepon</th>
+                                    <th>Jabatan</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
                 <!-- /.card-body -->
             </div>
@@ -56,7 +59,7 @@
     });
 
     $(".form-control").focus(function(e){
-        $(e.target).removeClass("is-invalid")
+        $(e.target).removeClass("is-invalid").parent().children('.error-msg').remove()
     })
 
     function get_data() {
@@ -121,12 +124,13 @@
                 .fail(function (msg) {
                     swal.fire({
                         title: 'Error!',
-                        text: 'Terjadi Kesalahan',
+                        text: msg.responseJSON.message,
                         type: "error"
                     })
 
                     $.each(msg.responseJSON.errors, function (key, value) {
-                        $("#" + key).addClass("is-invalid")
+                        let errorsMessage = "<small class='form-text text-danger error-msg'>" + value + "</small>"
+                        $("#" + key).addClass("is-invalid").parent().append(errorsMessage)
                     })
                 });
 
@@ -153,10 +157,10 @@
                 $('#modal-edit-user').modal('show');
 
             })
-            .fail(function (response) {
+            .fail(function (msg) {
                 swal.fire({
                     title: 'Error!',
-                    text: 'Terjadi Kesalahan',
+                    text: msg.responseJSON.message,
                     type: "error"
                 })
             });
@@ -197,12 +201,13 @@
             .fail(function (msg) {
                 swal.fire({
                     title: 'Error!',
-                    text: 'Terjadi Kesalahan',
+                    text: msg.responseJSON.message,
                     type: "error"
                 })
 
                 $.each(msg.responseJSON.errors, function (key, value) {
-                    $("#edit-" + key).addClass("is-invalid")
+                    let errorsMessage = "<small class='form-text text-danger error-msg'>" + value + "</small>"
+                    $("#edit-" + key).addClass("is-invalid").parent().append(errorsMessage)
                 })
             });
     }
@@ -230,7 +235,7 @@
             .fail(function (msg) {
                 swal.fire({
                     title: 'Error!',
-                    text: 'Terjadi Kesalahan',
+                    text: msg.responseJSON.message,
                     type: "error"
                 });
             });
