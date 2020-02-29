@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\SupplierRequest;
 use App\Http\Requests\Supplier\CreateRequest;
 use App\Http\Requests\Supplier\UpdateRequest;
 use App\Supplier;
@@ -53,7 +52,7 @@ class SupplierController extends Controller
 		]);
 	}
 
-	public function update(SupplierRequest $request, $id)
+	public function update(UpdateRequest $request, $id)
 	{
 		$supplier = Supplier::findOrFail($id);
 
