@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\RegistrationFormRequest;
 use App\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
+use App\Http\Requests\User\CreateRequest;
+use App\Http\Requests\User\UpdateRequest;
 
 class UserController extends Controller
 {
@@ -38,12 +38,8 @@ class UserController extends Controller
 		}
 	}
 
-	public function create(RegistrationFormRequest $request)
+	public function create(CreateRequest $request)
 	{
-		$validateRequest = $request->validate([
-			'username' => 'unique:users,username'
-		]);
-
 		User::create(
 			[
 				'username' => $request->username,
@@ -61,7 +57,7 @@ class UserController extends Controller
 		]);
 	}
 
-	public function update(RegistrationFormRequest $request, $username)
+	public function update(UpdateRequest $request, $username)
 	{
 		$data_user = User::findOrFail($username);
 

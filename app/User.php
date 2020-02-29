@@ -10,8 +10,8 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class User extends Authenticatable implements JWTSubject
 {
-		use Notifiable;
-		use SoftDeletes;
+    use Notifiable;
+    use SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -20,11 +20,11 @@ class User extends Authenticatable implements JWTSubject
      */
     protected $fillable = [
         'username', 'password', 'nama', 'alamat', 'telp', 'role',
-		];
-		
-		protected $primaryKey = 'username';
-		protected $keyType = 'string';
-		public $incrementing = false;
+    ];
+
+    protected $primaryKey = 'username';
+    protected $keyType = 'string';
+    public $incrementing = false;
 
     /**
      * The attributes that should be hidden for arrays.
@@ -34,19 +34,19 @@ class User extends Authenticatable implements JWTSubject
     protected $hidden = [
         'password', 'remember_token',
     ];
-		
-		public function getJWTIdentifier()
-		{
-			return $this->getKey();
-		}
 
-		public function getJWTCustomClaims()
-		{
-			return [];
-		}
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
 
-		public function include_staff_bazar()
-		{
-			return $this->hasMany('App\Staff_bazar', 'username', 'username');
-		}
+    public function getJWTCustomClaims()
+    {
+        return [];
+    }
+
+    public function include_staff_bazar()
+    {
+        return $this->hasMany('App\Staff_bazar', 'username', 'username');
+    }
 }

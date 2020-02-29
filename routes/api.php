@@ -75,6 +75,16 @@ Route::group([
             Route::put('/{id_bazzar}/{id}', 'BazarController@update_barang');
             Route::delete('/{id_bazzar}/{id}', 'BazarController@delete_barang');
         });
+
+        Route::group([
+            'prefix' => 'penjualan',
+        ], function () {
+            Route::post('/', 'PenjualanBazarController@create');
+            Route::get('/', 'PenjualanBazarController@get');
+            Route::get('/{id}', 'PenjualanBazarController@get');
+            Route::put('/{id}', 'PenjualanBazarController@update');
+            Route::delete('/{id}', 'PenjualanBazarController@delete');
+        });
     });
 
     Route::group([
@@ -85,5 +95,14 @@ Route::group([
         Route::get('/', 'UserController@get');
         Route::get('/{username}', 'UserController@get');
         Route::put('/{username}', 'UserController@update');
+    });
+
+    Route::group([
+        'prefix' => 'penjualan',
+        'middleware' => 'auth:api'
+    ], function () {
+        Route::post('/', 'PenjualanController@create'); // posting penjualan baru
+        Route::get('/', 'PenjualanController@get'); // daftar history penjualan
+        Route::get('/{kode_trx}', 'PenjualanController@get');   // detail barang transaksi
     });
 });

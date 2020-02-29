@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Barang_masuk;
-use App\Http\Requests\BarangMasukRequest;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\DataTables;
+use App\Http\Requests\BarangMasuk\CreateRequest;
+use App\Http\Requests\BarangMasuk\UpdateRequest;
 
 class BarangController extends Controller
 {
@@ -57,12 +57,8 @@ class BarangController extends Controller
 		]);
 	}
 
-	public function create(BarangMasukRequest $request)
+	public function create(CreateRequest $request)
 	{
-		$validatedData = $request->validate([
-			'barcode'  => 'string|unique:barang_masuks,barcode',
-		]);
-
 		Barang_masuk::create($request->all());
 
 		return response()->json([
@@ -71,12 +67,8 @@ class BarangController extends Controller
 		]);
 	}
 
-	public function update(BarangMasukRequest $request, $barcode)
+	public function update(UpdateRequest $request, $barcode)
 	{
-		$validatedData = $request->validate([
-			'barcode'  => 'string',
-		]);
-
 		$barang = Barang_masuk::findOrFail($barcode);
 
 		$barang->update([
