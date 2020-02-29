@@ -186,14 +186,14 @@ class BazarController extends Controller
                     'message' => 'Data barang untuk bazzar ini sudah ada. Silahkan ubah jumlah barang saja.'
                 ], 422);
             } else {
-                $cek_stock = $this->kurangi_stock($request->barcode[$key], $request->jml[$key]);
+                $cek_stock = $this->kurangi_stock($request->barcode[$key], $request->jumlah[$key]);
 
                 if ($cek_stock) {
                     Keluar_bazar::create([
                         'id_bazar' => $id_bazzar,
                         'date'     => $request->date,
                         'barcode'  => $request->barcode[$key],
-                        'jml'      => $request->jml[$key],
+                        'jml'      => $request->jumlah[$key],
                     ]);
                 } else {
                     return response()->json([

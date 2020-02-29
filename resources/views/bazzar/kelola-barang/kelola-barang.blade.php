@@ -118,7 +118,7 @@
                 let newRow = '<tr id="' + barcode + '">' +
                                 '<td><input type="text" name="barcode[]" class="form-control" value="' + barcode + '" readonly></td>' +
                                 '<td>' + response.data.namabrg + '</td>' +
-                                '<td><input type="text" name="jml[]" class="form-control number"></td>' +
+                                '<td><input type="text" name="jumlah[]" class="form-control number"></td>' +
                                 '<td><button class="btn btn-sm btn-danger" onclick="delete_nama_barang(' + barcode + ')"><i class="fas fa-trash-alt"></i></button></td>' +
                             '</tr>';
 

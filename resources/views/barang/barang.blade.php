@@ -102,14 +102,14 @@
             serverSide: true,
             ajax: settings,
             columns: [
-                {width: '30%', data: 'namabrg', name: 'namabrg'},
+                {width: '25%', data: 'namabrg', name: 'namabrg'},
                 {width: '10%', data: 'jenis_barang', name: 'jenis_barang'},
                 {width: '10%', data: 'tipe_barang', name: 'tipe_barang'},
                 {width: '10%', data: 'jumlah', name: 'jumlah'},
                 {width: '10%', data: 'hpp', name: 'hpp'},
                 {width: '10%', data: 'hjual', name: 'hjual'},
                 {width: '10%', data: 'tgl', name: 'tgl'},
-                {width: '10%', data: 'aksi', name: 'aksi'},
+                {width: '15%', data: 'aksi', name: 'aksi'},
             ],
             order: [0, 'asc'],
             responsive: true
