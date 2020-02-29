@@ -17,7 +17,7 @@
                     </div>
                     <div class="form-group">
                         <label for="password">Password</label>
-                        <input type="password" class="form-control" id="password" placeholder="Password">
+                        <input type="password" class="form-control" id="password" placeholder="Password Minimal 8 Karakter">
                     </div>
                     <div class="form-group">
                         <label for="password">Masukkan Ulang Password</label>

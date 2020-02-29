@@ -57,7 +57,7 @@ Route::group(['middleware' => ['isAlreadyLogin', 'auth.jwt']], function () {
         $tipe   = Tipe::all();
         $supp   = Supplier::all();
         $bazzar = Bazar::findOrFail($id_bazzar);
-        
+
         return view('bazzar.kelola-barang.kelola-barang', compact('bazzar', 'barang','id_bazzar', 'jenis', 'tipe', 'supp'));
     })->name('bazzar.kelola-barang');
 
@@ -89,5 +89,9 @@ Route::group(['middleware' => ['isAlreadyLogin', 'auth.jwt']], function () {
         Cookie::forget('access_token');
         Auth::guard()->logout();
         return redirect()->route('login');
+    });
+
+    Route::get('/penjualan', function () {
+        return view('penjualan.penjualan');
     });
 });

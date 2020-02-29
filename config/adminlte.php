@@ -249,6 +249,11 @@ return [
             'url'       => 'supplier',
         ],
         [
+            'text'      => 'PENJUALAN',
+            'icon'      => 'fa fa-cart-plus',
+            'url'       => 'penjualan',
+        ],
+        [
             'text'      => 'DATA BARANG',
             'icon'      => 'fas fa-fw fa-archive',
             'url'       => 'barang',
