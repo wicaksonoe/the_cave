@@ -26,7 +26,7 @@
                             <label for="id">Barcode</label>
                         </div>
                         <div class="col-10">
-                            <input class="form-control" id="edit-barcode" placeholder="Barcode">
+                            <input class="form-control" id="edit-barcode" placeholder="Barcode" maxlength="15">
                             <small class="text-danger edit-barcode"></small>
                         </div>
                     </div>

@@ -32,9 +32,10 @@
                         <table id="tabel_tambah_barang" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
-                                    <th style="width: 40%">Nama Barang</th>
-                                    <th style="width: 15%">Jumlah</th>
-                                    <th style="width: 10%">Harga</th>
+                                    <th class="text-center" style="width: 10%">Jumlah</th>
+                                    <th class="text-center" style="width: 40%">Nama Barang</th>
+                                    <th class="text-center" style="width: 25%">Harga</th>
+                                    <th class="text-center" style="width: 25%">Total</th>
                                 </tr>
                             </thead>
                             <tbody id="konten_tambah_barang"></tbody>
@@ -58,89 +59,9 @@
 @section('js')
 <script>
     const BASE_URL_API = "{{ url('api/v1/') }}"
-    $(document).ready(function () {
-        get_data();
-    });
 
-    $(".form-control").focus(function(e){
-        $(e.target).removeClass("is-invalid")
-    })
-
-    function get_data() {
-        var settings = {
-            "url": "{{ url('api/v1/users') }}",
-            "method": "GET",
-            "timeout": 0,
-            "headers": {
-                "Accept": "application/json",
-                "Authorization": "Bearer " + sessionStorage.getItem('access_token')
-            },
-        };
-        $('#tabelUser').DataTable().clear().destroy();
-        $('#tabelUser').DataTable({
-            processing: false,
-            serverSide: true,
-            ajax: settings,
-            columns: [
-                {width: '10%', data: 'aksi', name: 'aksi'},
-                {width: '20%', data: 'username', name: 'username'},
-                {width: '30%', data: 'nama', name: 'nama'},
-                {width: '20%', data: 'alamat', name: 'alamat'},
-                {width: '10%', data: 'telp', name: 'telp'},
-                {width: '10%', data: 'role', name: 'role'},
-            ],
-            order: [1, 'asc'],
-            responsive: true
-        });
-    }
-
-    function tambahUser() {
-            var settings = {
-            "url": "{{ url ('api/v1/users')}}",
-            "method": "POST",
-            "timeout": 0,
-            "headers": {
-                "Accept": "application/json",
-                "Content-Type": "application/x-www-form-urlencoded",
-                "Authorization": "Bearer " + sessionStorage.getItem('access_token')
-            },
-            data: {
-                "username": $('#username').val(),
-                "password": $('#password').val(),
-                "password_confirmation": $('#password_confirmation').val(),
-                "nama": $('#nama').val(),
-                "alamat": $('#alamat').val(),
-                "telp": $('#telp').val(),
-                "role": $('#role').val()
-            }
-            };
-
-            $.ajax(settings).done(function (msg) {
-                $('#tambahUser').modal('hide');
-                swal.fire({
-                    title: 'Berhasil',
-                    text: msg.message,
-                    type: "success"
-                });
-                document.getElementById("tambahUserForm").reset();
-                get_data();
-            })
-                .fail(function (msg) {
-                    swal.fire({
-                        title: 'Error!',
-                        text: 'Terjadi Kesalahan',
-                        type: "error"
-                    })
-
-                    $.each(msg.responseJSON.errors, function (key, value) {
-                        $("#" + key).addClass("is-invalid")
-                    })
-                });
-
-    }
-    function editUser(id_user) {
-        var settings = {
-            "url": BASE_URL_API + "/users/" + id_user,
+    let settings = {
+            "url": BASE_URL_API + "/barang/" + barcode ,
             "method": "GET",
             "timeout": 0,
             "headers": {
@@ -151,97 +72,32 @@
 
         $.ajax(settings)
             .done(function (response) {
-                $('#edit-username').val(response.data.username)
-                $('#edit-nama').val(response.data.nama)
-                $('#edit-alamat').html(response.data.alamat)
-                $('#edit-telp').val(response.data.telp)
-                $('#edit-role').val(response.data.role)
-                $('#update-button').val(response.data.username)
-                $('#modal-edit-user').modal('show');
+                let barcode = response.data.barcode;
+                let newRow = '<tr id="' + barcode + '">' +
+                                '<td><input type="text" name="barcode[]" class="form-control" value="' + barcode + '" readonly></td>' +
+                                '<td>' + response.data.namabrg + '</td>' +
+                                '<td><input type="text" name="jml[]" class="form-control number"></td>' +
+                                '<td><button class="btn btn-sm btn-danger" onclick="delete_nama_barang(' + barcode + ')"><i class="fas fa-trash-alt"></i></button></td>' +
+                            '</tr>';
 
+                if ( $('#' + barcode).length ) {
+                    swal.fire({
+                        title: 'Error!',
+                        text: 'Barang ini sudah anda tambahkan di keranjang',
+                        type: "error"
+                    })
+                } else {
+                    $('#konten_tambah_barang').append(newRow);
+                }
+
+                $('#barcode_scan').val('');
             })
             .fail(function (response) {
                 swal.fire({
                     title: 'Error!',
-                    text: 'Terjadi Kesalahan',
+                    text: response.responseJSON.message,
                     type: "error"
                 })
             });
-    }
-
-    function updateUser(id_user) {
-        var settings = {
-            "url": BASE_URL_API + "/users/" + id_user,
-            "method": "PUT",
-            "timeout": 0,
-            "headers": {
-                "Accept": "application/json",
-                "Content-Type": "application/x-www-form-urlencoded",
-                "Authorization": "Bearer " + sessionStorage.getItem('access_token')
-            },
-            "data": {
-                "username": $('#edit-username').val(),
-                "password": $('#edit-password').val(),
-                "password_confirmation": $('#edit-password_confirmation').val(),
-                "nama": $('#edit-nama').val(),
-                "alamat": $('#edit-alamat').val(),
-                "telp": $('#edit-telp').val(),
-                "role": $('#edit-role').val(),
-            }
-        };
-
-        $.ajax(settings)
-            .done(function (msg) {
-                $('#modal-edit-user').modal('hide');
-                swal.fire({
-                    title: 'Berhasil',
-                    text: msg.message,
-                    type: "success"
-                });
-                document.getElementById("form-edit-user").reset();
-                get_data();
-            })
-            .fail(function (msg) {
-                swal.fire({
-                    title: 'Error!',
-                    text: 'Terjadi Kesalahan',
-                    type: "error"
-                })
-
-                $.each(msg.responseJSON.errors, function (key, value) {
-                    $("#edit-" + key).addClass("is-invalid")
-                })
-            });
-    }
-
-    function deleteUser(id_user) {
-        var settings = {
-            "url": BASE_URL_API + "/users/" + id_user,
-            "method": "DELETE",
-            "timeout": 0,
-            "headers": {
-                "Accept": "application/json",
-                "Authorization": "Bearer " + sessionStorage.getItem('access_token')
-            },
-        };
-
-        $.ajax(settings)
-            .done(function (msg) {
-                swal.fire({
-                    title: 'Berhasil',
-                    text: msg.message,
-                    type: "success"
-                });
-                get_data();
-            })
-            .fail(function (msg) {
-                swal.fire({
-                    title: 'Error!',
-                    text: 'Terjadi Kesalahan',
-                    type: "error"
-                });
-            });
-    }
-
 </script>
 @stop
