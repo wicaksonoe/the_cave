@@ -3,12 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\DetailPenjualan;
-use App\Http\Requests\PenjualanRequest;
 use App\Penjualan;
 use DateTime;
 use DateTimeZone;
 use Illuminate\Database\QueryException;
-use Illuminate\Http\Request;
+use App\Http\Requests\Penjualan\CreateRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
@@ -80,7 +79,7 @@ class PenjualanController extends Controller
         }
     }
 
-    public function create(PenjualanRequest $request)
+    public function create(CreateRequest $request)
     {
         $username = $this->user->username;
 

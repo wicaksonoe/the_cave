@@ -4,13 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Barang_masuk;
 use App\Bazar;
-use App\Http\Requests\BazarRequest;
-use App\Http\Requests\KeluarBazzarRequest;
 use App\Keluar_bazar;
 use App\Staff_bazar;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
+use App\Http\Requests\Bazar\CreateRequest;
+use App\Http\Requests\Bazar\UpdateRequest;
+use App\Http\Requests\Bazar\CreateBarangRequest;
+use App\Http\Requests\Bazar\UpdateBarangRequest;
 
 class BazarController extends Controller
 {
@@ -21,7 +23,7 @@ class BazarController extends Controller
         $this->user = Auth::guard()->user();
     }
 
-    public function create(BazarRequest $request)
+    public function create(CreateRequest $request)
     {
         Bazar::create($request->all());
 
@@ -60,7 +62,7 @@ class BazarController extends Controller
         ]);
     }
 
-    public function update(BazarRequest $request, $id)
+    public function update(UpdateRequest $request, $id)
     {
         $bazar = Bazar::findOrFail($id);
 
@@ -161,7 +163,7 @@ class BazarController extends Controller
         }
     }
 
-    public function create_barang(KeluarBazzarRequest $request, $id_bazzar)
+    public function create_barang(CreateBarangRequest $request, $id_bazzar)
     {
         if (gettype((int) $id_bazzar) != 'integer') {
             return response()->json([
@@ -170,43 +172,42 @@ class BazarController extends Controller
             ], 422);
         }
 
-        $data_exist = Keluar_bazar::where([
-            'id_bazar' => $id_bazzar,
-            'barcode' => $request->barcode
-        ])->first();
+        foreach ($request->barcode as $key => $value) {
+
+            $data_exist = Keluar_bazar::where([
+                'id_bazar' => $id_bazzar,
+                'barcode' => $request->barcode[$key]
+            ])->first();
 
 
-        if ($data_exist) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Data barang untuk bazzar ini sudah ada. Silahkan ubah jumlah barang saja.'
-            ], 422);
-        } else {
-
-            foreach ($request->barcode as $key => $value) {
-                
+            if ($data_exist) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Data barang untuk bazzar ini sudah ada. Silahkan ubah jumlah barang saja.'
+                ], 422);
+            } else {
                 $cek_stock = $this->kurangi_stock($request->barcode[$key], $request->jml[$key]);
 
-                if (!$cek_stock) {
+                if ($cek_stock) {
+                    Keluar_bazar::create([
+                        'id_bazar' => $id_bazzar,
+                        'date'     => $request->date,
+                        'barcode'  => $request->barcode[$key],
+                        'jml'      => $request->jml[$key],
+                    ]);
+                } else {
                     return response()->json([
                         'success' => false,
                         'message' => 'Stock barang di gudang kurang dari jumlah yang diminta.'
                     ], 422);
                 }
-
-                Keluar_bazar::create([
-                    'id_bazar' => $id_bazzar,
-                    'date'     => $request->date,
-                    'barcode'  => $request->barcode[$key],
-                    'jml'      => $request->jml[$key],
-                ]);
             }
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Data barang bazzar berhasil ditambahkan.'
-            ]);
         }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Data barang bazzar berhasil ditambahkan.'
+        ]);
     }
 
     public function get_barang($id_bazzar, $id = null)
@@ -229,8 +230,8 @@ class BazarController extends Controller
                         'nama_barang'  => $value->include_barang_masuk->namabrg,
                         'jenis_barang' => $value->include_barang_masuk->include_jenis->nama_jenis,
                         'tipe_barang'  => $value->include_barang_masuk->include_tipe->nama_tipe,
-                        'hpp'          => "Rp. ".number_format($value->include_barang_masuk->hpp, 0, '.', ','),
-                        'hjual'        => "Rp. ".number_format($hjual_setelah_diskon, 0, '.', ','),
+                        'hpp'          => "Rp. " . number_format($value->include_barang_masuk->hpp, 0, '.', ','),
+                        'hjual'        => "Rp. " . number_format($hjual_setelah_diskon, 0, '.', ','),
                         'jumlah'       => $value->jml,
                         'date'         => $value->date,
                     ];
@@ -257,11 +258,14 @@ class BazarController extends Controller
         }
     }
 
-    public function update_barang(Request $request, $id_bazzar, $id)
+    public function update_barang(UpdateBarangRequest $request, $id_bazzar, $id)
     {
-        $validatedRequest = $request->validate([
-            'jml' => 'required|integer'
-        ]);
+        if (gettype((int) $id_bazzar) != 'integer') {
+            return response()->json([
+                'success' => false,
+                'message' => 'Mohon masukan id_bazzar dengan benar.'
+            ], 422);
+        }
 
         $bazzar_exist = Bazar::findOrFail($id_bazzar);
 
@@ -329,6 +333,13 @@ class BazarController extends Controller
 
     public function delete_barang($id_bazzar, $id)
     {
+        if (gettype((int) $id_bazzar) != 'integer') {
+            return response()->json([
+                'success' => false,
+                'message' => 'Mohon masukan id_bazzar dengan benar.'
+            ], 422);
+        }
+
         $bazzar_exist = Bazar::findOrFail($id_bazzar);
 
         if ($bazzar_exist) {

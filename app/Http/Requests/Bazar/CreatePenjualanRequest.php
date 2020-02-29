@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Bazar;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class KeluarBazzarRequest extends FormRequest
+class CreatePenjualanRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,7 +13,7 @@ class KeluarBazzarRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return false;
     }
 
     /**
@@ -24,7 +24,7 @@ class KeluarBazzarRequest extends FormRequest
     public function rules()
     {
         return [
-            'date'     => 'required|date'
+            //
         ];
     }
 }

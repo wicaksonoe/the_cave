@@ -63,9 +63,9 @@
             day = '' + d.getDate(),
             year = d.getFullYear();
 
-        if (month.length < 2) 
+        if (month.length < 2)
             month = '0' + month;
-        if (day.length < 2) 
+        if (day.length < 2)
             day = '0' + day;
 
         return [year, month, day].join('-');
@@ -82,6 +82,7 @@
     });
 
     $(".form-control").focus(function(e){
+        $('small.text-danger.' + e.target.id).html('');
         $(e.target).removeClass("is-invalid")
     })
 
@@ -148,6 +149,8 @@
                     type : "success"
                 });
                 document.getElementById("tambahBarangForm").reset();
+                $('#tgl').val(formatDate());
+                $('#edit-tgl').val(formatDate());
                 get_data();
             })
             .fail(function( msg ) {
@@ -158,7 +161,8 @@
                 })
 
                 $.each(msg.responseJSON.errors, function(key, value){
-                    $("#"+key).addClass("is-invalid")
+                    $('small.' + key).html(value);
+                    $("#"+key).addClass("is-invalid");
                 })
             });
 
@@ -233,6 +237,8 @@
                     type: "success"
                 });
                 document.getElementById("form-edit-barang").reset();
+                $('#tgl').val(formatDate());
+                $('#edit-tgl').val(formatDate());
                 get_data();
             })
             .fail(function (msg) {
@@ -243,6 +249,7 @@
                 })
 
                 $.each(msg.responseJSON.errors, function (key, value) {
+                    $('small.edit-' + key).html(value);
                     $("#edit-" + key).addClass("is-invalid")
                 })
             });

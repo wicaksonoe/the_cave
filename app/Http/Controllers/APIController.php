@@ -2,14 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use JWTAuth;
 use App\User;
 use Illuminate\Http\Request;
-use Tymon\JWTAuth\Exceptions\JWTException;
-use App\Http\Requests\RegistrationFormRequest;
+use App\Http\Requests\User\CreateRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Symfony\Component\HttpFoundation\Response;
 
 class APIController extends Controller
 {
@@ -58,12 +55,8 @@ class APIController extends Controller
 		]);
 	}
 
-	public function register(RegistrationFormRequest $request)
+	public function register(CreateRequest $request)
 	{
-		$validateRequest = $request->validate([
-			'username' => 'unique:users,username'
-		]);
-
 		User::create(
 			[
 				'username' => $request->username,
@@ -78,13 +71,6 @@ class APIController extends Controller
 		return response()->json([
 			'success' => true,
 			'message' => 'Registrasi berhasil'
-		]);
-	}
-
-	public function home()
-	{
-		return response()->json([
-			$this->guard()->user()
 		]);
 	}
 }

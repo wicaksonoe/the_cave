@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\PenjualanBazarRequest;
-use Illuminate\Http\Request;
+use App\Http\Requests\Bazar\CreatePenjualanRequest;
 
 class PenjualanBazarController extends Controller
 {
@@ -12,17 +11,7 @@ class PenjualanBazarController extends Controller
         # code...
     }
 
-    public function create(PenjualanBazarRequest $request)
-    {
-        # code...
-    }
-
-    public function update(PenjualanBazarRequest $request, $id)
-    {
-        # code...
-    }
-
-    public function delete($id)
+    public function create(CreatePenjualanRequest $request)
     {
         # code...
     }
