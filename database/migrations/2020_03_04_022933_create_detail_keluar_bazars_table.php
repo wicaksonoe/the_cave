@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateKeluarBazarsTable extends Migration
+class CreateDetailKeluarBazarsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,10 @@ class CreateKeluarBazarsTable extends Migration
      */
     public function up()
     {
-        Schema::create('keluar_bazars', function (Blueprint $table) {
+        Schema::create('detail_keluar_bazars', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('id_bazar');
-            $table->string('barcode', 15);
+            $table->integer('id_keluar_bazar');
+            $table->integer('jumlah');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -29,6 +29,6 @@ class CreateKeluarBazarsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('keluar_bazars');
+        Schema::dropIfExists('detail_keluar_bazars');
     }
 }

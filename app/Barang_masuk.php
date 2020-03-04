@@ -14,7 +14,7 @@ class Barang_masuk extends Model
 	public $incrementing = false;
 
 	protected $fillable = [
-		'barcode', 'namabrg', 'id_jenis', 'id_tipe', 'id_sup', 'jumlah', 'hpp', 'hjual', 'grosir', 'partai', 'tgl',
+		'barcode', 'namabrg', 'id_jenis', 'id_tipe', 'id_sup', 'hpp', 'hjual', 'grosir', 'partai',
 	];
 
 	public function include_penjualan_bazar()
