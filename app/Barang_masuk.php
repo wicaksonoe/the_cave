@@ -40,5 +40,10 @@ class Barang_masuk extends Model
 	public function include_jenis()
 	{
 		return $this->belongsTo('App\Jenis', 'id_jenis')->withTrashed();
-	}
+    }
+
+    public function include_detail_barang()
+    {
+        return $this->hasMany('App\Detail_barang', 'barcode_barang', 'barcode');
+    }
 }

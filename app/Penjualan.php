@@ -22,6 +22,6 @@ class Penjualan extends Model
 
     public function include_detail_penjualan()
     {
-        return $this->hasMany('App\DetailPenjualan', 'kode_trx', 'kode_trx');
+        return $this->hasMany('App\Detail_penjualan', 'kode_trx', 'kode_trx');
     }
 }
