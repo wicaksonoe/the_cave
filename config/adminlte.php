@@ -251,7 +251,16 @@ return [
         [
             'text'      => 'PENJUALAN',
             'icon'      => 'fa fa-cart-plus',
-            'url'       => 'penjualan',
+            'submenu'   => [
+                [
+                    'text'  => 'TRANSAKSI BARU',
+                    'url'   => 'penjualan',
+                ],
+                [
+                    'text'  => 'RETUR BARANG',
+                    'url'   => 'retur',
+                ],
+            ],
         ],
         [
             'text'      => 'DATA BARANG',
@@ -265,6 +274,12 @@ return [
         ],
         [
             'text'      => 'USER',
+            'icon'      => 'fas fa-fw fa-user-friends',
+            'url'       => 'user',
+            // 'can'        => 'admin',
+        ],
+        [
+            'text'      => 'PEMBIAYAAN',
             'icon'      => 'fas fa-fw fa-user-friends',
             'url'       => 'user',
             // 'can'        => 'admin',
