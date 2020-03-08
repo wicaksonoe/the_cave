@@ -35,6 +35,10 @@ Route::group([
         Route::get('/{barcode}', 'BarangController@get');
         Route::put('/{barcode}', 'BarangController@update');
         Route::delete('/{barcode}', 'BarangController@delete');
+
+        Route::get('/stock/{barcode}', 'BarangController@get_stock');
+        Route::put('/stock/{id}', 'BarangController@update_stock');
+        Route::delete('/stock/{id}', 'BarangController@delete_stock');
     });
 
     Route::group([
