@@ -35,7 +35,7 @@ class BarangController extends Controller
                     'namabrg'         => $value->namabrg,
                     'jenis_barang'    => $value->include_jenis->nama_jenis,
                     'tipe_barang'     => $value->include_tipe->nama_tipe,
-                    'supplier_barang' => $value->include_supplier->nama,
+                    'supplier_barang' => $value->include_supplier->nama_supplier,
                     'jumlah'          => StockController::get_stock($value->barcode),
                     'hpp'             => number_format($value->hpp, 0, '.', ','),
                     'hjual'           => number_format($value->hjual, 0, '.', ','),
