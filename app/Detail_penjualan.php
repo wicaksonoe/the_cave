@@ -9,7 +9,7 @@ class Detail_penjualan extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = ['kode_trx', 'barcode', 'jumlah'];
+    protected $fillable = ['kode_trx', 'barcode', 'jumlah', 'harga_partai'];
 
     public function include_penjualan()
     {

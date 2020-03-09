@@ -36,4 +36,15 @@ class StockController extends Controller
             'processed_data' => $stock
         ], 200);
     }
+
+    public static function validate_stock($barcode, $requested_stock)
+    {
+        $ready_stock = self::get_stock($barcode);
+
+        if ($ready_stock - $requested_stock >= 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

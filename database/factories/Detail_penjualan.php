@@ -8,7 +8,8 @@ use Faker\Generator as Faker;
 
 $factory->define(Detail_penjualan::class, function (Faker $faker) {
     return [
-        'barcode' => Barang_masuk::all()->random()->barcode,
-        'jumlah'  => $faker->numberBetween(2, 4),
+        'barcode'      => Barang_masuk::all()->random()->barcode,
+        'jumlah'       => $faker->numberBetween(2, 20),
+        'harga_partai' => (string) $faker->numberBetween(0, 1),
     ];
 });

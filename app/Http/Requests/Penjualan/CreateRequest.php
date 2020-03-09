@@ -26,8 +26,9 @@ class CreateRequest extends FormRequest
         $rules = [];
 
         foreach ($this->request->get('barcode') as $key => $value) {
-            $rules['barcode.' . $key] = 'required|min:15|max:15';
-            $rules['jumlah.' . $key] = 'required|numeric';
+            $rules['barcode.' . $key]      = 'bail|required|min:15|max:15';
+            $rules['jumlah.' . $key]       = 'bail|required|numeric';
+            $rules['harga_partai.' . $key] = 'bail|required|in:0,1';
         }
 
         return $rules;
@@ -44,6 +45,9 @@ class CreateRequest extends FormRequest
 
             $messages['jumlah.' . $key . '.required'] = 'The jumlah number ' . ($key + 1) . ' field is required';
             $messages['jumlah.' . $key . '.numeric']  = 'The jumlah number ' . ($key + 1) . ' must be numeric';
+
+            $messages['harga_partai.' . $key . '.required'] = 'The jumlah number ' . ($key + 1) . ' field is required';
+            $messages['harga_partai.' . $key . '.in']       = 'The jumlah number ' . ($key + 1) . ' must be "ya" or "tidak"';
         }
 
         return $messages;

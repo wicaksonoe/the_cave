@@ -108,5 +108,7 @@ Route::group([
         Route::post('/', 'PenjualanController@create'); // posting penjualan baru
         Route::get('/', 'PenjualanController@get'); // daftar history penjualan
         Route::get('/{kode_trx}', 'PenjualanController@get');   // detail barang transaksi
+        Route::put('/retur/{kode_trx}', 'PenjualanController@retur_barang');
+        Route::get('/laporan/{kode_trx}', 'PenjualanController@laporan_trx');
     });
 });
