@@ -27,4 +27,9 @@ class Bazar extends Model
     {
         return $this->hasMany('App\Keluar_bazar', 'id_bazar');
     }
+
+    public function include_biaya()
+    {
+        return $this->hasMany(Biaya::class, 'id_bazar');
+    }
 }

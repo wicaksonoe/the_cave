@@ -111,4 +111,22 @@ Route::group([
         Route::put('/retur/{kode_trx}', 'PenjualanController@retur_barang');
         Route::get('/laporan/{kode_trx}', 'PenjualanController@laporan_trx');
     });
+
+    Route::group([
+        'prefix' => 'biaya',
+        'middleware' => 'auth:api'
+    ], function () {
+        Route::post('/', 'BiayaController@create');
+        Route::get('/', 'BiayaController@get');
+        Route::get('/{id}', 'BiayaController@get');
+        Route::put('/{id}', 'BiayaController@update');
+        Route::delete('/{id}', 'BiayaController@delete');
+
+        Route::post('/bazar/{id_bazar}', 'BiayaController@create_biaya_bazar');
+        Route::get('/bazar/{id_bazar}', 'BiayaController@get_biaya_bazar');
+        Route::get('/bazar/{id_bazar}/{id}', 'BiayaController@get_biaya_bazar');
+        Route::put('/bazar/{id_bazar}/{id}', 'BiayaController@update_biaya_bazar');
+        Route::delete('/bazar/{id_bazar}/{id}', 'BiayaController@delete_biaya_bazar');
+    });
+
 });
