@@ -17,11 +17,11 @@ class Penjualan extends Model
 
     public function include_user()
     {
-        return $this->belongsTo('App\User', 'username', 'username');
+        return $this->belongsTo(User::class, 'username', 'username');
     }
 
     public function include_detail_penjualan()
     {
-        return $this->hasMany('App\Detail_penjualan', 'kode_trx', 'kode_trx');
+        return $this->hasMany(Detail_penjualan::class, 'kode_trx', 'kode_trx');
     }
 }

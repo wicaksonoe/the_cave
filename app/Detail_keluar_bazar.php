@@ -13,6 +13,6 @@ class Detail_keluar_bazar extends Model
 
     public function include_keluar_bazar()
     {
-        return $this->belongsTo('App\Keluar_bazar', 'id_keluar_bazar', 'id');
+        return $this->belongsTo(Keluar_bazar::class, 'id_keluar_bazar', 'id');
     }
 }

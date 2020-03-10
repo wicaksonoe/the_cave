@@ -13,6 +13,6 @@ class Biaya extends Model
 
     public function include_bazar()
     {
-        return $this->belongsTo('App\Bazar', 'id_bazar', 'id');
+        return $this->belongsTo(Bazar::class, 'id_bazar', 'id');
     }
 }

@@ -13,11 +13,11 @@ class Detail_penjualan extends Model
 
     public function include_penjualan()
     {
-        return $this->belongsTo('App\Penjualan', 'kode_trx', 'kode_trx');
+        return $this->belongsTo(Penjualan::class, 'kode_trx', 'kode_trx');
     }
 
     public function include_barang_masuk()
     {
-        return $this->belongsTo('App\Barang_masuk', 'barcode', 'barcode')->withTrashed();
+        return $this->belongsTo(Barang_masuk::class, 'barcode', 'barcode')->withTrashed();
     }
 }

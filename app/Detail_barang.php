@@ -13,6 +13,6 @@ class Detail_barang extends Model
 
     public function include_barang_masuk()
     {
-        return $this->belongsTo('App\Barang_masuk', 'barcode_barang', 'barcode');
+        return $this->belongsTo(Barang_masuk::class, 'barcode_barang', 'barcode');
     }
 }

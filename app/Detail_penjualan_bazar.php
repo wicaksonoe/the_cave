@@ -13,6 +13,6 @@ class Detail_penjualan_bazar extends Model
 
     public function include_penjualan_bazar()
     {
-        return $this->belongsTo('App\Penjualan_bazar', 'kode_trx', 'kode_trx');
+        return $this->belongsTo(Penjualan_bazar::class, 'kode_trx', 'kode_trx');
     }
 }

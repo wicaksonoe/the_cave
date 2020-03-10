@@ -15,17 +15,17 @@ class Bazar extends Model
 
     public function include_staff_bazar()
     {
-        return $this->hasMany('App\Staff_bazar', 'id_bazar');
+        return $this->hasMany(Staff_bazar::class, 'id_bazar');
     }
 
     public function include_penjualan_bazar()
     {
-        return $this->hasMany('App\Penjualan_bazar', 'id_bazar');
+        return $this->hasMany(Penjualan_bazar::class, 'id_bazar');
     }
 
     public function include_keluar_bazar()
     {
-        return $this->hasMany('App\Keluar_bazar', 'id_bazar');
+        return $this->hasMany(Keluar_bazar::class, 'id_bazar');
     }
 
     public function include_biaya()

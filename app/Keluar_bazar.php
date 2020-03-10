@@ -15,16 +15,11 @@ class Keluar_bazar extends Model
 
     public function include_bazar()
 	{
-		return $this->belongsTo('App\Bazar', 'id_bazar')->withTrashed();
+		return $this->belongsTo(Bazar::class, 'id_bazar')->withTrashed();
 	}
 
 	public function include_barang_masuk()
 	{
-		return $this->belongsTo('App\Barang_masuk', 'barcode', 'barcode');
-    }
-
-    public function include_detail_keluar_bazar()
-    {
-        return $this->hasMany('App\Detail_keluar_bazar', 'id_keluar_bazar', 'id');
+		return $this->belongsTo(Barang_masuk::class, 'barcode', 'barcode');
     }
 }

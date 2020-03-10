@@ -19,11 +19,11 @@ class Penjualan_bazar extends Model
 
 	public function include_bazar()
 	{
-		return $this->belongsTo('App\Bazar', 'id_bazar');
+		return $this->belongsTo(Bazar::class, 'id_bazar');
 	}
 
 	public function include_barang_masuk()
 	{
-		return $this->belongsTo('App\Barang_masuk', 'barcode', 'barcode');
+		return $this->belongsTo(Barang_masuk::class, 'barcode', 'barcode');
 	}
 }
