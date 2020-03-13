@@ -17,6 +17,7 @@ class CreateKeluarBazarsTable extends Migration
             $table->bigIncrements('id');
             $table->integer('id_bazar');
             $table->string('barcode', 15);
+            $table->integer('jumlah');
             $table->timestamps();
             $table->softDeletes();
         });

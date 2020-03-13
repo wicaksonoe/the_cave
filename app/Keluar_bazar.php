@@ -10,7 +10,7 @@ class Keluar_bazar extends Model
 	use SoftDeletes;
 
 	protected $fillable = [
-		'id_bazar', 'barcode',
+		'id_bazar', 'barcode', 'jumlah'
     ];
 
     public function include_bazar()
