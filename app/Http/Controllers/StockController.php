@@ -45,13 +45,13 @@ class StockController extends Controller
             }
         }
 
-        // return $stock_asal - $stock_terjual_di_penjualan - $stock_di_bazar - $stock_terjual_di_bazar_non_aktif;
+        return $stock_asal - $stock_terjual_di_penjualan - $stock_di_bazar - $stock_terjual_di_bazar_non_aktif;
 
         /*
          * Below is the code for
          * debug and experiment only
          *
-         */
+         *
 
         $barang = Barang_masuk::findOrFail($barcode);
         $original_data['barang_masuk'] = $barang;
@@ -70,7 +70,7 @@ class StockController extends Controller
             'processed_data' => $stock
         ], 200);
 
-
+        */
     }
 
     public static function validate_stock($barcode, $requested_stock)
