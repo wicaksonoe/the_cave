@@ -24,14 +24,14 @@ class UpdateBarangRequest extends FormRequest
     public function rules()
     {
         return [
-            'jml' => 'bail|required|numeric'
+            'jumlah' => 'bail|required|numeric'
         ];
     }
 
     public function message()
     {
         return [
-            'jml' => [
+            'jumlah' => [
                 'required' => 'Kolom jumlah harus diisi',
                 'integer'  => 'Kolom jumlah harus berupa angka',
             ],

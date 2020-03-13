@@ -15,11 +15,11 @@ class Staff_bazar extends Model
 
 	public function include_bazar()
 	{
-		return $this->belongsTo('App\Bazar', 'id_bazar');
+		return $this->belongsTo(Bazar::class, 'id_bazar');
 	}
 
 	public function include_user()
 	{
-		return $this->belongsTo('App\User', 'username', 'username');
+		return $this->belongsTo(User::class, 'username', 'username');
 	}
 }

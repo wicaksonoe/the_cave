@@ -34,7 +34,6 @@ class CreateRequest extends FormRequest
             'hjual'    => 'bail|required|numeric',
             'grosir'   => 'bail|required|numeric',
             'partai'   => 'bail|required|numeric',
-            'tgl'      => 'bail|required|date',
         ];
     }
 
@@ -76,9 +75,6 @@ class CreateRequest extends FormRequest
 
             'partai.required' => 'Kolom harga partai ' . $harus,
             'partai.numeric'  => 'Kolom harga partai ' . $numeric,
-
-            'tgl.required' => 'Kolom tanggal ' . $harus,
-            'tgl.date'     => 'Kolom tanggal harus berupa tanggal',
         ];
     }
 }

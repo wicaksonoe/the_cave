@@ -16,9 +16,8 @@ class CreateKeluarBazarsTable extends Migration
         Schema::create('keluar_bazars', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('id_bazar');
-            $table->date('date');
             $table->string('barcode', 15);
-            $table->integer('jml');
+            $table->integer('jumlah');
             $table->timestamps();
             $table->softDeletes();
         });

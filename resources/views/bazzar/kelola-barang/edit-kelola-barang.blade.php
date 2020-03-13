@@ -10,6 +10,7 @@
             </div>
             <div class="modal-body">
                 <form id="form-edit-KelolaBarang" class="form-horizontal" data-toggle="validator">
+                    <input type="text" name="edit-barcode" id="edit-barcode" readonly hidden>
                     <div class="form-group">
                         <label for="jumlah">Jumlah Barang</label>
                         <input type="number" class="form-control" id="edit-jml" placeholder="Jumlah Barang">
