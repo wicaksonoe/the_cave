@@ -3,7 +3,7 @@
 @section('title', 'PENJUALAN')
 
 @section('content_header')
-<h1>Transaksi Penjualan</h1>
+<h1>TRANSAKSI PENJUALAN</h1>
 @stop
 
 @section('content')
@@ -16,7 +16,7 @@
                     <h3 class="card-title">Transaksi Penjualan</h3>
                 </div>
                 <div class="card-body">
-                    <form id="tambahKelolaBarangForm">
+                    <form id="TransaksiPenjualan">
                         <div class="form-group">
                             <label for="barcode_scan">Barcode</label>
                             <div class="row">
@@ -29,20 +29,18 @@
                                 </div>
                             </div>
                         </div>
-                        <table id="tabel_tambah_barang" class="table table-bordered table-striped">
+                        <table id="tabel_transaksi_penjualan" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
+                                    <th class="text-center" style="width: 30%">Nama Barang</th>
                                     <th class="text-center" style="width: 10%">Jumlah</th>
-                                    <th class="text-center" style="width: 40%">Nama Barang</th>
+                                    <th class="text-center" style="width: 10%">Harga Partai</th>
                                     <th class="text-center" style="width: 25%">Harga</th>
                                     <th class="text-center" style="width: 25%">Total</th>
                                 </tr>
                             </thead>
                             <tbody id="konten_tambah_barang"></tbody>
                         </table>
-
-
-
                     </form>
                 </div>
                 <!-- /.card-body -->
@@ -51,9 +49,6 @@
     </div>
 </div>
 
-<script>
-
-</script>
 @stop
 
 @section('js')

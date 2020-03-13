@@ -91,7 +91,10 @@ Route::group(['middleware' => ['isAlreadyLogin', 'auth.jwt']], function () {
         return redirect()->route('login');
     });
 
-    Route::get('/penjualan', function () {
-        return view('penjualan.penjualan');
+    Route::get('/transaksi_baru', function () {
+        return view('penjualan.transaksi_baru');
+    });
+    Route::get('/riwayat_transaksi', function () {
+        return view('penjualan.riwayat_transaksi');
     });
 });

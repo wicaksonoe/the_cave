@@ -254,11 +254,11 @@ return [
             'submenu'   => [
                 [
                     'text'  => 'TRANSAKSI BARU',
-                    'url'   => 'penjualan',
+                    'url'   => 'transaksi_baru',
                 ],
                 [
-                    'text'  => 'RETUR BARANG',
-                    'url'   => 'retur',
+                    'text'  => 'RIWAYAT TRANSAKSI',
+                    'url'   => 'riwayat_transaksi',
                 ],
             ],
         ],
