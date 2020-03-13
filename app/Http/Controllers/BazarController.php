@@ -2,22 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Barang_masuk;
+use DateTime;
+use DateTimeZone;
 use App\Bazar;
 use App\Keluar_bazar;
 use App\Staff_bazar;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Yajra\DataTables\Facades\DataTables;
+use App\Penjualan_bazar;
 use App\Http\Requests\Bazar\CreateRequest;
 use App\Http\Requests\Bazar\UpdateRequest;
 use App\Http\Requests\Bazar\CreateBarangRequest;
 use App\Http\Requests\Bazar\UpdateBarangRequest;
-use App\Penjualan_bazar;
-use DateTime;
-use DateTimeZone;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Yajra\DataTables\Facades\DataTables;
 
 class BazarController extends Controller
 {
@@ -281,10 +280,7 @@ class BazarController extends Controller
             $data_barang = $data_bazar
                 ->include_keluar_bazar()
                 ->groupBy('barcode')
-                ->get([
-                    'barcode',
-                    DB::raw('sum(jumlah) as sum')
-                ]);
+                ->get('barcode');
 
             $daftar_barang = [];
             foreach ($data_barang as $barang) {
@@ -305,7 +301,7 @@ class BazarController extends Controller
                     'tipe_barang'  => $barang->include_barang_masuk->include_tipe->nama_tipe,
                     'hpp'          => "Rp. " . number_format($barang->include_barang_masuk->hpp, 0, '.', ','),
                     'hjual'        => "Rp. " . number_format($harga_diskon, 0, '.', ','),
-                    'jumlah'       => $barang->sum,
+                    'jumlah'       => StockController::get_stock_for_bazar($id_bazar, $barang->barcode),
                     'tanggal'      => $tanggal->format("d-M-Y H:i T"),
                 ]);
             }
@@ -321,10 +317,7 @@ class BazarController extends Controller
                 ->include_keluar_bazar()
                 ->where('barcode', $barcode)
                 ->groupBy('barcode')
-                ->firstOrFail([
-                    'barcode',
-                    DB::raw('sum(jumlah) as sum')
-                ]);
+                ->firstOrFail('barcode');
 
             $tanggal = new DateTime(
                 Keluar_bazar::where([
@@ -344,7 +337,7 @@ class BazarController extends Controller
                 'tipe_barang'  => $barang->include_barang_masuk->include_tipe->nama_tipe,
                 'hpp'          => "Rp. " . number_format($barang->include_barang_masuk->hpp, 0, '.', ','),
                 'hjual'        => "Rp. " . number_format($harga_diskon, 0, '.', ','),
-                'jumlah'       => $barang->sum,
+                'jumlah'       => StockController::get_stock_for_bazar($id_bazar, $barcode),
                 'tanggal'      => $tanggal->format("d-M-Y H:i T"),
             ];
 
