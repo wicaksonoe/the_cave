@@ -20,7 +20,7 @@ class Bazar extends Model
 
     public function include_penjualan_bazar()
     {
-        return $this->hasMany(Penjualan_bazar::class, 'id_bazar');
+        return $this->hasMany(Penjualan_bazar::class, 'id_bazar', 'id');
     }
 
     public function include_keluar_bazar()

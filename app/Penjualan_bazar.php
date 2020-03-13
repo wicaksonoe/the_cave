@@ -20,10 +20,15 @@ class Penjualan_bazar extends Model
 	public function include_bazar()
 	{
 		return $this->belongsTo(Bazar::class, 'id_bazar');
-	}
+    }
 
-	public function include_barang_masuk()
-	{
-		return $this->belongsTo(Barang_masuk::class, 'barcode', 'barcode');
-	}
+    public function include_user()
+    {
+        return $this->belongsTo(User::class, 'username', 'username');
+    }
+
+    public function include_detail_penjualan_bazar()
+    {
+        return $this->hasMany(Detail_penjualan_bazar::class, 'kode_trx', 'kode_trx');
+    }
 }

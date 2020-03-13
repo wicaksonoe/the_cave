@@ -24,7 +24,6 @@ Route::group([
     Route::post('login', 'APIController@login');
     Route::post('register', 'APIController@register');
     Route::get('logout', 'APIController@logout');
-    Route::get('home', 'APIController@home');
 
     Route::group([
         'prefix' => 'barang',
@@ -53,7 +52,7 @@ Route::group([
     });
 
     Route::group([
-        'prefix' => 'bazzar',
+        'prefix' => 'bazar',
         'middleware' => 'auth:api',
     ], function () {
         Route::post('/', 'BazarController@create');
@@ -65,29 +64,27 @@ Route::group([
         Route::group([
             'prefix' => 'staff'
         ], function () {
-            Route::post('/{id_bazzar}', 'BazarController@create_staff');
-            Route::get('/{id_bazzar}', 'BazarController@get_staff');
-            Route::delete('/{id_bazzar}/{username}', 'BazarController@delete_staff');
+            Route::post('/{id_bazar}', 'BazarController@create_staff');
+            Route::get('/{id_bazar}', 'BazarController@get_staff');
+            Route::delete('/{id_bazar}/{username}', 'BazarController@delete_staff');
         });
 
         Route::group([
             'prefix' => 'barang'
         ], function () {
-            Route::post('/{id_bazzar}', 'BazarController@create_barang');
-            Route::get('/{id_bazzar}', 'BazarController@get_barang');
-            Route::get('/{id_bazzar}/{id}', 'BazarController@get_barang');
-            Route::put('/{id_bazzar}/{id}', 'BazarController@update_barang');
-            Route::delete('/{id_bazzar}/{id}', 'BazarController@delete_barang');
+            Route::post('/{id_bazar}', 'BazarController@create_barang');
+            Route::get('/{id_bazar}', 'BazarController@get_barang');
+            Route::get('/{id_bazar}/{barcode}', 'BazarController@get_barang');
+            Route::put('/{id_bazar}/{barcode}', 'BazarController@update_barang');
+            Route::delete('/{id_bazar}/{barcode}', 'BazarController@delete_barang');
         });
 
         Route::group([
             'prefix' => 'penjualan',
         ], function () {
-            Route::post('/', 'PenjualanBazarController@create');
-            Route::get('/', 'PenjualanBazarController@get');
-            Route::get('/{id}', 'PenjualanBazarController@get');
-            Route::put('/{id}', 'PenjualanBazarController@update');
-            Route::delete('/{id}', 'PenjualanBazarController@delete');
+            Route::post('/{id_bazar}', 'PenjualanBazarController@create');
+            Route::get('/{id_bazar}', 'PenjualanBazarController@get');
+            Route::get('/{id_bazar}/{kode_trx}', 'PenjualanBazarController@get');
         });
     });
 

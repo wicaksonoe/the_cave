@@ -15,7 +15,7 @@ class CreateDetailPenjualanBazarsTable extends Migration
     {
         Schema::create('detail_penjualan_bazars', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('kode_trx', 15);
+            $table->string('kode_trx', 20);
             $table->string('barcode', 15);
             $table->integer('jumlah');
             $table->timestamps();

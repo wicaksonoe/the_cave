@@ -15,4 +15,9 @@ class Detail_penjualan_bazar extends Model
     {
         return $this->belongsTo(Penjualan_bazar::class, 'kode_trx', 'kode_trx');
     }
+
+    public function include_barang_masuk()
+    {
+        return $this->belongsTo(Barang_masuk::class, 'barcode');
+    }
 }
