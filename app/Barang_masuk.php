@@ -14,31 +14,36 @@ class Barang_masuk extends Model
 	public $incrementing = false;
 
 	protected $fillable = [
-		'barcode', 'namabrg', 'id_jenis', 'id_tipe', 'id_sup', 'jumlah', 'hpp', 'hjual', 'grosir', 'partai', 'tgl',
+		'barcode', 'namabrg', 'id_jenis', 'id_tipe', 'id_sup', 'hpp', 'hjual', 'grosir', 'partai',
 	];
 
 	public function include_penjualan_bazar()
 	{
-		return $this->hasMany('App\Penjualan_bazar', 'barcode', 'barcode');
+		return $this->hasMany(Penjualan_bazar::class, 'barcode', 'barcode');
 	}
 
 	public function include_keluar_bazar()
 	{
-		return $this->hasMany('App\Keluar_bazar', 'barcode', 'barcode');
+		return $this->hasMany(Keluar_bazar::class, 'barcode', 'barcode');
 	}
 
 	public function include_supplier()
 	{
-		return $this->belongsTo('App\Supplier', 'id_sup')->withTrashed();
+		return $this->belongsTo(Supplier::class, 'id_sup')->withTrashed();
 	}
 
 	public function include_tipe()
 	{
-		return $this->belongsTo('App\Tipe', 'id_tipe')->withTrashed();
+		return $this->belongsTo(Tipe::class, 'id_tipe')->withTrashed();
 	}
 
 	public function include_jenis()
 	{
-		return $this->belongsTo('App\Jenis', 'id_jenis')->withTrashed();
-	}
+		return $this->belongsTo(Jenis::class, 'id_jenis')->withTrashed();
+    }
+
+    public function include_detail_barang()
+    {
+        return $this->hasMany(Detail_barang::class, 'barcode_barang', 'barcode');
+    }
 }

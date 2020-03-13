@@ -15,6 +15,6 @@ class Supplier extends Model
 
 	public function include_barang_masuk()
 	{
-		return $this->hasMany('App\Barang_masuk', 'id_sup');
+		return $this->hasMany(Barang_masuk::class, 'id_sup');
 	}
 }

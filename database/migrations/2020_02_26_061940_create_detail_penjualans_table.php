@@ -18,6 +18,7 @@ class CreateDetailPenjualansTable extends Migration
             $table->string('kode_trx', 15);
             $table->string('barcode', 15);
             $table->integer('jumlah');
+            $table->enum('harga_partai', [0, 1]);
             $table->timestamps();
             $table->softDeletes();
         });

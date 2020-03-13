@@ -15,6 +15,11 @@ class DatabaseSeeder extends Seeder
             JenisSeeder::class,
             TipeSeeder::class,
             UserSeeder::class,
+            BarangSeeder::class,
+            PenjualanSeeder::class,
+            BiayaSeeder::class,
+            BazarSeeder::class,
+            PenjualanBazarSeeder::class,
         ]);
     }
 }

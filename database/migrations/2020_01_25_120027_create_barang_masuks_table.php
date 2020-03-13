@@ -19,12 +19,10 @@ class CreateBarangMasuksTable extends Migration
             $table->integer('id_jenis');
             $table->integer('id_tipe');
             $table->integer('id_sup');
-            $table->integer('jumlah');
             $table->integer('hpp');
             $table->integer('hjual');
             $table->integer('grosir');
             $table->integer('partai');
-            $table->date('tgl');
             $table->timestamps();
             $table->softDeletes();
             $table->primary('barcode');

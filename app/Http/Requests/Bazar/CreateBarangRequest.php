@@ -25,7 +25,6 @@ class CreateBarangRequest extends FormRequest
     {
         $rules = [];
 
-        $rules['date'] = 'bail|required|date';
         foreach ($this->request->get('barcode') as $key => $value) {
             $rules['barcode.' . $key] = 'bail|required|min:15|max:15';
             $rules['jumlah.' . $key] = 'bail|required|numeric';

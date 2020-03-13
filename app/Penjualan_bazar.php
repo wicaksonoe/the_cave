@@ -9,17 +9,26 @@ class Penjualan_bazar extends Model
 {
 	use SoftDeletes;
 
+    protected $primaryKey = 'kode_trx';
+    protected $keyType = 'string';
+    public $incrementing = false;
+
 	protected $fillable = [
-		'id_bazar', 'tgl', 'barcode', 'jml'
+		'kode_trx', 'id_bazar', 'username',
 	];
 
 	public function include_bazar()
 	{
-		return $this->belongsTo('App\Bazar', 'id_bazar');
-	}
+		return $this->belongsTo(Bazar::class, 'id_bazar');
+    }
 
-	public function include_barang_masuk()
-	{
-		return $this->belongsTo('App\Barang_masuk', 'barcode', 'barcode');
-	}
+    public function include_user()
+    {
+        return $this->belongsTo(User::class, 'username', 'username');
+    }
+
+    public function include_detail_penjualan_bazar()
+    {
+        return $this->hasMany(Detail_penjualan_bazar::class, 'kode_trx', 'kode_trx');
+    }
 }

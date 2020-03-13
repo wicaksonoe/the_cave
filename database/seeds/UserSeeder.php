@@ -1,5 +1,6 @@
 <?php
 
+use App\User;
 use Illuminate\Database\Seeder;
 
 class UserSeeder extends Seeder
@@ -18,6 +19,10 @@ class UserSeeder extends Seeder
             'alamat'   => 'jalanjalan',
             'telp'     => '123456',
             'role'     => 'admin',
+            'created_at' => DB::raw('now()'),
+            'updated_at' => DB::raw('now()'),
         ]);
+
+        factory(User::class, 5)->create();
     }
 }

@@ -232,14 +232,13 @@
             .done(function (response) {
                 $('#edit-barcode').val(response.data.barcode)
                 $('#edit-jml').val(response.data.jml)
-                $('#edit-date').val(response.data.date)
                 $('#update-button').val(response.data.id)
                 $('#modal-edit-KelolaBarang').modal('show');
             })
             .fail(function (response) {
                 swal.fire({
                     title: 'Error!',
-                    text: 'Terjadi Kesalahan',
+                    text: response.responseJSON.message,
                     type: "error"
                 })
             });
@@ -275,7 +274,7 @@
             .fail(function (msg) {
                 swal.fire({
                     title: 'Error!',
-                    text: 'Terjadi Kesalahan',
+                    text: msg.responseJSON.message,
                     type: "error"
                 })
 
@@ -308,7 +307,7 @@
             .fail(function (msg) {
                 swal.fire({
                     title: 'Error!',
-                    text: 'Terjadi Kesalahan',
+                    text: msg.responseJSON.message,
                     type: "error"
                 });
             });
