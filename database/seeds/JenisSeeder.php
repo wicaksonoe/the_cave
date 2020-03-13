@@ -12,14 +12,14 @@ class JenisSeeder extends Seeder
      */
     public function run()
     {
-      $datas = [
-				'anak', 'bayi', 'balita', 'wanita', 'pria'
-			];
+        $datas = [
+            'anak', 'bayi', 'balita', 'wanita', 'pria'
+        ];
 
-			foreach ($datas as $data) {
-				DB::table('jenis')->insert([
-					'nama_jenis' => $data
-				]);
-			}
+        foreach ($datas as $data) {
+            DB::table('jenis')->insert([
+                'nama_jenis' => $data
+            ]);
+        }
     }
 }

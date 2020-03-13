@@ -20,10 +20,15 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
+use App\Http\Controllers\StockController;
 
 Route::get('/login', function () {
     return view('auth.login');
 })->name('login');
+
+Route::get('/sandbox/{barcode}', function ($barcode) {
+    return StockController::get_stock($barcode);
+});
 
 Route::group(['middleware' => ['isAlreadyLogin', 'auth.jwt']], function () {
 
@@ -57,16 +62,22 @@ Route::group(['middleware' => ['isAlreadyLogin', 'auth.jwt']], function () {
         $tipe   = Tipe::all();
         $supp   = Supplier::all();
         $bazzar = Bazar::findOrFail($id_bazzar);
-        
-        return view('bazzar.kelola-barang.kelola-barang', compact('bazzar', 'barang','id_bazzar', 'jenis', 'tipe', 'supp'));
+
+        return view('bazzar.kelola-barang.kelola-barang', compact('bazzar', 'barang', 'id_bazzar', 'jenis', 'tipe', 'supp'));
     })->name('bazzar.kelola-barang');
 
     Route::get('/bazzar/kelola-staff/{id_bazzar}', function ($id_bazzar) {
-        $nama   = User::where(['role'=>'pegawai'])->get();
+        $nama   = User::where(['role' => 'pegawai'])->get();
         $bazzar = Bazar::findOrFail($id_bazzar);
 
         return view('bazzar.kelola-staff.kelola-staff', compact('id_bazzar', 'bazzar', 'nama'));
     })->name('bazzar.kelola-staff');
+
+    Route::get('/bazzar/laporan/{id_bazar}', 'BazarController@laporan')
+        // function ($id_bazzar) {
+        //     return $id_bazzar;
+        // })
+        ->name('bazzar.laporan');
 
 
     Route::get('/user', function () {
@@ -89,5 +100,9 @@ Route::group(['middleware' => ['isAlreadyLogin', 'auth.jwt']], function () {
         Cookie::forget('access_token');
         Auth::guard()->logout();
         return redirect()->route('login');
+    });
+
+    Route::get('/penjualan', function () {
+        return view('penjualan.penjualan');
     });
 });

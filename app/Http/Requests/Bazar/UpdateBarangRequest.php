@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Bazar;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class SupplierRequest extends FormRequest
+class UpdateBarangRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,9 +24,17 @@ class SupplierRequest extends FormRequest
     public function rules()
     {
         return [
-            'nama'   => 'required|max:50',
-            'alamat' => 'required|string|max:120',
-            'telp'   => 'required|string|max:12',
+            'jumlah' => 'bail|required|numeric'
+        ];
+    }
+
+    public function message()
+    {
+        return [
+            'jumlah' => [
+                'required' => 'Kolom jumlah harus diisi',
+                'integer'  => 'Kolom jumlah harus berupa angka',
+            ],
         ];
     }
 }

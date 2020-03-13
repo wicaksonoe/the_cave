@@ -5,7 +5,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="close">
                     <span aria-hidden="true"> &times; </span>
                 </button>
-                <h3 class="modal-title"></h3>
+                <h3 class="modal-title">Tambah User</h3>
             </div>
 
             <div class="modal-body">
@@ -17,7 +17,7 @@
                     </div>
                     <div class="form-group">
                         <label for="password">Password</label>
-                        <input type="password" class="form-control" id="password" placeholder="Password">
+                        <input type="password" class="form-control" id="password" placeholder="Password Minimal 8 Karakter">
                     </div>
                     <div class="form-group">
                         <label for="password">Masukkan Ulang Password</label>
@@ -36,7 +36,7 @@
                         <label for="telp">Telepon</label>
                         <input type="number" class="form-control" cols="30" id="telp" placeholder="Telepon">
                     </div>
-                    <div class="form-group col-md-4">
+                    <div class="form-group">
                         <label for="role">Jabatan</label>
                         <select id="role" class="form-control">
                             <option selected disabled>Pilih Jabatan...</option>

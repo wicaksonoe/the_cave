@@ -35,7 +35,7 @@
                         <label for="telp">Telepon</label>
                         <input type="number" class="form-control" cols="30" id="edit-telp" placeholder="Telepon">
                     </div>
-                    <div class="form-group col-md-4">
+                    <div class="form-group">
                         <label for="role">Jabatan</label>
                         <select id="edit-role" class="form-control">
                             <option selected disabled>Pilih Jabatan...</option>

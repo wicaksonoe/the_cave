@@ -2,14 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Barang_masuk;
+use DateTime;
+use DateTimeZone;
 use App\Bazar;
-use App\Http\Requests\BazarRequest;
-use App\Http\Requests\KeluarBazzarRequest;
 use App\Keluar_bazar;
 use App\Staff_bazar;
+use App\Penjualan_bazar;
+use App\Http\Requests\Bazar\CreateRequest;
+use App\Http\Requests\Bazar\UpdateRequest;
+use App\Http\Requests\Bazar\CreateBarangRequest;
+use App\Http\Requests\Bazar\UpdateBarangRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
 
 class BazarController extends Controller
@@ -21,7 +27,7 @@ class BazarController extends Controller
         $this->user = Auth::guard()->user();
     }
 
-    public function create(BazarRequest $request)
+    public function create(CreateRequest $request)
     {
         Bazar::create($request->all());
 
@@ -35,32 +41,38 @@ class BazarController extends Controller
     {
         if ($id == null) {
             # REPLACE WITH YAJRA
-            $bazar = Bazar::all();
+            $bazar = Bazar::withTrashed()->get();
 
             return DataTables::of($bazar)
                 ->addColumn('potongan_harga', function ($bazar) {
                     return number_format($bazar->potongan, 0, '.', ',');
                 })
                 ->addColumn('aksi', function ($bazar) {
-                    return '
-                        <a href="' . route("bazzar.kelola-barang", $bazar->id) . '" class="btn btn-sm btn-info">Kelola</a>
-                        <button class="btn btn-sm btn-warning" value="' . $bazar->id . '" onclick="editBazzar(this.value)">Edit</button>
-                        <button class="btn btn-sm btn-danger" value="' . $bazar->id . '" onclick="summaryDelete(this.value)">Delete</button>
-                        ';
+                    if ($bazar->deleted_at == null) {
+                        return '
+                            <a href="' . route("bazzar.kelola-barang", $bazar->id) . '" class="btn btn-sm btn-info" style="margin: 0.25em">Kelola</a>
+                            <button class="btn btn-sm btn-warning" value="' . $bazar->id . '" onclick="editBazzar(this.value)" style="margin: 0.25em">Edit</button>
+                            <button class="btn btn-sm btn-danger" value="' . $bazar->id . '" onclick="summaryDelete(this.value)" style="margin: 0.25em">Tutup Bazar</button>
+                            ';
+                    } else {
+                        return '
+                            Bazar sudah berakhir<br>
+                            <a href="' . route("bazzar.laporan", $bazar->id) . '" >Lihat laporan</a>';
+                    }
                 })
                 ->rawColumns(['aksi', 'potongan_harga'])
                 ->make(true);
         } else {
             $bazar = Bazar::findOrFail($id);
-        }
 
-        return response()->json([
-            'success' => true,
-            'data' => $bazar,
-        ]);
+            return response()->json([
+                'success' => true,
+                'data' => $bazar,
+            ]);
+        }
     }
 
-    public function update(BazarRequest $request, $id)
+    public function update(UpdateRequest $request, $id)
     {
         $bazar = Bazar::findOrFail($id);
 
@@ -76,51 +88,98 @@ class BazarController extends Controller
     {
         $bazar = Bazar::findOrFail($id);
 
-        $barang_bazzar = $bazar->include_keluar_bazar()->get();
-
-        foreach ($barang_bazzar as $value) {
-            $return_stock = $this->kembalikan_stock($value->barcode, $value->jml);
-
-            if ($return_stock == false) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Terjadi kesalahan, silahkan ulangi lagi.'
-                ], 422);
-            }
-
-            $value->delete();
-        }
-
         $bazar->delete();
 
         return response()->json([
             'success' => true,
-            'message' => 'Data bazar berhasil dihapus.'
+            'message' => 'Bazar berhasil ditutup.'
         ]);
     }
 
-    public function create_staff(Request $request, $id_bazzar)
+    public function laporan($id_bazar)
     {
-        $data_bazzar = Bazar::findOrFail($id_bazzar);
+        $data_bazar = Bazar::withTrashed()->find($id_bazar);
+        $data_barang = Keluar_bazar::where('id_bazar', $id_bazar)->withTrashed()->get(['id_bazar', 'barcode']);
+        $data_penjualan = [];
 
-        $validateRequest = $request->validate([
-            'username' => 'required|string'
-        ]);
+        foreach ($data_barang as $key => $val) {
+            $total = Penjualan_bazar::where(
+                [
+                    'id_bazar' => $id_bazar,
+                    'barcode' => $val->barcode
+                ]
+            )->first(
+                DB::raw('sum(jml) as total_penjualan')
+            );
 
-        Staff_bazar::create([
-            'id_bazar' => $id_bazzar,
-            'username' => $request->username
-        ]);
+            $data_penjualan[$key] = [
+                'barcode'                 => $val->barcode,
+                'nama_barang'             => $val->include_barang_masuk->namabrg,
+                'total_penjualan'         => (int) $total->total_penjualan,
+                'potongan_harga'          => $val->include_bazar->potongan,
+                'harga_pokok_penjualan'   => $val->include_barang_masuk->hpp,
+                'harga_jual_belum_diskon' => $val->include_barang_masuk->hjual,
+            ];
+        }
 
         return response()->json([
             'success' => true,
-            'message' => 'Staff bazzar ' . $data_bazzar->nama_bazar . ' berhasil ditambahkan.'
+            'data' => [
+                'data_bazar'     => $data_bazar,
+                'data_penjualan' => $data_penjualan
+            ]
         ]);
     }
 
-    public function get_staff($id_bazzar)
+    public function create_staff(Request $request, $id_bazar)
     {
-        $data_staff_bazzar = Staff_bazar::where(['id_bazar' => $id_bazzar])->get();
+        $data_bazar = Bazar::findOrFail($id_bazar);
+
+        Validator::make(
+            $request->all(),
+            [
+                'username' => 'bail|required|string'
+            ],
+            [
+                'username.required' => 'Kolom username wajib diisi',
+                'username.string'   => 'Silahkan pilih username yang tersedia',
+            ]
+        );
+
+        $staff_sudah_ada = $data_bazar
+            ->include_staff_bazar()
+            ->where('username', $request->username)
+            ->firstOrFail();
+
+        if ($staff_sudah_ada == true) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Staff yang dipilih sudah terdaftar di bazar ini.',
+            ], 422);
+        } else {
+            try {
+                $data_bazar
+                    ->include_staff_bazar()
+                    ->create([
+                        'username' => $request->username
+                    ]);
+            } catch (QueryException $e) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Terjadi kesalahan. Error code: [' . $e->errorInfo[1] . '] ' . $e->errorInfo[2]
+                ], 422);
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Staff bazzar ' . $data_bazar->nama_bazar . ' berhasil ditambahkan.',
+            ], 200);
+        }
+    }
+
+    public function get_staff($id_bazar)
+    {
+        $data_staff_bazzar = Staff_bazar::where(['id_bazar' => $id_bazar])->get();
 
         return DataTables::of($data_staff_bazzar)
             ->addColumn('alamat', function ($data) {
@@ -139,250 +198,213 @@ class BazarController extends Controller
             ->make(true);
     }
 
-    public function delete_staff($id_bazzar, $username)
+    public function delete_staff($id_bazar, $username)
     {
-        $data_staff = Staff_bazar::where([
-            'id_bazar' => $id_bazzar,
-            'username' => $username
-        ])->first();
+        $data_bazar = Bazar::findOrfail($id_bazar);
 
-        if ($data_staff) {
+        $data_staff = $data_bazar
+            ->include_staff_bazar()
+            ->where('username', $username)
+            ->firstOrFail();
+
+        try {
             $data_staff->delete();
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Staff bazzar berhasil dihapus.'
-            ]);
-        } else {
+        } catch (QueryException $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Staff bazzar tidak ditemukan atau sudah terhapus.'
-            ], 404);
-        }
-    }
-
-    public function create_barang(KeluarBazzarRequest $request, $id_bazzar)
-    {
-        if (gettype((int) $id_bazzar) != 'integer') {
-            return response()->json([
-                'success' => false,
-                'message' => 'Mohon masukan id_bazzar dengan benar.'
+                'message' => 'Terjadi kesalahan. Error code: [' . $e->errorInfo[1] . '] ' . $e->errorInfo[2]
             ], 422);
         }
 
-        $data_exist = Keluar_bazar::where([
-            'id_bazar' => $id_bazzar,
-            'barcode' => $request->barcode
-        ])->first();
-
-
-        if ($data_exist) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Data barang untuk bazzar ini sudah ada. Silahkan ubah jumlah barang saja.'
-            ], 422);
-        } else {
-
-            foreach ($request->barcode as $key => $value) {
-                
-                $cek_stock = $this->kurangi_stock($request->barcode[$key], $request->jml[$key]);
-
-                if (!$cek_stock) {
-                    return response()->json([
-                        'success' => false,
-                        'message' => 'Stock barang di gudang kurang dari jumlah yang diminta.'
-                    ], 422);
-                }
-
-                Keluar_bazar::create([
-                    'id_bazar' => $id_bazzar,
-                    'date'     => $request->date,
-                    'barcode'  => $request->barcode[$key],
-                    'jml'      => $request->jml[$key],
-                ]);
-            }
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Data barang bazzar berhasil ditambahkan.'
-            ]);
-        }
-    }
-
-    public function get_barang($id_bazzar, $id = null)
-    {
-        $data_barang = [];
-        $keluar_bazar = Keluar_bazar::where(['id_bazar' => $id_bazzar])->withTrashed()->get();
-
-        if ($keluar_bazar) {
-            if ($id == null) {
-
-                foreach ($keluar_bazar as $key => $value) {
-                    $hjual_asli = $value->include_barang_masuk->hjual;
-                    $potongan = $value->include_bazar->potongan;
-                    $hjual_setelah_diskon = $hjual_asli - $potongan;
-
-                    $data_barang[$key] = [
-                        'id'           => $value->id,
-                        'id_bazar'     => $value->id_bazar,
-                        'barcode'      => $value->barcode,
-                        'nama_barang'  => $value->include_barang_masuk->namabrg,
-                        'jenis_barang' => $value->include_barang_masuk->include_jenis->nama_jenis,
-                        'tipe_barang'  => $value->include_barang_masuk->include_tipe->nama_tipe,
-                        'hpp'          => "Rp. ".number_format($value->include_barang_masuk->hpp, 0, '.', ','),
-                        'hjual'        => "Rp. ".number_format($hjual_setelah_diskon, 0, '.', ','),
-                        'jumlah'       => $value->jml,
-                        'date'         => $value->date,
-                    ];
-                }
-
-                return DataTables::of($data_barang)
-                    ->addColumn('aksi', function ($data_barang) {
-                        $data_barang = (object) $data_barang;
-                        return '
-                            <button class="btn btn-sm btn-info" value="' . $data_barang->id . '" onclick="editKelolaBarang(this.value)">Edit</button>
-                            <button class="btn btn-sm btn-danger" value="' . $data_barang->id . '" onclick="deleteKelolaBarang(this.value)" >Hapus</button>
-                            ';
-                    })
-                    ->rawColumns(['aksi'])
-                    ->make(true);
-            } else {
-                $data = Keluar_bazar::findOrFail($id);
-
-                return response()->json([
-                    'success' => true,
-                    'data' => $data
-                ]);
-            }
-        }
-    }
-
-    public function update_barang(Request $request, $id_bazzar, $id)
-    {
-        $validatedRequest = $request->validate([
-            'jml' => 'required|integer'
+        return response()->json([
+            'success' => true,
+            'message' => 'Staff bazzar berhasil dihapus.'
         ]);
-
-        $bazzar_exist = Bazar::findOrFail($id_bazzar);
-
-        if ($bazzar_exist) {
-            $barang_bazzar_exist = Keluar_bazar::findOrFail($id);
-
-            if ($barang_bazzar_exist) {
-                /*
-                cek jumlah input lebih atau kurang dari value sebelumnya
-                kalau lebih dari = cari selisihnya, lalu ambil barang dari gudang sesuai selisih
-                kalau kurang dari = cari selsihnya, lalu kembalikan barang ke gudang sesuai selisih
-                */
-
-                $jumlah_sebelumnya = $barang_bazzar_exist->jml;
-
-                if ($request->jml > $jumlah_sebelumnya) {
-                    $selisih = $request->jml - $jumlah_sebelumnya;
-
-                    $cek_stock = $this->kurangi_stock($request->barcode, $selisih);
-
-                    if (!$cek_stock) {
-                        return response()->json([
-                            'success' => false,
-                            'message' => 'Stock barang di gudang kurang dari jumlah yang diminta.'
-                        ], 422);
-                    } else {
-                        $barang_bazzar_exist->update([
-                            'jml' => $jumlah_sebelumnya + $selisih
-                        ]);
-                    }
-                } else if ($request->jml < $jumlah_sebelumnya) {
-                    $selisih = $jumlah_sebelumnya - $request->jml;
-
-                    $cek_stock = $this->kembalikan_stock($request->barcode, $selisih);
-
-                    if (!$cek_stock) {
-                        return response()->json([
-                            'success' => false,
-                            'message' => 'Terjadi kesalahan.'
-                        ], 422);
-                    } else {
-                        $barang_bazzar_exist->update([
-                            'jml' => $jumlah_sebelumnya - $selisih
-                        ]);
-                    }
-                }
-
-                return response()->json([
-                    'success' => true,
-                    'message' => 'Data barang bazzar berhasil diubah.'
-                ]);
-            } else {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Data barang bazzar yang anda minta tidak terdaftar, atau sudah terhapus.'
-                ], 404);
-            }
-        } else {
-            return response()->json([
-                'success' => false,
-                'message' => 'Data bazzar yang anda minta tidak terdaftar, atau sudah terhapus.'
-            ], 404);
-        }
     }
 
-    public function delete_barang($id_bazzar, $id)
+    public function create_barang(CreateBarangRequest $request, $id_bazar)
     {
-        $bazzar_exist = Bazar::findOrFail($id_bazzar);
+        $data_bazar = Bazar::findOrFail($id_bazar);
 
-        if ($bazzar_exist) {
-            $data_barang_bazzar = Keluar_bazar::findOrFail($id);
+        foreach ($request->barcode as $key => $barcode) {
+            // Cek stock
+            $stock_ready = StockController::get_stock($barcode);
+            $stock_sisa = $stock_ready - $request->jumlah[$key];
 
-            $cek_stock = $this->kembalikan_stock($data_barang_bazzar->barcode, $data_barang_bazzar->jml);
-
-            if (!$cek_stock) {
+            if ($stock_sisa < 0) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Data barang yang anda minta tidak terdaftar, atau sudah terhapus.'
+                    'message' => 'Ada stock barang yang kurang. Mohon cek stock, refresh, dan ulangi kembali.',
                 ], 422);
             }
 
-            $data_barang_bazzar->delete();
+            // Mulai masukan stock
+            $data_barang = $data_bazar
+                ->include_keluar_bazar()
+                ->where('barcode', $barcode)
+                ->firstOrFail();
+
+            if ($data_barang == true) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Barang yang anda masukan sudah terdaftar, silahkan lakukan update stock',
+                ], 422);
+            } else {
+                try {
+                    $data_barang = $data_bazar
+                        ->include_keluar_bazar()
+                        ->create([
+                            'barcode' => $barcode,
+                            'jumlah' => $request->jumlah[$key] ?? null
+                        ]);
+                } catch (QueryException $e) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Terjadi kesalahan. Error code: [' . $e->errorInfo[1] . '] ' . $e->errorInfo[2]
+                    ], 422);
+                }
+            }
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Data barang bazzar berhasil ditambahkan.'
+        ]);
+    }
+
+    public function get_barang($id_bazar, $barcode = null)
+    {
+        $data_bazar = Bazar::findOrFail($id_bazar);
+
+        if ($barcode == null) {
+            $data_barang = $data_bazar
+                ->include_keluar_bazar()
+                ->groupBy('barcode')
+                ->get('barcode');
+
+            $daftar_barang = [];
+            foreach ($data_barang as $barang) {
+                $harga_diskon = $barang->include_barang_masuk->hpp - $data_bazar->potongan;
+                $tanggal = new DateTime(
+                    Keluar_bazar::where([
+                        'id_bazar' => $id_bazar,
+                        'barcode' => $barang->barcode,
+                    ])->latest('created_at')->firstOrFail()->created_at
+                );
+                $tanggal->setTimezone(new DateTimeZone('Asia/Makassar'));
+
+                array_push($daftar_barang, [
+                    'id_bazar'     => $id_bazar,
+                    'barcode'      => $barang->barcode,
+                    'nama_barang'  => $barang->include_barang_masuk->namabrg,
+                    'jenis_barang' => $barang->include_barang_masuk->include_jenis->nama_jenis,
+                    'tipe_barang'  => $barang->include_barang_masuk->include_tipe->nama_tipe,
+                    'hpp'          => "Rp. " . number_format($barang->include_barang_masuk->hpp, 0, '.', ','),
+                    'hjual'        => "Rp. " . number_format($harga_diskon, 0, '.', ','),
+                    'jumlah'       => StockController::get_stock_for_bazar($id_bazar, $barang->barcode),
+                    'tanggal'      => $tanggal->format("d-M-Y H:i T"),
+                ]);
+            }
+
+            return DataTables::of($daftar_barang)
+                ->addColumn('aksi', function ($barang) {
+                    return $barang['barcode'] . 'Button aksi';
+                })
+                ->rawColumns(['aksi'])
+                ->make(true);
+        } else {
+            $barang = $data_bazar
+                ->include_keluar_bazar()
+                ->where('barcode', $barcode)
+                ->groupBy('barcode')
+                ->firstOrFail('barcode');
+
+            $tanggal = new DateTime(
+                Keluar_bazar::where([
+                    'id_bazar' => $id_bazar,
+                    'barcode' => $barcode,
+                ])->latest('created_at')->firstOrFail()->created_at
+            );
+            $tanggal->setTimezone(new DateTimeZone('Asia/Makassar'));
+
+            $harga_diskon = $barang->include_barang_masuk->hpp - $data_bazar->potongan;
+
+            $data_barang = [
+                'id_bazar'     => $id_bazar,
+                'barcode'      => $barang->barcode,
+                'nama_barang'  => $barang->include_barang_masuk->namabrg,
+                'jenis_barang' => $barang->include_barang_masuk->include_jenis->nama_jenis,
+                'tipe_barang'  => $barang->include_barang_masuk->include_tipe->nama_tipe,
+                'hpp'          => "Rp. " . number_format($barang->include_barang_masuk->hpp, 0, '.', ','),
+                'hjual'        => "Rp. " . number_format($harga_diskon, 0, '.', ','),
+                'jumlah'       => StockController::get_stock_for_bazar($id_bazar, $barcode),
+                'tanggal'      => $tanggal->format("d-M-Y H:i T"),
+            ];
 
             return response()->json([
                 'success' => true,
-                'message' => 'Data barang bazzar berhasil dihapus.'
-            ]);
-        } else {
+                'data'    => $data_barang,
+            ], 200);
+        }
+    }
+
+    public function update_barang(UpdateBarangRequest $request, $id_bazar, $barcode)
+    {
+        $data_bazar = Bazar::findOrFail($id_bazar);
+
+        $barang = $data_bazar
+            ->include_keluar_bazar()
+            ->where('barcode', $barcode)
+            ->firstOrFail();
+
+        if ($barang == false) {
             return response()->json([
                 'success' => false,
-                'message' => 'Data bazzar yang anda minta tidak terdaftar, atau sudah terhapus.'
-            ], 404);
+                'message' => 'Barcode belum terdaftar, silahkan melakukan tambah barang bazar.',
+            ], 401);
         }
+
+        try {
+            $data_bazar->include_keluar_bazar()->create([
+                'barcode' => $barcode,
+                'jumlah' => $request->jumlah,
+            ]);
+        } catch (QueryException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan. Error code: [' . $e->errorInfo[1] . '] ' . $e->errorInfo[2]
+            ], 422);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Stock berhasil ditambahkan',
+        ], 200);
     }
 
-    protected function kurangi_stock($barcode, $jml)
+    public function delete_barang($id_bazar, $barcode)
     {
-        $data_barang = Barang_masuk::findOrFail($barcode);
+        $data_bazar = Bazar::findOrFail($id_bazar);
 
-        if ($data_barang->jumlah - $jml >= 0) {
-            $data_barang->update([
-                'jumlah' => $data_barang->jumlah - $jml
-            ]);
+        $daftar_barang_bazar = $data_bazar
+            ->include_keluar_bazar()
+            ->where('barcode', $barcode)
+            ->get();
 
-            return true;
-        } else {
-            return false;
+        foreach ($daftar_barang_bazar as $barang) {
+            try {
+                $barang->delete();
+            } catch (QueryException $e) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Terjadi kesalahan. Error code: [' . $e->errorInfo[1] . '] ' . $e->errorInfo[2]
+                ], 422);
+            }
         }
-    }
 
-    protected function kembalikan_stock($barcode, $jml)
-    {
-        $barang_masuk_exist = Barang_masuk::findOrFail($barcode);
-
-        if ($barang_masuk_exist) {
-            $barang_masuk_exist->update([
-                'jumlah' => $barang_masuk_exist->jumlah + $jml
-            ]);
-            return true;
-        } else {
-            return false;
-        }
+        return response()->json([
+            'success' => true,
+            'message' => 'Seluruh stock barang ini sudah dihapus dari bazar ini.',
+        ], 200);
     }
 }

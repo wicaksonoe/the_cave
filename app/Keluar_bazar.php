@@ -10,16 +10,16 @@ class Keluar_bazar extends Model
 	use SoftDeletes;
 
 	protected $fillable = [
-		'id_bazar', 'date', 'barcode', 'jml',
+		'id_bazar', 'barcode', 'jumlah'
     ];
-    
+
     public function include_bazar()
 	{
-		return $this->belongsTo('App\Bazar', 'id_bazar')->withTrashed();
+		return $this->belongsTo(Bazar::class, 'id_bazar')->withTrashed();
 	}
 
 	public function include_barang_masuk()
 	{
-		return $this->belongsTo('App\Barang_masuk', 'barcode', 'barcode');
-	}
+		return $this->belongsTo(Barang_masuk::class, 'barcode', 'barcode');
+    }
 }

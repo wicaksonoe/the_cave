@@ -62,9 +62,9 @@
             day = '' + d.getDate(),
             year = d.getFullYear();
 
-        if (month.length < 2) 
+        if (month.length < 2)
             month = '0' + month;
-        if (day.length < 2) 
+        if (day.length < 2)
             day = '0' + day;
 
         return [year, month, day].join('-');
@@ -118,20 +118,20 @@
                 let newRow = '<tr id="' + barcode + '">' +
                                 '<td><input type="text" name="barcode[]" class="form-control" value="' + barcode + '" readonly></td>' +
                                 '<td>' + response.data.namabrg + '</td>' +
-                                '<td><input type="text" name="jml[]" class="form-control number"></td>' +
+                                '<td><input type="text" name="jumlah[]" class="form-control number"></td>' +
                                 '<td><button class="btn btn-sm btn-danger" onclick="delete_nama_barang(' + barcode + ')"><i class="fas fa-trash-alt"></i></button></td>' +
                             '</tr>';
-                
+
                 if ( $('#' + barcode).length ) {
                     swal.fire({
                         title: 'Error!',
                         text: 'Barang ini sudah anda tambahkan di keranjang',
                         type: "error"
-                    })    
+                    })
                 } else {
                     $('#konten_tambah_barang').append(newRow);
                 }
-                
+
                 $('#barcode_scan').val('');
             })
             .fail(function (response) {
@@ -147,7 +147,7 @@
         $('#' + barcode).remove();
     }
 
-    
+
     function get_data() {
         var settings = {
             "url": "{{ url('api/v1/bazzar/barang').'/'.$id_bazzar }}" ,
@@ -164,9 +164,9 @@
             serverSide: true,
             ajax: settings,
             columns: [
-                {width: '20%', data: 'nama_barang', name: 'nama_barang'},
+                {width: '15%', data: 'nama_barang', name: 'nama_barang'},
                 {width: '10%', data: 'jenis_barang', name: 'jenis_barang'},
-                {width: '10%', data: 'tipe_barang', name: 'tipe_barang'},
+                {width: '15%', data: 'tipe_barang', name: 'tipe_barang'},
                 {width: '10%', data: 'jumlah', name: 'jumlah'},
                 {width: '10%', data: 'hpp', name: 'hpp'},
                 {width: '10%', data: 'hjual', name: 'hjual'},
@@ -232,14 +232,13 @@
             .done(function (response) {
                 $('#edit-barcode').val(response.data.barcode)
                 $('#edit-jml').val(response.data.jml)
-                $('#edit-date').val(response.data.date)
                 $('#update-button').val(response.data.id)
                 $('#modal-edit-KelolaBarang').modal('show');
             })
             .fail(function (response) {
                 swal.fire({
                     title: 'Error!',
-                    text: 'Terjadi Kesalahan',
+                    text: response.responseJSON.message,
                     type: "error"
                 })
             });
@@ -275,7 +274,7 @@
             .fail(function (msg) {
                 swal.fire({
                     title: 'Error!',
-                    text: 'Terjadi Kesalahan',
+                    text: msg.responseJSON.message,
                     type: "error"
                 })
 
@@ -308,7 +307,7 @@
             .fail(function (msg) {
                 swal.fire({
                     title: 'Error!',
-                    text: 'Terjadi Kesalahan',
+                    text: msg.responseJSON.message,
                     type: "error"
                 });
             });

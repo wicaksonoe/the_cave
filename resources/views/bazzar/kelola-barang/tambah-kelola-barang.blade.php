@@ -30,7 +30,7 @@
                         <label for="barcode_scan">Barcode</label>
                         <div class="row">
                             <div class="col-10">
-                                <input type="text" name="barcode_scan" id="barcode_scan" class="form-control">
+                                <input type="text" name="barcode_scan" id="barcode_scan" class="form-control" maxlength="15">
                             </div>
                             <div class="col-2">
                                 <button class="btn btn-info" onclick="get_nama_barang( $('#barcode_scan').val() )">Tambah</button>

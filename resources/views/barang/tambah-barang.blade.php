@@ -16,6 +16,7 @@
                         </div>
                         <div class="col-10">
                             <input type='date' class="form-control" id="tgl" readonly>
+                            <small class="tgl text-danger"></small>
                         </div>
                     </div>
 
@@ -24,7 +25,8 @@
                             <label for="id">Barcode</label>
                         </div>
                         <div class="col-10">
-                            <input class="form-control" id="barcode" placeholder="Barcode">
+                            <input class="form-control" id="barcode" placeholder="Barcode" maxlength="15" >
+                            <small class="barcode text-danger"></small>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -33,6 +35,7 @@
                         </div>
                         <div class="col-10">
                             <input class="form-control" id="namabrg" placeholder="Nama Barang">
+                            <small class="namabrg text-danger"></small>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -48,6 +51,7 @@
                                     @endif
                                 @endforeach
                             </select>
+                            <small class="text-danger id_jenis"></small>
                         </div>
                     </div>
 
@@ -64,6 +68,7 @@
                                     @endif
                                 @endforeach
                             </select>
+                            <small class="text-danger id_tipe"></small>
                         </div>
                     </div>
 
@@ -80,6 +85,7 @@
                                     @endif
                                 @endforeach
                             </select>
+                            <small class="text-danger id_sup"></small>
                         </div>
                     </div>
 
@@ -89,6 +95,7 @@
                         </div>
                         <div class="col-10">
                             <input type="text" class="form-control number" id="jumlah" placeholder="Jumlah Barang">
+                            <small class="text-danger jumlah"></small>
                         </div>
                     </div>
 
@@ -103,6 +110,7 @@
                                 </div>
                                 <input type="text" class="form-control number" id="hpp" placeholder="Harga Pokok Penjualan">
                             </div>
+                            <small class="text-danger hpp"></small>
                         </div>
                     </div>
 
@@ -117,6 +125,7 @@
                                 </div>
                                 <input type="text" class="form-control number" id="hjual" placeholder="Harga Jual">
                             </div>
+                            <small class="text-danger hjual"></small>
                         </div>
                     </div>
 
@@ -131,6 +140,7 @@
                                 </div>
                                 <input type="text" class="form-control number" id="grosir" placeholder="Harga Grosir">
                             </div>
+                            <small class="text-danger grosir"></small>
                         </div>
                     </div>
 
@@ -145,6 +155,7 @@
                                 </div>
                                 <input type="text" class="form-control number" id="partai" placeholder="Harga Partai">
                             </div>
+                            <small class="text-danger partai"></small>
                         </div>
                     </div>
 

@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\SupplierRequest;
+use App\Http\Requests\Supplier\CreateRequest;
+use App\Http\Requests\Supplier\UpdateRequest;
 use App\Supplier;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\DataTables;
 
@@ -17,12 +17,8 @@ class SupplierController extends Controller
 		$this->user = Auth::guard()->user();
 	}
 
-	public function create(SupplierRequest $request)
+	public function create(CreateRequest $request)
 	{
-		$validatedRequest = $request->validate([
-			'nama' => 'string|unique:suppliers,nama'
-		]);
-
 		Supplier::create($request->all());
 
 		return response()->json([
@@ -56,12 +52,8 @@ class SupplierController extends Controller
 		]);
 	}
 
-	public function update(SupplierRequest $request, $id)
+	public function update(UpdateRequest $request, $id)
 	{
-		$validatedRequest = $request->validate([
-			'nama' => 'required|string'
-		]);
-
 		$supplier = Supplier::findOrFail($id);
 
 		$supplier->update([

@@ -14,13 +14,12 @@ class CreatePenjualanBazarsTable extends Migration
     public function up()
     {
         Schema::create('penjualan_bazars', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->string('kode_trx', 20);
             $table->integer('id_bazar');
-            $table->date('tgl');
-            $table->string('barcode', 15);
-            $table->integer('jml');
+            $table->string('username', 20);
             $table->timestamps();
             $table->softDeletes();
+            $table->primary('kode_trx');
         });
     }
 

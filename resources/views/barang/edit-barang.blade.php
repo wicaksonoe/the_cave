@@ -18,6 +18,7 @@
                         <div class="col-10">
                             <input type='date' class="form-control" id="edit-tgl" readonly>
                         </div>
+                        <small class="text-danger edit-date"></small>
                     </div>
 
                     <div class="form-group row">
@@ -25,7 +26,8 @@
                             <label for="id">Barcode</label>
                         </div>
                         <div class="col-10">
-                            <input class="form-control" id="edit-barcode" placeholder="Barcode">
+                            <input class="form-control" id="edit-barcode" placeholder="Barcode" maxlength="15">
+                            <small class="text-danger edit-barcode"></small>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -34,6 +36,7 @@
                         </div>
                         <div class="col-10">
                             <input class="form-control" id="edit-namabrg" placeholder="Nama Barang">
+                            <small class="text-danger edit-namabrg"></small>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -51,6 +54,7 @@
                                     @endif
                                 @endforeach
                             </select>
+                            <small class="text-danger edit-id_jenis"></small>
                         </div>
                     </div>
 
@@ -69,6 +73,7 @@
                                     @endif
                                 @endforeach
                             </select>
+                            <small class="text-danger edit-id_tipe"></small>
                         </div>
                     </div>
 
@@ -87,6 +92,7 @@
                                     @endif
                                 @endforeach
                             </select>
+                            <small class="text-danger edit-id_sup"></small>
                         </div>
                     </div>
 
@@ -96,6 +102,7 @@
                         </div>
                         <div class="col-10">
                             <input type="text" class="form-control number" id="edit-jumlah" placeholder="Jumlah Barang">
+                            <small class="text-danger edit-jumlah"></small>
                         </div>
                     </div>
 
@@ -110,6 +117,7 @@
                                 </div>
                                 <input type="text" class="form-control number" id="edit-hpp" placeholder="Harga Pokok Penjualan">
                             </div>
+                            <small class="text-danger edit-hpp"></small>
                         </div>
                     </div>
 
@@ -123,6 +131,7 @@
                                     <span class="input-group-text" id="basic-addon2">Rp. </span>
                                 </div>
                                 <input type="text" class="form-control number" id="edit-hjual" placeholder="Harga Jual">
+                                <small class="text-danger edit-hjual"></small>
                             </div>
                         </div>
                     </div>
@@ -137,6 +146,7 @@
                                     <span class="input-group-text" id="basic-addon2">Rp. </span>
                                 </div>
                                 <input type="text" class="form-control number" id="edit-grosir" placeholder="Harga Grosir">
+                                <small class="text-danger edit-grosir"></small>
                             </div>
                         </div>
                     </div>
@@ -151,6 +161,7 @@
                                     <span class="input-group-text" id="basic-addon2">Rp. </span>
                                 </div>
                                 <input type="text" class="form-control number" id="edit-partai" placeholder="Harga Partai">
+                                <small class="text-danger edit-partai"></small>
                             </div>
                         </div>
                     </div>
