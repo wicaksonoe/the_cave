@@ -10,7 +10,7 @@ class Supplier extends Model
 	use SoftDeletes;
 
 	protected $fillable = [
-		'nama', 'alamat', 'telp',
+		'nama_supplier', 'alamat', 'no_telp',
 	];
 
 	public function include_barang_masuk()
