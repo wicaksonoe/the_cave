@@ -13,16 +13,16 @@
                     {{ csrf_field() }} {{ method_field('POST') }}
 
                     <div class="form-group">
-                        <label for="nama">Nama</label>
-                        <input class="form-control" id="nama" placeholder="Nama Supplier">
+                        <label for="nama_supplier">Nama</label>
+                        <input class="form-control" id="nama_supplier" placeholder="Nama Supplier">
                     </div>
                     <div class="form-group">
                         <label for="alamat">Alamat</label>
                         <textarea class="form-control" cols="30" id="alamat" placeholder="Alamat"></textarea>
                     </div>
                     <div class="form-group">
-                        <label for="telp">Telepon</label>
-                        <input type="number" class="form-control" cols="30" id="telp" placeholder="Telepon">
+                        <label for="no_telp">Telepon</label>
+                        <input type="number" class="form-control" cols="30" id="no_telp" placeholder="Telepon">
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-primary" onclick="tambahSupplier()">Simpan</button>

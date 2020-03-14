@@ -11,16 +11,16 @@
             <div class="modal-body">
                 <form id="form-edit-supplier">
                     <div class="form-group">
-                        <label for="nama">Nama</label>
-                        <input class="form-control" id="edit-nama" placeholder="Nama Supplier">
+                        <label for="nama_supplier">Nama</label>
+                        <input class="form-control" id="edit-nama_supplier" placeholder="Nama Supplier">
                     </div>
                     <div class="form-group">
                         <label for="alamat">Alamat</label>
                         <textarea class="form-control" cols="30" id="edit-alamat" placeholder="Alamat"></textarea>
                     </div>
                     <div class="form-group">
-                        <label for="telp">Telepon</label>
-                        <input type="number" class="form-control" cols="30" id="edit-telp" placeholder="Telepon">
+                        <label for="no_telp">Telepon</label>
+                        <input type="number" class="form-control" cols="30" id="edit-no_telp" placeholder="Telepon">
                     </div>
                 </form>
             </div>

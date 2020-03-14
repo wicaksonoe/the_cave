@@ -73,9 +73,9 @@
             serverSide: true,
             ajax: settings,
             columns: [
-                {width: '40%', data: 'nama', name: 'nama'},
+                {width: '40%', data: 'nama_supplier', name: 'nama_supplier'},
                 {width: '30%', data: 'alamat', name: 'alamat'},
-                {width: '10%', data: 'telp', name: 'telp'},
+                {width: '10%', data: 'no_telp', name: 'no_telp'},
                 {width: '20%', data: 'aksi', name: 'aksi'},
             ],
             order: [0, 'asc'],
@@ -94,9 +94,9 @@
                 "Authorization": "Bearer " + sessionStorage.getItem('access_token')
             },
             data: {
-                "nama": $('#nama').val(),
+                "nama_supplier": $('#nama_supplier').val(),
                 "alamat": $('#alamat').val(),
-                "telp": $('#telp').val(),
+                "no_telp": $('#no_telp').val(),
             }
             };
 
@@ -137,9 +137,9 @@
 
         $.ajax(settings)
             .done(function (response) {
-                $('#edit-nama').val(response.data.nama)
+                $('#edit-nama_supplier').val(response.data.nama_supplier)
                 $('#edit-alamat').html(response.data.alamat)
-                $('#edit-telp').val(response.data.telp)
+                $('#edit-no_telp').val(response.data.no_telp)
                 $('#update-button').val(response.data.id)
                 $('#modal-edit-supplier').modal('show');
             })
@@ -163,9 +163,9 @@
                 "Authorization": "Bearer " + sessionStorage.getItem('access_token')
             },
             "data": {
-                "nama": $('#edit-nama').val(),
+                "nama_supplier": $('#edit-nama_supplier').val(),
                 "alamat": $('#edit-alamat').val(),
-                "telp": $('#edit-telp').val(),
+                "no_telp": $('#edit-no_telp').val(),
             }
         };
 
