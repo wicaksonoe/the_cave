@@ -11,7 +11,7 @@
                 <form id="tambahKelolaBarangForm">
                     <div class="form-group">
                         <label for="tanggal"> Tanggal</label>
-                        <input type="date" class="form-control" name="date" id="date" readonly>
+                        <input type="tanggal" class="form-control" name="tanggal" id="tanggal" readonly>
                     </div>
 
                     <table id="tabel_tambah_barang" class="table table-bordered table-striped">

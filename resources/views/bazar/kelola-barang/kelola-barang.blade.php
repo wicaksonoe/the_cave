@@ -71,7 +71,7 @@
     }
 
     $(document).ready(function () {
-        $('#date').val(formatDate());
+        $('#tanggal').val(formatDate());
         get_data();
     });
 
@@ -88,7 +88,7 @@
     });
 
     $('#tambahKelolaBarang').on('show.bs.modal', (e) => {
-        $('#date').val(formatDate());
+        $('#tanggal').val(formatDate());
     });
 
     function get_nama_barang(barcode) {
@@ -170,7 +170,7 @@
                 {width: '10%', data: 'jumlah', name: 'jumlah'},
                 {width: '10%', data: 'hpp', name: 'hpp'},
                 {width: '10%', data: 'hjual', name: 'hjual'},
-                {width: '15%', data: 'date', name: 'date'},
+                {width: '15%', data: 'tanggal', name: 'tanggal'},
                 {width: '15%', data: 'aksi', name: 'aksi'},
 
             ],

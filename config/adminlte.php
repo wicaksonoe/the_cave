@@ -281,7 +281,7 @@ return [
         [
             'text'      => 'PEMBIAYAAN',
             'icon'      => 'fas fa-fw fa-user-friends',
-            'url'       => 'user',
+            'url'       => 'pembiayaan',
             // 'can'        => 'admin',
         ],
     ],
