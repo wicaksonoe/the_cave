@@ -41,6 +41,7 @@ class BarangController extends Controller
                     'hjual'           => number_format($value->hjual, 0, '.', ','),
                     'grosir'          => number_format($value->grosir, 0, '.', ','),
                     'partai'          => number_format($value->partai, 0, '.', ','),
+                    'tgl'             => Detail_barang::where('barcode', $value->barcode)->latest('created_at')->first()->created_at,
                 ];
             }
             return DataTables::of($data)
@@ -65,13 +66,14 @@ class BarangController extends Controller
                 'hjual'           => number_format($data->hjual, 0, '.', ','),
                 'grosir'          => number_format($data->grosir, 0, '.', ','),
                 'partai'          => number_format($data->partai, 0, '.', ','),
+                'tgl'             => Detail_barang::where('barcode', $data->barcode)->latest('created_at')->first()->created_at,
             ];
-        }
 
-        return response()->json([
-            'success' => true,
-            'data' => $data_barang
-        ]);
+            return response()->json([
+                'success' => true,
+                'data' => $data_barang
+            ]);
+        }
     }
 
     public function get_stock($barcode)
@@ -106,12 +108,11 @@ class BarangController extends Controller
         try {
 
             Detail_barang::create([
-               'barcode' => $data_stock->barcode_barang,
-               'jumlah' => $request->jumlah,
+                'barcode' => $data_stock->barcode_barang,
+                'jumlah' => $request->jumlah,
             ]);
 
             $data_stock->delete();
-
         } catch (QueryException $e) {
             return response()->json([
                 'success' => false,
