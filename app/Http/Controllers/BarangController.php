@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\DataTables;
 use App\Http\Requests\BarangMasuk\CreateRequest;
 use App\Http\Requests\BarangMasuk\UpdateRequest;
+use DateTime;
+use DateTimeZone;
 
 class BarangController extends Controller
 {
@@ -30,6 +32,14 @@ class BarangController extends Controller
             $data_barang = Barang_masuk::all();
 
             foreach ($data_barang as $key => $value) {
+                $tanggal = new DateTime(
+                    Detail_barang::where('barcode_barang', $value->barcode)
+                        ->latest('created_at')
+                        ->first()
+                        ->created_at
+                );
+                $tanggal->setTimezone(new DateTimeZone('Asia/Makassar'));
+
                 $data[$key] = [
                     'barcode'         => $value->barcode,
                     'namabrg'         => $value->namabrg,
@@ -41,7 +51,7 @@ class BarangController extends Controller
                     'hjual'           => number_format($value->hjual, 0, '.', ','),
                     'grosir'          => number_format($value->grosir, 0, '.', ','),
                     'partai'          => number_format($value->partai, 0, '.', ','),
-                    'tgl'             => Detail_barang::where('barcode_barang', $value->barcode)->latest('created_at')->first()->created_at,
+                    'tanggal'         => $tanggal->format("d-M-Y H:i T"),
                 ];
             }
             return DataTables::of($data)
@@ -55,6 +65,14 @@ class BarangController extends Controller
         } else {
             $data = Barang_masuk::findOrFail($barcode);
 
+            $tanggal = new DateTime(
+                Detail_barang::where('barcode_barang', $data->barcode)
+                    ->latest('created_at')
+                    ->first()
+                    ->created_at
+            );
+            $tanggal->setTimezone(new DateTimeZone('Asia/Makassar'));
+
             $data_barang = [
                 'barcode'         => $data->barcode,
                 'namabrg'         => $data->namabrg,
@@ -66,7 +84,7 @@ class BarangController extends Controller
                 'hjual'           => number_format($data->hjual, 0, '.', ','),
                 'grosir'          => number_format($data->grosir, 0, '.', ','),
                 'partai'          => number_format($data->partai, 0, '.', ','),
-                'tgl'             => Detail_barang::where('barcode_barang', $data->barcode)->latest('created_at')->first()->created_at,
+                'tanggal'         => $tanggal->format("d-M-Y H:i T"),
             ];
 
             return response()->json([
