@@ -41,7 +41,7 @@ class BarangController extends Controller
                     'hjual'           => number_format($value->hjual, 0, '.', ','),
                     'grosir'          => number_format($value->grosir, 0, '.', ','),
                     'partai'          => number_format($value->partai, 0, '.', ','),
-                    'tgl'             => Detail_barang::where('barcode', $value->barcode)->latest('created_at')->first()->created_at,
+                    'tgl'             => Detail_barang::where('barcode_barang', $value->barcode)->latest('created_at')->first()->created_at,
                 ];
             }
             return DataTables::of($data)
@@ -66,7 +66,7 @@ class BarangController extends Controller
                 'hjual'           => number_format($data->hjual, 0, '.', ','),
                 'grosir'          => number_format($data->grosir, 0, '.', ','),
                 'partai'          => number_format($data->partai, 0, '.', ','),
-                'tgl'             => Detail_barang::where('barcode', $data->barcode)->latest('created_at')->first()->created_at,
+                'tgl'             => Detail_barang::where('barcode_barang', $data->barcode)->latest('created_at')->first()->created_at,
             ];
 
             return response()->json([
