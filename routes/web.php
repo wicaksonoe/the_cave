@@ -48,36 +48,36 @@ Route::group(['middleware' => ['isAlreadyLogin', 'auth.jwt']], function () {
         return view('barang.barang', compact('jenis', "tipe", "supp"));
     });
 
-    Route::get('/bazzar', function () {
-        return view('bazzar.bazzar');
+    Route::get('/bazar', function () {
+        return view('bazar.bazar');
     });
 
-    Route::get('/bazzar/tambah', function () {
-        return view('bazzar.tambah-bazzar');
+    Route::get('/bazar/tambah', function () {
+        return view('bazar.tambah-bazar');
     });
 
-    Route::get('/bazzar/kelola-barang/{id_bazzar}', function ($id_bazzar) {
+    Route::get('/bazar/kelola-barang/{id_bazar}', function ($id_bazar) {
         $barang = Barang_masuk::all();
         $jenis  = Jenis::all();
         $tipe   = Tipe::all();
         $supp   = Supplier::all();
-        $bazzar = Bazar::findOrFail($id_bazzar);
+        $bazar = Bazar::findOrFail($id_bazar);
 
-        return view('bazzar.kelola-barang.kelola-barang', compact('bazzar', 'barang', 'id_bazzar', 'jenis', 'tipe', 'supp'));
-    })->name('bazzar.kelola-barang');
+        return view('bazar.kelola-barang.kelola-barang', compact('bazar', 'barang', 'id_bazar', 'jenis', 'tipe', 'supp'));
+    })->name('bazar.kelola-barang');
 
-    Route::get('/bazzar/kelola-staff/{id_bazzar}', function ($id_bazzar) {
+    Route::get('/bazar/kelola-staff/{id_bazar}', function ($id_bazar) {
         $nama   = User::where(['role' => 'pegawai'])->get();
-        $bazzar = Bazar::findOrFail($id_bazzar);
+        $bazar = Bazar::findOrFail($id_bazar);
 
-        return view('bazzar.kelola-staff.kelola-staff', compact('id_bazzar', 'bazzar', 'nama'));
-    })->name('bazzar.kelola-staff');
+        return view('bazar.kelola-staff.kelola-staff', compact('id_bazar', 'bazar', 'nama'));
+    })->name('bazar.kelola-staff');
 
-    Route::get('/bazzar/laporan/{id_bazar}', 'BazarController@laporan')
-        // function ($id_bazzar) {
-        //     return $id_bazzar;
+    Route::get('/bazar/laporan/{id_bazar}', 'BazarController@laporan')
+        // function ($id_bazar) {
+        //     return $id_bazar;
         // })
-        ->name('bazzar.laporan');
+        ->name('bazar.laporan');
 
 
     Route::get('/user', function () {
@@ -88,12 +88,12 @@ Route::group(['middleware' => ['isAlreadyLogin', 'auth.jwt']], function () {
         return view('supplier.supplier');
     });
 
-    Route::get('/bazzar/tambah', function () {
-        return view('bazzar.tambah-bazzar');
+    Route::get('/bazar/tambah', function () {
+        return view('bazar.tambah-bazar');
     });
 
-    Route::get('/bazzar/tambah/barang-keluar', function () {
-        return view('bazzar.keluar-bazzar');
+    Route::get('/bazar/tambah/barang-keluar', function () {
+        return view('bazar.keluar-bazar');
     });
 
     Route::post('/logout', function (Request $request) {

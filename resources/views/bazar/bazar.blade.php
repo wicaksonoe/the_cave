@@ -1,6 +1,6 @@
 @extends ('adminlte::page')
 
-@section('title', 'BAZZAR')
+@section('title', 'BAZAR')
 
 @section('content_header')
 <h1>Data Bazar</h1>
@@ -8,9 +8,8 @@
 
 @section('content')
 
-@include('bazzar.summary-delete-bazar')
-@include('bazzar.tambah-bazzar')
-@include('bazzar.edit-bazzar')
+@include('bazar.tambah-bazar')
+@include('bazar.edit-bazar')
 <div class="container">
     <div class="row">
         <div class="col">
@@ -20,12 +19,12 @@
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body">
-                    <a onclick="$('#tambahBazzar').modal('show')"><button type="button" class="btn btn-primary"
+                    <a onclick="$('#tambahBazar').modal('show')"><button type="button" class="btn btn-primary"
                             style="margin-bottom: 10px">
                             <i class="fa fa-plus-square" aria-hidden="true"></i> Tambah
                         </button></a>
                     <div class="table-responsive">
-                        <table id="tabelBazzar" class="table table-bordered table-striped">
+                        <table id="tabelBazar" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
                                     <th>Nama Bazar</th>
@@ -69,7 +68,7 @@
 
     function summaryDelete(id_bazar) {
         var settings = {
-            "url": BASE_URL_API + '/bazzar/barang/' + id_bazar,
+            "url": BASE_URL_API + '/bazar/barang/' + id_bazar,
             "method": "GET",
             "timeout": 0,
             "headers": {
@@ -96,7 +95,7 @@
 
     function get_data() {
         var settings = {
-            "url": "{{ url('api/v1/bazzar') }}",
+            "url": "{{ url('api/v1/bazar') }}",
             "method": "GET",
             "timeout": 0,
             "headers": {
@@ -104,8 +103,8 @@
                 "Authorization": "Bearer " + sessionStorage.getItem('access_token')
             },
         };
-        $('#tabelBazzar').DataTable().clear().destroy();
-        $('#tabelBazzar').DataTable({
+        $('#tabelBazar').DataTable().clear().destroy();
+        $('#tabelBazar').DataTable({
             processing: false,
             serverSide: true,
             ajax: settings,
@@ -122,9 +121,9 @@
         });
     }
 
-    function tambahBazzar() {
+    function tambahBazar() {
             var settings = {
-            "url": "{{ url ('api/v1/bazzar')}}",
+            "url": "{{ url ('api/v1/bazar')}}",
             "method": "POST",
             "timeout": 0,
             "headers": {
@@ -142,13 +141,13 @@
             };
 
             $.ajax(settings).done(function (msg) {
-                $('#tambahBazzar').modal('hide');
+                $('#tambahBazar').modal('hide');
                 swal.fire({
                     title: 'Berhasil',
                     text: msg.message,
                     type: "success"
                 });
-                document.getElementById("tambahBazzarForm").reset();
+                document.getElementById("tambahBazarForm").reset();
                 get_data();
             })
                 .fail(function (msg) {
@@ -165,9 +164,9 @@
 
     }
 
-    function editBazzar(id_bazzar) {
+    function editBazar(id_bazar) {
         var settings = {
-            "url": BASE_URL_API + "/bazzar/" + id_bazzar,
+            "url": BASE_URL_API + "/bazar/" + id_bazar,
             "method": "GET",
             "timeout": 0,
             "headers": {
@@ -184,7 +183,7 @@
                 $('#edit-tgl_akhir').val(response.data.tgl_akhir)
                 $('#edit-potongan').val(formatNumber(response.data.potongan))
                 $('#update-button').val(response.data.id)
-                $('#modal-edit-bazzar').modal('show');
+                $('#modal-edit-bazar').modal('show');
             })
             .fail(function (response) {
                 swal.fire({
@@ -195,9 +194,9 @@
             });
     }
 
-    function updateBazzar(id_bazzar) {
+    function updateBazar(id_bazar) {
         var settings = {
-            "url": BASE_URL_API + "/bazzar/" + id_bazzar,
+            "url": BASE_URL_API + "/bazar/" + id_bazar,
             "method": "PUT",
             "timeout": 0,
             "headers": {
@@ -216,13 +215,13 @@
 
         $.ajax(settings)
             .done(function (msg) {
-                $('#modal-edit-bazzar').modal('hide');
+                $('#modal-edit-bazar').modal('hide');
                 swal.fire({
                     title: 'Berhasil',
                     text: msg.message,
                     type: "success"
                 });
-                document.getElementById("form-edit-bazzar").reset();
+                document.getElementById("form-edit-bazar").reset();
                 get_data();
             })
             .fail(function (msg) {
@@ -238,9 +237,9 @@
             });
     }
 
-    function deleteBazzar(id_bazzar) {
+    function deleteBazar(id_bazar) {
         var settings = {
-            "url": BASE_URL_API + "/bazzar/" + id_bazzar,
+            "url": BASE_URL_API + "/bazar/" + id_bazar,
             "method": "DELETE",
             "timeout": 0,
             "headers": {
