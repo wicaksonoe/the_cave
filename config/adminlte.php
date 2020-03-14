@@ -270,7 +270,7 @@ return [
         [
             'text'      => 'BAZAR',
             'icon'      => 'fas fa-fw fa-store',
-            'url'       => 'bazzar',
+            'url'       => 'bazar',
         ],
         [
             'text'      => 'USER',

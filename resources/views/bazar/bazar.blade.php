@@ -8,7 +8,6 @@
 
 @section('content')
 
-@include('bazar.summary-delete-bazar')
 @include('bazar.tambah-bazar')
 @include('bazar.edit-bazar')
 <div class="container">
