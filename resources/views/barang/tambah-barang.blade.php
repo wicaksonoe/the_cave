@@ -15,8 +15,8 @@
                             <label for="tanggal"> Tanggal</label>
                         </div>
                         <div class="col-10">
-                            <input type='date' class="form-control" id="tgl" readonly>
-                            <small class="tgl text-danger"></small>
+                            <input type='date' class="form-control" id="tanggal" readonly>
+                            <small class="tanggal text-danger"></small>
                         </div>
                     </div>
 
