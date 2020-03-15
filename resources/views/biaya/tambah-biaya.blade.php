@@ -12,13 +12,22 @@
                 <form method="post" id="tambahBiayaForm" class="form-horizontal" data-toggle="validator">
                     {{ csrf_field() }} {{ method_field('POST') }}
 
-                    <div class="form-group">
-                        <label for="nama_biaya">ID Biaya</label>
-                        <input class="form-control" id="id">
-                    </div>
-                    <div class="form-group">
-                        <label for="nama_bazar">Nama Bazar</label>
-                        <textarea class="form-control" cols="30" id="nama_bazar" placeholder="Nama Bazar"></textarea>
+                    <div class="form-group row">
+                        <div class="col-2">
+                            <label for="nama_bazar">Nama Bazar/Toko</label>
+                        </div>
+                        <div class="col-10">
+                            <select id="nama_bazar" class="form-control">
+                                <option selected disabled>Pilih Nama Bazar...</option>
+                                <option value="0">Toko</option>
+                                @foreach ($bazar as $item)
+                                    @if (!isset($item->deleted_at))
+                                    <option value="{{ $item->id }}"> {{ $item->id }}-{{ ucfirst($item->nama_bazar) }}</option>
+                                    @endif
+                                @endforeach
+                            </select>
+                            <small class="text-danger id_bazar"></small>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label for="keterangan">Keterangan</label>

@@ -84,11 +84,11 @@
                         <div class="col-10">
                             <select id="edit-id_sup" class="form-control">
                                 <option selected disabled>Pilih Supplier Barang...</option>
-                                @foreach ($supp as $item)
+                                @foreach ($supplier as $item)
                                     @if (isset($item->deleted_at))
                                     <option value="{{ $item->id }}">-- Supplier sudah dihapus -- ({{ ucfirst($item->nama) }})</option>
                                     @else
-                                    <option value="{{ $item->id }}">{{ ucfirst($item->nama) }}</option>
+                                    <option value="{{ $item->id }}">{{ ucfirst($item->nama_supplier) }}</option>
                                     @endif
                                 @endforeach
                             </select>
