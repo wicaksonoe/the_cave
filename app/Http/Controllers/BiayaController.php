@@ -22,7 +22,7 @@ class BiayaController extends Controller
                     return $biaya->id . 'Button here';
                 })
                 ->addColumn('nama_bazar', function($biaya) {
-                    return $biaya->include_bazar->bazar;
+                    return $biaya->include_bazar->nama_bazar;
                 })
                 ->rawColumns(['aksi'])
                 ->make(true);
