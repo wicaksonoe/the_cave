@@ -19,7 +19,8 @@ class BiayaController extends Controller
 
             return DataTables::of($data_biaya)
                 ->addColumn('aksi', function ($biaya) {
-                    return $biaya->id . 'Button here';
+                    return '<button class="btn btn-sm btn-info" value="' . $biaya->id . '" onclick="editBiaya(this.value)">Edit</button>
+                            <button class="btn btn-sm btn-danger" value="' . $biaya->id . '" onclick="deleteBiaya(this.value)">Delete</button>';
                 })
                 ->addColumn('nama_bazar', function($biaya) {
                     if ($biaya->id_bazar == null) {
