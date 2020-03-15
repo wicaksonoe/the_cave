@@ -7,8 +7,8 @@
 @stop
 
 @section('content')
-{{--
-@include('biaya.edit-biaya') --}}
+
+@include('biaya.edit-biaya')
 @include('biaya.tambah-biaya')
 <div class="container">
     <div class="row">
@@ -169,6 +169,81 @@
 
 
     }
+
+    function editBiaya(id_biaya) {
+        var settings = {
+            "url": BASE_URL_API + "/biaya/" + id_biaya,
+            "method": "GET",
+            "timeout": 0,
+            "headers": {
+                "Accept": "application/json",
+                "Authorization": "Bearer " + sessionStorage.getItem('access_token')
+            },
+        };
+
+        $.ajax(settings)
+            .done(function (response) {
+                $('#edit-id_biaya').val(response.data.id_biaya)
+                $('#edit-id_bazar').val(response.data.id_bazar)
+                $('#edit-keterangan').val(response.data.keterangan)
+                $('#edit-nominal').val(response.data.nominal)
+                $('#update-button').val(response.data.barcode)
+                $('#modal-edit-biaya').modal('show');
+            })
+            .fail(function (response) {
+                swal.fire({
+                    title: 'Error!',
+                    text: msg.responseJSON.message,
+                    type: "error"
+                })
+            });
+    }
+
+    function updateBiaya(barcode) {
+        var settings = {
+            "url": BASE_URL_API + "/biaya/" + id_biaya,
+            "method": "PUT",
+            "timeout": 0,
+            "headers": {
+                "Accept": "application/json",
+                "Content-Type": "application/x-www-form-urlencoded",
+                "Authorization": "Bearer " + sessionStorage.getItem('access_token')
+            },
+            "data": {
+                "id_biaya": $('#id_biaya-barcode').val(),
+                "id_bazar" : $('#edit-id_bazar').val(),
+                "keterangan": $('#edit-keterangan').val(),
+                "nominal" : $('#edit-nominal').val(),
+            }
+        };
+
+        $.ajax(settings)
+            .done(function (msg) {
+                $('#modal-edit-biaya').modal('hide');
+                swal.fire({
+                    title: 'Berhasil',
+                    text: msg.message,
+                    type: "success"
+                });
+                document.getElementById("form-edit-biaya").reset();
+                $('#tanggal').val(formatDate());
+                $('#edit-tanggal').val(formatDate());
+                get_data();
+            })
+            .fail(function (msg) {
+                swal.fire({
+                    title: 'Error!',
+                    text: msg.responseJSON.message,
+                    type: "error"
+                })
+
+                $.each(msg.responseJSON.errors, function (key, value) {
+                    $('small.edit-' + key).html(value);
+                    $("#edit-" + key).addClass("is-invalid")
+                })
+            });
+    }
+
 
 </script>
 @stop
