@@ -280,7 +280,7 @@ return [
         ],
         [
             'text'      => 'PEMBIAYAAN',
-            'icon'      => 'fas fa-fw fa-user-friends',
+            'icon'      => 'fas fa-fw fa-dollar-sign',
             'url'       => 'pembiayaan',
             // 'can'        => 'admin',
         ],

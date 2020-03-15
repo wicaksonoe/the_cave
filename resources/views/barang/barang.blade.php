@@ -76,8 +76,8 @@
     });
 
     $(document).ready(function () {
-        $('#tgl').val(formatDate());
-        $('#edit-tgl').val(formatDate());
+        $('#tanggal').val(formatDate());
+        $('#edit-tanggal').val(formatDate());
         get_data();
     });
 
@@ -108,7 +108,7 @@
                 {width: '10%', data: 'jumlah', name: 'jumlah'},
                 {width: '10%', data: 'hpp', name: 'hpp'},
                 {width: '10%', data: 'hjual', name: 'hjual'},
-                {width: '10%', data: 'tgl', name: 'tgl'},
+                {width: '10%', data: 'tanggal', name: 'tanggal'},
                 {width: '15%', data: 'aksi', name: 'aksi'},
             ],
             order: [0, 'asc'],
@@ -137,7 +137,7 @@
             "hjual"   : $('#hjual').val().replace(',',''),
             "grosir"  : $('#grosir').val().replace(',',''),
             "partai"  : $('#partai').val().replace(',',''),
-            "tgl"     : $('#tgl').val(),
+            "tanggal"     : $('#tanggal').val(),
         }
         };
 
@@ -149,8 +149,8 @@
                     type : "success"
                 });
                 document.getElementById("tambahBarangForm").reset();
-                $('#tgl').val(formatDate());
-                $('#edit-tgl').val(formatDate());
+                $('#tanggal').val(formatDate());
+                $('#edit-tanggal').val(formatDate());
                 get_data();
             })
             .fail(function( msg ) {
@@ -224,7 +224,7 @@
                 "hjual"   : $('#edit-hjual').val().replace(',',''),
                 "grosir"  : $('#edit-grosir').val().replace(',',''),
                 "partai"  : $('#edit-partai').val().replace(',',''),
-                "tgl"     : $('#edit-tgl').val(),
+                "tanggal"     : $('#edit-tanggal').val(),
             }
         };
 
@@ -237,8 +237,8 @@
                     type: "success"
                 });
                 document.getElementById("form-edit-barang").reset();
-                $('#tgl').val(formatDate());
-                $('#edit-tgl').val(formatDate());
+                $('#tanggal').val(formatDate());
+                $('#edit-tanggal').val(formatDate());
                 get_data();
             })
             .fail(function (msg) {

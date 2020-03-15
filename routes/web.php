@@ -108,4 +108,7 @@ Route::group(['middleware' => ['isAlreadyLogin', 'auth.jwt']], function () {
     Route::get('/riwayat_transaksi', function () {
         return view('penjualan.riwayat_transaksi');
     });
+    Route::get('/pembiayaan', function () {
+        return view('pembiayaan.pembiayaan');
+    });
 });

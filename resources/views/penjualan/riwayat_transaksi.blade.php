@@ -8,14 +8,12 @@
 
 @section('content')
 
-@include('barang.tambah-barang')
-@include('barang.edit-barang')
 <div class="container">
     <div class="row">
         <div class="col">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Data Barang</h3>
+                    <h3 class="card-title">RIWAYAT TRANSAKSI PENJUALAN</h3>
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body">
