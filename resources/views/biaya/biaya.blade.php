@@ -74,7 +74,7 @@
             ajax: settings,
             columns: [
                 {width: '20%', data: 'id', name: 'id'},
-                {width: '20%', data: 'id_bazar', name: 'id_bazar'},
+                {width: '20%', data: 'nama_bazar', name: 'nama_bazar'},
                 {width: '40%', data: 'keterangan', name: 'keterangan'},
                 {width: '20%', data: 'nominal', name: 'nominal'},
             ],

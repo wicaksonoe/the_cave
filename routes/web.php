@@ -108,8 +108,8 @@ Route::group(['middleware' => ['isAlreadyLogin', 'auth.jwt']], function () {
     Route::get('/riwayat_transaksi', function () {
         return view('penjualan.riwayat_transaksi');
     });
-    Route::get('/pembiayaan', function ($id) {
-        $bazar = Bazar::all();
-        return view('pembiayaan.pembiayaan', compact('bazar', 'nama_bazar', 'id_bazar'));
-    })->name('pembiayaan');
+    Route::get('/biaya', function () {
+        $bazar = Bazar::get(['id', 'nama_bazar']);
+        return view('biaya.biaya', compact('bazar'));
+    })->name('biaya');
 });
