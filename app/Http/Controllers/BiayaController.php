@@ -17,19 +17,16 @@ class BiayaController extends Controller
         if ($id == null) {
             $data_biaya = Biaya::all();
 
-            $daftar_biaya = [];
-            foreach ($data_biaya as $biaya) {
-                array_push($daftar_biaya, [
-                    'id'         => $biaya->id,
-                    'nama_bazar' => $biaya->include_bazar->nama_bazar,
-                    'keterangan' => $biaya->keterangan,
-                    'nominal'    => $biaya->nominal,
-                ]);
-            }
-
-            return DataTables::of($daftar_biaya)
+            return DataTables::of($data_biaya)
                 ->addColumn('aksi', function ($biaya) {
                     return $biaya->id . 'Button here';
+                })
+                ->addColumn('nama_bazar', function($biaya) {
+                    if ($biaya->id_bazar == null) {
+                        return '--Toko--';
+                    } else {
+                        return $biaya->include_bazar()->withTrashed()->first()->nama_bazar;
+                    }
                 })
                 ->rawColumns(['aksi'])
                 ->make(true);
