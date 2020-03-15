@@ -1,33 +1,33 @@
 @extends('adminlte::page')
 
-@section('title', 'PEMBIAYAAN')
+@section('title', 'BIAYA')
 
 @section('content_header')
-<h1>PEMBIAYAAN</h1>
+<h1>BIAYA</h1>
 @stop
 
 @section('content')
 
-{{-- @include('pembiayaan.edit-pembiayaan')
-@include('pembiayaan.tambah-pembiayaan') --}}
+{{-- @include('biaya.edit-biaya')
+@include('biaya.tambah-biaya') --}}
 <div class="container">
     <div class="row">
         <div class="col">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Data Pembiayaan</h3>
+                    <h3 class="card-title">Data Biaya</h3>
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body">
-                    <a onclick="$('#tambahPembiayaan').modal('show')"><button type="button" class="btn btn-primary"
+                    <a onclick="$('#tambahBiaya').modal('show')"><button type="button" class="btn btn-primary"
                             style="margin-bottom: 10px">
                             <i class="fa fa-plus-square" aria-hidden="true"></i> Tambah
                         </button></a>
                     <div class="table-responsive">
-                        <table id="tabelPembiayaan" class="table table-bordered table-striped">
+                        <table id="tabelBiaya" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
-                                    <th class="text-center">ID Pembiayaan</th>
+                                    <th class="text-center">ID Biaya</th>
                                     <th class="text-center">Bazar</th>
                                     <th class="text-center">Keterangan</th>
                                     <th class="text-center">Nominal</th>
@@ -67,14 +67,14 @@
                 "Authorization": "Bearer " + sessionStorage.getItem('access_token')
             },
         };
-        $('#tabelPembiayaan').DataTable().clear().destroy();
-        $('#tabelPembiayaan').DataTable({
+        $('#tabelBiaya').DataTable().clear().destroy();
+        $('#tabelBiaya').DataTable({
             processing: false,
             serverSide: true,
             ajax: settings,
             columns: [
                 {width: '20%', data: 'id', name: 'id'},
-                {width: '20%', data: 'id_bazar', name: 'id_bazar'},
+                {width: '20%', data: 'nama_bazar', name: 'nama_bazar'},
                 {width: '40%', data: 'keterangan', name: 'keterangan'},
                 {width: '20%', data: 'nominal', name: 'nominal'},
             ],
@@ -83,7 +83,7 @@
         });
     }
 
-    function tambahPembiayaan() {
+    function tambahBiaya() {
             var settings = {
             "url": "{{ url ('api/v1/biaya/') }}",
             "method": "POST",
@@ -95,20 +95,20 @@
             },
             data: {
                 "id": $('#id').val(),
-                "id_bazar": $('#id_bazar').val(),
+                "nama_bazar": $('#nama_bazar').val(),
                 "keterangan": $('#keterangan').val(),
                 "nominal": $('#nominal').val(),
             }
             };
 
             $.ajax(settings).done(function (msg) {
-                    $('#tambahPembiayaan').modal('hide');
+                    $('#tambahBiaya').modal('hide');
                     swal.fire({
                         title: 'Berhasil',
                         text: msg.message,
                         type: "success"
                     });
-                    document.getElementById("tambahPembiayaanForm").reset();
+                    document.getElementById("tambahBiayaForm").reset();
                     get_data();
                 })
                 .fail(function (msg) {

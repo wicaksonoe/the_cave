@@ -279,9 +279,9 @@ return [
             // 'can'        => 'admin',
         ],
         [
-            'text'      => 'PEMBIAYAAN',
+            'text'      => 'BIAYA',
             'icon'      => 'fas fa-fw fa-dollar-sign',
-            'url'       => 'pembiayaan',
+            'url'       => 'biaya',
             // 'can'        => 'admin',
         ],
     ],
