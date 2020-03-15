@@ -15,11 +15,14 @@ class BiayaController extends Controller
     public function get($id = null)
     {
         if ($id == null) {
-            $data_biaya = Biaya::where('id_bazar', null)->get();
+            $data_biaya = Biaya::all();
 
             return DataTables::of($data_biaya)
                 ->addColumn('aksi', function ($biaya) {
                     return $biaya->id . 'Button here';
+                })
+                ->addColumn('nama_bazar', function($biaya) {
+                    return $biaya->include_bazar->bazar;
                 })
                 ->rawColumns(['aksi'])
                 ->make(true);

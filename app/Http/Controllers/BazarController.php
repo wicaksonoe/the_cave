@@ -51,7 +51,7 @@ class BazarController extends Controller
                     if ($bazar->deleted_at == null) {
                         return '
                             <a href="' . route("bazar.kelola-barang", $bazar->id) . '" class="btn btn-sm btn-info" style="margin: 0.25em">Kelola</a>
-                            <button class="btn btn-sm btn-warning" value="' . $bazar->id . '" onclick="editBazzar(this.value)" style="margin: 0.25em">Edit</button>
+                            <button class="btn btn-sm btn-warning" value="' . $bazar->id . '" onclick="editBazar(this.value)" style="margin: 0.25em">Edit</button>
                             <button class="btn btn-sm btn-danger" value="' . $bazar->id . '" onclick="summaryDelete(this.value)" style="margin: 0.25em">Tutup Bazar</button>
                             ';
                     } else {
