@@ -7,9 +7,9 @@
 @stop
 
 @section('content')
-
-{{-- @include('biaya.edit-biaya')
-@include('biaya.tambah-biaya') --}}
+{{--
+@include('biaya.edit-biaya') --}}
+@include('biaya.tambah-biaya')
 <div class="container">
     <div class="row">
         <div class="col">
@@ -31,6 +31,7 @@
                                     <th class="text-center">Bazar</th>
                                     <th class="text-center">Keterangan</th>
                                     <th class="text-center">Nominal</th>
+                                    <th class="text-center">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -73,10 +74,11 @@
             serverSide: true,
             ajax: settings,
             columns: [
-                {width: '20%', data: 'id', name: 'id'},
+                {width: '10%', data: 'id', name: 'id'},
                 {width: '20%', data: 'nama_bazar', name: 'nama_bazar'},
-                {width: '40%', data: 'keterangan', name: 'keterangan'},
+                {width: '30%', data: 'keterangan', name: 'keterangan'},
                 {width: '20%', data: 'nominal', name: 'nominal'},
+                {width: '20%', data: 'aksi', name: 'aksi'},
             ],
             order: [0, 'asc'],
             responsive: true
@@ -84,21 +86,23 @@
     }
 
     function tambahBiaya() {
+        let id_bazar = $('#nama_bazar').val();
+
+        if (id_bazar == 0) {
             var settings = {
-            "url": "{{ url ('api/v1/biaya/') }}",
-            "method": "POST",
-            "timeout": 0,
-            "headers": {
-                "Accept": "application/json",
-                "Content-Type": "application/x-www-form-urlencoded",
-                "Authorization": "Bearer " + sessionStorage.getItem('access_token')
-            },
-            data: {
-                "id": $('#id').val(),
-                "nama_bazar": $('#nama_bazar').val(),
-                "keterangan": $('#keterangan').val(),
-                "nominal": $('#nominal').val(),
-            }
+                "method": "POST",
+                "url": "{{ url('api/v1/biaya') }}",
+                "timeout": 0,
+                "headers": {
+                    "Accept": "application/json",
+                    "Content-Type": "application/x-www-form-urlencoded",
+                    "Authorization": "Bearer " + sessionStorage.getItem('access_token')
+                },
+                data: {
+                    "id": $('#id').val(),
+                    "keterangan": $('#keterangan').val(),
+                    "nominal": $('#nominal').val(),
+                }
             };
 
             $.ajax(settings).done(function (msg) {
@@ -122,6 +126,47 @@
                         $("#" + key).addClass("is-invalid")
                     })
                 });
+        } else {
+            var settings = {
+                "method": "POST",
+                "url": "{{ url('api/v1/biaya/bazar').'/' }}" + id_bazar,
+                "timeout": 0,
+                "headers": {
+                    "Accept": "application/json",
+                    "Content-Type": "application/x-www-form-urlencoded",
+                    "Authorization": "Bearer " + sessionStorage.getItem('access_token')
+                },
+                data: {
+                    "id": $('#id').val(),
+                    "nama_bazar": $('#nama_bazar').val(),
+                    "keterangan": $('#keterangan').val(),
+                    "nominal": $('#nominal').val(),
+                }
+            };
+
+            $.ajax(settings).done(function (msg) {
+                    $('#tambahBiaya').modal('hide');
+                    swal.fire({
+                        title: 'Berhasil',
+                        text: msg.message,
+                        type: "success"
+                    });
+                    document.getElementById("tambahBiayaForm").reset();
+                    get_data();
+                })
+                .fail(function (msg) {
+                    swal.fire({
+                        title: 'Error!',
+                        text: msg.responseJSON.message,
+                        type: "error"
+                    })
+
+                    $.each(msg.responseJSON.errors, function (key, value) {
+                        $("#" + key).addClass("is-invalid")
+                    })
+                });
+        }
+
 
     }
 

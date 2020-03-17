@@ -43,9 +43,9 @@ Route::group(['middleware' => ['isAlreadyLogin', 'auth.jwt']], function () {
     Route::get('/barang', function () {
         $jenis = Jenis::withTrashed()->get();
         $tipe  = Tipe::withTrashed()->get();
-        $supp  = Supplier::withTrashed()->get();
+        $supplier  = Supplier::withTrashed()->get();
 
-        return view('barang.barang', compact('jenis', "tipe", "supp"));
+        return view('barang.barang', compact('jenis', "tipe", "supplier"));
     });
 
     Route::get('/bazar', function () {
@@ -60,10 +60,10 @@ Route::group(['middleware' => ['isAlreadyLogin', 'auth.jwt']], function () {
         $barang = Barang_masuk::all();
         $jenis  = Jenis::all();
         $tipe   = Tipe::all();
-        $supp   = Supplier::all();
+        $supplier   = Supplier::all();
         $bazar = Bazar::findOrFail($id_bazar);
 
-        return view('bazar.kelola-barang.kelola-barang', compact('bazar', 'barang', 'id_bazar', 'jenis', 'tipe', 'supp'));
+        return view('bazar.kelola-barang.kelola-barang', compact('bazar', 'barang', 'id_bazar', 'jenis', 'tipe', 'supplier'));
     })->name('bazar.kelola-barang');
 
     Route::get('/bazar/kelola-staff/{id_bazar}', function ($id_bazar) {
