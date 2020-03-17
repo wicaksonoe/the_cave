@@ -2,17 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\User;
 use Illuminate\Http\Request;
-use App\Http\Requests\User\CreateRequest;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 
 class APIController extends Controller
 {
 	public function __construct()
 	{
-		$this->middleware('auth:api', ['except' => ['login', 'register']]);
+		$this->middleware('auth:api', ['except' => ['login']]);
 	}
 
 	protected function respondWithToken($token)
@@ -52,25 +49,16 @@ class APIController extends Controller
 		return response()->json([
 			'success' => true,
 			'message' => 'Berhasil logout.'
-		]);
+        ], 200);
 	}
 
-	public function register(CreateRequest $request)
+	public function check(Request $request)
 	{
-		User::create(
-			[
-				'username' => $request->username,
-				'password' => Hash::make($request->password),
-				'nama'     => $request->nama,
-				'alamat'   => $request->alamat,
-				'telp'     => $request->telp,
-				'role'     => $request->role,
-			]
-		);
+        $user = $this->guard()->user();
 
-		return response()->json([
+        return response()->json([
 			'success' => true,
-			'message' => 'Registrasi berhasil'
-		]);
+			'data' => $user
+		], 200);
 	}
 }
