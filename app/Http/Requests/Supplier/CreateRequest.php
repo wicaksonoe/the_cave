@@ -24,7 +24,7 @@ class CreateRequest extends FormRequest
     public function rules()
     {
         return [
-            'nama_supplier'   => 'bail|required|string|unique:suppliers,nama|max:50',
+            'nama_supplier'   => 'bail|required|string|unique:suppliers,nama_supplier|max:50',
             'alamat' => 'bail|required|string|max:120',
             'no_telp'   => 'bail|required|string|max:12',
         ];
