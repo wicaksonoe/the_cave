@@ -22,7 +22,7 @@ Route::group([
     'middleware' => 'api'
 ], function () {
     Route::post('login', 'APIController@login');
-    Route::post('register', 'APIController@register');
+    Route::get('check', 'APIController@check');
     Route::get('logout', 'APIController@logout');
 
     Route::group([

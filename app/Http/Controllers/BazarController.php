@@ -52,9 +52,12 @@ class BazarController extends Controller
                         return '
                             <a href="' . route("bazar.kelola-barang", $bazar->id) . '" class="btn btn-sm btn-info" style="margin: 0.25em">Kelola</a>
                             <button class="btn btn-sm btn-warning" value="' . $bazar->id . '" onclick="editBazar(this.value)" style="margin: 0.25em">Edit</button>
-                            <button class="btn btn-sm btn-danger" value="' . $bazar->id . '" onclick="summaryDelete(this.value)" style="margin: 0.25em">Tutup Bazar</button>
+                            <button class="btn btn-sm btn-danger" value="' . $bazar->id . '" onclick="deleteBazar(this.value)" style="margin: 0.25em">Tutup Bazar</button>
                             ';
                     } else {
+                        return '
+                            Bazar sudah berakhir<br>
+                            <a href="' . $bazar->id . '" >Lihat laporan</a>';
                         return '
                             Bazar sudah berakhir<br>
                             <a href="' . route("bazzar.laporan", $bazar->id) . '" >Lihat laporan</a>';
@@ -87,6 +90,12 @@ class BazarController extends Controller
     public function delete($id)
     {
         $bazar = Bazar::findOrFail($id);
+
+        $daftar_staff = $bazar->include_staff_bazar()->get();
+
+        foreach ($daftar_staff as $staff) {
+            $staff->delete();
+        }
 
         $bazar->delete();
 
@@ -149,12 +158,19 @@ class BazarController extends Controller
         $staff_sudah_ada = $data_bazar
             ->include_staff_bazar()
             ->where('username', $request->username)
-            ->firstOrFail();
+            ->first();
+
+        $staff_terdaftar_di_bazar_lain = Staff_bazar::where('username', $request->username)->first();
 
         if ($staff_sudah_ada == true) {
             return response()->json([
                 'success' => false,
                 'message' => 'Staff yang dipilih sudah terdaftar di bazar ini.',
+            ], 422);
+        } elseif ($staff_terdaftar_di_bazar_lain == true) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Staff yang dipilih sudah terdaftar di bazar lain.',
             ], 422);
         } else {
             try {
@@ -242,7 +258,7 @@ class BazarController extends Controller
             $data_barang = $data_bazar
                 ->include_keluar_bazar()
                 ->where('barcode', $barcode)
-                ->firstOrFail();
+                ->first();
 
             if ($data_barang == true) {
                 return response()->json([
