@@ -28,7 +28,11 @@ class SupplierController extends Controller
             ], 422);
         }
 
-        Supplier::create($request->all());
+        Supplier::create([
+            'nama_supplier' => $request->nama_supplier,
+            'alamat' => $request->alamat,
+            'no_telp' => $request->no_telp,
+        ]);
 
         return response()->json([
             'success' => true,
