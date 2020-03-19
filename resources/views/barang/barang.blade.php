@@ -137,7 +137,6 @@
             "hjual"   : $('#hjual').val().replace(',',''),
             "grosir"  : $('#grosir').val().replace(',',''),
             "partai"  : $('#partai').val().replace(',',''),
-            "tanggal"     : $('#tanggal').val(),
         }
         };
 
@@ -224,7 +223,6 @@
                 "hjual"   : $('#edit-hjual').val().replace(',',''),
                 "grosir"  : $('#edit-grosir').val().replace(',',''),
                 "partai"  : $('#edit-partai').val().replace(',',''),
-                "tanggal"     : $('#edit-tanggal').val(),
             }
         };
 
