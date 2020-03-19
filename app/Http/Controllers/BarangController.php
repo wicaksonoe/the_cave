@@ -47,10 +47,10 @@ class BarangController extends Controller
                     'tipe_barang'     => $value->include_tipe->nama_tipe,
                     'supplier_barang' => $value->include_supplier->nama_supplier,
                     'jumlah'          => StockController::get_stock($value->barcode),
-                    'hpp'             => number_format($value->hpp, 0, '.', ','),
-                    'hjual'           => number_format($value->hjual, 0, '.', ','),
-                    'grosir'          => number_format($value->grosir, 0, '.', ','),
-                    'partai'          => number_format($value->partai, 0, '.', ','),
+                    'hpp'             => 'Rp. '.number_format($value->hpp, 0, '.', ','),
+                    'hjual'           => 'Rp. '.number_format($value->hjual, 0, '.', ','),
+                    'grosir'          => 'Rp. '.number_format($value->grosir, 0, '.', ','),
+                    'partai'          => 'Rp. '.number_format($value->partai, 0, '.', ','),
                     'tanggal'         => $tanggal->format("d-M-Y H:i T"),
                 ];
             }
@@ -74,17 +74,17 @@ class BarangController extends Controller
             $tanggal->setTimezone(new DateTimeZone('Asia/Makassar'));
 
             $data_barang = [
-                'barcode'         => $data->barcode,
-                'namabrg'         => $data->namabrg,
-                'jenis_barang'    => $data->include_jenis->nama_jenis,
-                'tipe_barang'     => $data->include_tipe->nama_tipe,
-                'supplier_barang' => $data->include_supplier->nama,
-                'jumlah'          => StockController::get_stock($data->barcode),
-                'hpp'             => number_format($data->hpp, 0, '.', ','),
-                'hjual'           => number_format($data->hjual, 0, '.', ','),
-                'grosir'          => number_format($data->grosir, 0, '.', ','),
-                'partai'          => number_format($data->partai, 0, '.', ','),
-                'tanggal'         => $tanggal->format("d-M-Y H:i T"),
+                'barcode'  => $data->barcode,
+                'namabrg'  => $data->namabrg,
+                'id_jenis' => $data->id_jenis,
+                'id_tipe'  => $data->id_tipe,
+                'id_sup'   => $data->id_sup,
+                'jumlah'   => StockController::get_stock($data->barcode),
+                'hpp'      => number_format($data->hpp, 0, '.', ','),
+                'hjual'    => number_format($data->hjual, 0, '.', ','),
+                'grosir'   => number_format($data->grosir, 0, '.', ','),
+                'partai'   => number_format($data->partai, 0, '.', ','),
+                'tanggal'  => $tanggal->format("d-M-Y H:i T"),
             ];
 
             return response()->json([
