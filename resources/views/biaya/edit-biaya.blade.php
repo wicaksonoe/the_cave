@@ -10,17 +10,31 @@
             </div>
             <div class="modal-body">
                 <form id="form-edit-biaya">
-                    <div class="form-group">
-                        <label for="nama_biaya">Nama</label>
-                        <input class="form-control" id="edit-nama_biaya" placeholder="Nama Biaya">
+                    <div class="form-group row">
+                        <div class="col-2">
+                            <label for="bazar">Nama Bazar</label>
+                        </div>
+                        <div class="col-10">
+                            <select id="edit-id_bazar" class="form-control">
+                                <option selected disabled>Pilih Bazar...</option>
+                                @foreach ($bazar as $item)
+                                    @if (isset($item->deleted_at))
+                                    <option value="{{ $item->id }}">-- Bazar sudah dihapus -- ({{ ucfirst($item->nama_bazar) }})</option>
+                                    @else
+                                    <option value="{{ $item->id }}">{{ ucfirst($item->nama_bazar) }}</option>
+                                    @endif
+                                @endforeach
+                            </select>
+                            <small class="text-danger edit-id_bazar"></small>
+                        </div>
                     </div>
                     <div class="form-group">
-                        <label for="alamat">Alamat</label>
-                        <textarea class="form-control" cols="30" id="edit-alamat" placeholder="Alamat"></textarea>
+                        <label for="keterangan">Keterangan</label>
+                        <textarea class="form-control" cols="30" id="edit-keterangan" placeholder="Keterangan"></textarea>
                     </div>
                     <div class="form-group">
-                        <label for="no_telp">Telepon</label>
-                        <input type="number" class="form-control" cols="30" id="edit-no_telp" placeholder="Telepon">
+                        <label for="nominal">nominal</label>
+                        <input type="number" class="form-control" cols="30" id="edit-nominal" placeholder="Nominal">
                     </div>
                 </form>
             </div>

@@ -25,12 +25,8 @@
                         <table id="tabelBarang" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
-                                    <th>Nama Barang</th>
-                                    <th>Jenis</th>
-                                    <th>Tipe</th>
-                                    <th>Jumlah</th>
-                                    <th>Harga Pokok</th>
-                                    <th>Harga Jual</th>
+                                    <th>ID Transaksi</th>
+
                                     <th>Tanggal</th>
                                     <th>Aksi</th>
                                 </tr>
