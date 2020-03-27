@@ -26,8 +26,8 @@
                             <thead>
                                 <tr>
                                     <th>ID Transaksi</th>
-
                                     <th>Tanggal</th>
+                                    <th>Total</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>

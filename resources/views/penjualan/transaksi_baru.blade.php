@@ -51,6 +51,7 @@
                                 </tfoot>
                             </table>
                         </div>
+                        <button type="button" class="btn btn-primary" onclick="tambahTransaksi()">Simpan</button>
                     </form>
                 </div>
                 <!-- /.card-body -->
@@ -69,7 +70,7 @@
 
     // const input = document.querySelector('input.jumlah');
     $(document.body).on('input', 'input:checkbox',  function() {
-        console.log($(this).prop('checked'));
+
         let parentTD = $(this).parent();
         let barcode = parentTD.parent().prop('id');
 
@@ -77,7 +78,9 @@
             let total = dataBarang[barcode].jumlah * (dataBarang[barcode].partai.split(',').join(''))
             $(parentTD[0]).siblings('.total').html( 'Rp. ' + total.toString().replace(/(\d)(?=(\d{3})+$)/g, '$1,') );
             $(parentTD[0]).siblings('.harga').html( 'Rp. ' + dataBarang[barcode].partai);
+            dataBarang[barcode].statusharga=1;
         } else {
+            dataBarang[barcode].statusharga=0;
             if (dataBarang[barcode].jumlah >= 12) {
 
                 let total = dataBarang[barcode].jumlah * (dataBarang[barcode].grosir.split(',').join(''))
@@ -102,7 +105,15 @@
             function() {
                 let total_bayar = 0;
                 $.each(dataBarang, function(key, value) {
-                    total_bayar += value.jumlah * value.hjual.split(',').join('');
+                    if (value.jumlah >= 100 && value.statusharga == 1) {
+                        total_bayar += value.jumlah * value.partai.split(',').join('');
+                    } else {
+                        if (value.jumlah >= 12) {
+                            total_bayar += value.jumlah * value.grosir.split(',').join('');
+                        } else {
+                        total_bayar += value.jumlah * value.hjual.split(',').join('');
+                        }
+                    }
                 });
                 return "Rp. " + total_bayar.toString().replace(/(\d)(?=(\d{3})+$)/g, '$1,');
             }
@@ -129,6 +140,7 @@
                 parentTD.siblings('.partai').children('input:first').removeAttr('disabled')
             }
         } else {
+            dataBarang[barcode].statusharga=0;
             parentTD.siblings('.partai').children('input:first').prop('checked', false)
             parentTD.siblings('.partai').children('input:first').attr('disabled', true)
             let total = dataBarang[barcode].jumlah * (dataBarang[barcode].hjual.split(',').join(''))
@@ -141,7 +153,15 @@
             function() {
                 let total_bayar = 0;
                 $.each(dataBarang, function(key, value) {
-                    total_bayar += value.jumlah * value.hjual.split(',').join('');
+                    if (value.jumlah >= 100 && value.statusharga == 1) {
+                        total_bayar += value.jumlah * value.partai.split(',').join('');
+                    } else {
+                        if (value.jumlah >= 12) {
+                            total_bayar += value.jumlah * value.grosir.split(',').join('');
+                        } else {
+                        total_bayar += value.jumlah * value.hjual.split(',').join('');
+                        }
+                    }
                 });
                 return "Rp. " + total_bayar.toString().replace(/(\d)(?=(\d{3})+$)/g, '$1,');
             }
@@ -178,6 +198,7 @@
                         'hjual': response.data.hjual,
                         'partai' : response.data.partai,
                         'grosir' : response.data.grosir,
+                        'statusharga' : 0,
                     };
 
                 let newRow = '<tr id="' + barcode + '">' +
@@ -212,9 +233,25 @@
             });
     }
 
-    function tambahKelolaBarang() {
+    function tambahTransaksi() {
+        let barcode = [];
+        let jumlah = [];
+        let harga_partai = [];
+
+        $.each(dataBarang, function(keyBarcode, barang) {
+            barcode.push(keyBarcode);
+            jumlah.push(barang['jumlah']);
+            harga_partai.push(barang['statusharga']);
+            console.log(barang['statusharga']);
+            // if (barang['statusharga'] == 1 ) {
+            //     harga_partai.push('ya');
+            // } else if (barang['statusharga'] == 0 ) {
+            //     harga_partai.push('tidak');
+            // };
+
+        });
             var settings = {
-                "url": BASE_URL_API + "/barang/" + barcode ,
+                "url": BASE_URL_API + "/penjualan/",
                 "method": "POST",
                 "timeout": 0,
                 "headers": {
@@ -222,18 +259,21 @@
                     "Content-Type": "application/x-www-form-urlencoded",
                     "Authorization": "Bearer " + sessionStorage.getItem('access_token')
                 },
-                "data": $('#tambahKelolaBarangForm').serialize()
+                'data' : {
+                    'barcode': barcode,
+                    'jumlah': jumlah,
+                    'harga_partai': harga_partai,
+                },
             };
 
             $.ajax(settings).done(function (msg) {
-                $('#tambahKelolaBarang').modal('hide');
                 swal.fire({
                     title: 'Berhasil',
                     text: msg.message,
                     type: "success"
                 });
-                document.getElementById("tambahKelolaBarangForm").reset();
-                get_data();
+                $('#konten_tambah_barang').children().remove();
+
             })
                 .fail(function (msg) {
                     console.log(msg)
@@ -247,6 +287,8 @@
                         $("#" + key).addClass("is-invalid")
                     })
                 });
+
+
 
     }
 </script>
