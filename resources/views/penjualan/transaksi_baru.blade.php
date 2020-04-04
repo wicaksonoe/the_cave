@@ -121,7 +121,7 @@
 
     });
 
-    $(document.body).on('input', '.jumlah',  function() {
+    $(document.body).on('input', '.jumlah',  function () {
         let parentTD = $(this).parent();
         let barcode = parentTD.parent().prop('id');
         dataBarang[barcode].jumlah = this.value;
@@ -204,11 +204,11 @@
                 let newRow = '<tr id="' + barcode + '">' +
                                 '<td><input type="text" name="barcode[]" class="form-control" value="' + barcode + '" readonly></td>' +
                                 '<td>' + response.data.namabrg + '</td>' +
-                                '<td><input type="text" name="jumlah[]" class="form-control jumlah"></td>' +
+                                '<td><input type="text" id="'+ barcode+'jumlah" name="jumlah[]" class="form-control jumlah"></td>' +
                                 `<td class="partai"><input id="row_${rowCounter}" type="checkbox" name="partai[]" class="form-control" value="1" disabled><input id="rowHidden_${rowCounter}" type="hidden" name="partai[]" value="0"></td>` +
                                 '<td class="harga">Rp. ' + response.data.hjual + '</td>' +
                                 '<td class="total">Rp.0</td>' +
-                                '<td><button class="btn btn-sm btn-danger" onclick="delete_nama_barang(' + barcode + ')"><i class="fas fa-trash-alt"></i></button></td>' +
+                                '<td><button class="btn btn-sm btn-danger" value="'+ barcode + '" onclick="deleteBarang(this.value)"><i class="fas fa-trash-alt"></i></button></td>' +
                             '</tr>';
 
                 if ( $('#' + barcode).length ) {
@@ -223,6 +223,9 @@
                 }
 
                 $('#barcode_scan').val('');
+
+                document.getElementById(barcode + "jumlah").focus();
+
             })
             .fail(function (response) {
                 swal.fire({
@@ -231,6 +234,8 @@
                     type: "error"
                 })
             });
+
+
     }
 
     function tambahTransaksi() {
@@ -288,9 +293,33 @@
                     })
                 });
 
+    }
 
+    function deleteBarang(barcode) {
+        $('#' + barcode).remove();
+        delete dataBarang[barcode];
+
+        $('#total_bayar').html(
+            function() {
+                let total_bayar = 0;
+                $.each(dataBarang, function(key, value) {
+                    if (value.jumlah >= 100 && value.statusharga == 1) {
+                        total_bayar += value.jumlah * value.partai.split(',').join('');
+                    } else {
+                        if (value.jumlah >= 12) {
+                            total_bayar += value.jumlah * value.grosir.split(',').join('');
+                        } else {
+                        total_bayar += value.jumlah * value.hjual.split(',').join('');
+                        }
+                    }
+                });
+                return "Rp. " + total_bayar.toString().replace(/(\d)(?=(\d{3})+$)/g, '$1,');
+            }
+        );
 
     }
+
+
 </script>
 
 @stop

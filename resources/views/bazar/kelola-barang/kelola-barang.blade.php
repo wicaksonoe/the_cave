@@ -119,7 +119,7 @@
                                 '<td><input type="text" name="barcode[]" class="form-control" value="' + barcode + '" readonly></td>' +
                                 '<td>' + response.data.namabrg + '</td>' +
                                 '<td><input type="text" name="jumlah[]" class="form-control number"></td>' +
-                                '<td><button class="btn btn-sm btn-danger" onclick="delete_nama_barang(' + barcode + ')"><i class="fas fa-trash-alt"></i></button></td>' +
+                                '<td><button class="btn btn-sm btn-danger" value="'+ barcode +'" onclick="delete_nama_barang(this.value)"><i class="fas fa-trash-alt"></i></button></td>' +
                             '</tr>';
 
                 if ( $('#' + barcode).length ) {
