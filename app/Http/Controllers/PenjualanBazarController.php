@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Bazar;
 use App\Http\Requests\Bazar\CreatePenjualanRequest;
+use Illuminate\Http\Request;
 use DateTime;
 use DateTimeZone;
 use Illuminate\Support\Facades\Auth;
@@ -82,6 +83,7 @@ class PenjualanBazarController extends Controller
 
     public function create($id_bazar, CreatePenjualanRequest $request)
     {
+        // return print_r($request->all());
         $data_bazar = Bazar::findOrFail($id_bazar);
 
         $username = $this->user->username;
@@ -121,10 +123,7 @@ class PenjualanBazarController extends Controller
                 ->create([
                     'kode_trx' => $kode_trx,
                     'username' => $username,
-                ]);
-
-            $penjualan
-                ->include_detail_penjualan_bazar()
+                ])->include_detail_penjualan_bazar()
                 ->createMany($detail_penjualan);
         } catch (QueryException $e) {
             return response()->json([

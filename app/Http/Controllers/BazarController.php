@@ -300,7 +300,7 @@ class BazarController extends Controller
 
             $daftar_barang = [];
             foreach ($data_barang as $barang) {
-                $harga_diskon = $barang->include_barang_masuk->hpp - $data_bazar->potongan;
+                $harga_diskon = $barang->include_barang_masuk->hjual - $data_bazar->potongan;
                 $tanggal = new DateTime(
                     Keluar_bazar::where([
                         'id_bazar' => $id_bazar,
@@ -315,7 +315,7 @@ class BazarController extends Controller
                     'nama_barang'  => $barang->include_barang_masuk->namabrg,
                     'jenis_barang' => $barang->include_barang_masuk->include_jenis->nama_jenis,
                     'tipe_barang'  => $barang->include_barang_masuk->include_tipe->nama_tipe,
-                    'hpp'          => "Rp. " . number_format($barang->include_barang_masuk->hpp, 0, '.', ','),
+                    'hpp'          => "Rp. " . number_format($barang->include_barang_masuk->hjual, 0, '.', ','),
                     'hjual'        => "Rp. " . number_format($harga_diskon, 0, '.', ','),
                     'jumlah'       => StockController::get_stock_for_bazar($id_bazar, $barang->barcode),
                     'tanggal'      => $tanggal->format("d-M-Y H:i T"),
@@ -343,7 +343,7 @@ class BazarController extends Controller
             );
             $tanggal->setTimezone(new DateTimeZone('Asia/Makassar'));
 
-            $harga_diskon = $barang->include_barang_masuk->hpp - $data_bazar->potongan;
+            $harga_diskon = $barang->include_barang_masuk->hjual - $data_bazar->potongan;
 
             $data_barang = [
                 'id_bazar'     => $id_bazar,
@@ -351,7 +351,7 @@ class BazarController extends Controller
                 'nama_barang'  => $barang->include_barang_masuk->namabrg,
                 'jenis_barang' => $barang->include_barang_masuk->include_jenis->nama_jenis,
                 'tipe_barang'  => $barang->include_barang_masuk->include_tipe->nama_tipe,
-                'hpp'          => "Rp. " . number_format($barang->include_barang_masuk->hpp, 0, '.', ','),
+                'hpp'          => "Rp. " . number_format($barang->include_barang_masuk->hjual, 0, '.', ','),
                 'hjual'        => "Rp. " . number_format($harga_diskon, 0, '.', ','),
                 'jumlah'       => StockController::get_stock_for_bazar($id_bazar, $barcode),
                 'tanggal'      => $tanggal->format("d-M-Y H:i T"),

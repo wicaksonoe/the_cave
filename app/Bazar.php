@@ -32,4 +32,9 @@ class Bazar extends Model
     {
         return $this->hasMany(Biaya::class, 'id_bazar');
     }
+
+    public function include_detail_penjualan_bazar()
+    {
+        return $this->hasManyThrough(Detail_penjualan_bazar::class, Penjualan_bazar::class, 'id_bazar', 'kode_trx', 'id', 'kode_trx');
+    }
 }
