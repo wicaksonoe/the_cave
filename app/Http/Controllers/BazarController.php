@@ -300,7 +300,9 @@ class BazarController extends Controller
 
             $daftar_barang = [];
             foreach ($data_barang as $barang) {
-                $harga_diskon = $barang->include_barang_masuk->hjual - $data_bazar->potongan;
+                $data = $barang->include_barang_masuk()->withTrashed()->first();
+
+                $harga_diskon = $data->hjual - $data_bazar->potongan;
                 $tanggal = new DateTime(
                     Keluar_bazar::where([
                         'id_bazar' => $id_bazar,
@@ -312,10 +314,10 @@ class BazarController extends Controller
                 array_push($daftar_barang, [
                     'id_bazar'     => $id_bazar,
                     'barcode'      => $barang->barcode,
-                    'nama_barang'  => $barang->include_barang_masuk->namabrg,
-                    'jenis_barang' => $barang->include_barang_masuk->include_jenis->nama_jenis,
-                    'tipe_barang'  => $barang->include_barang_masuk->include_tipe->nama_tipe,
-                    'hpp'          => "Rp. " . number_format($barang->include_barang_masuk->hjual, 0, '.', ','),
+                    'nama_barang'  => $data->namabrg,
+                    'jenis_barang' => $data->include_jenis->nama_jenis,
+                    'tipe_barang'  => $data->include_tipe->nama_tipe,
+                    'hpp'          => "Rp. " . number_format($data->hjual, 0, '.', ','),
                     'hjual'        => "Rp. " . number_format($harga_diskon, 0, '.', ','),
                     'jumlah'       => StockController::get_stock_for_bazar($id_bazar, $barang->barcode),
                     'tanggal'      => $tanggal->format("d-M-Y H:i T"),
@@ -324,7 +326,8 @@ class BazarController extends Controller
 
             return DataTables::of($daftar_barang)
                 ->addColumn('aksi', function ($barang) {
-                    return $barang['barcode'] . 'Button aksi';
+                    return '<button class="btn btn-sm btn-info" value="' . $barang['barcode'] . '" onclick="editBarangBazar(this.value)">Edit</button>';
+                    // return $barang['barcode'] . 'Button aksi';
                 })
                 ->rawColumns(['aksi'])
                 ->make(true);
@@ -335,6 +338,8 @@ class BazarController extends Controller
                 ->groupBy('barcode')
                 ->firstOrFail('barcode');
 
+            $data = $barang->include_barang_masuk()->withTrashed()->first();
+
             $tanggal = new DateTime(
                 Keluar_bazar::where([
                     'id_bazar' => $id_bazar,
@@ -343,15 +348,15 @@ class BazarController extends Controller
             );
             $tanggal->setTimezone(new DateTimeZone('Asia/Makassar'));
 
-            $harga_diskon = $barang->include_barang_masuk->hjual - $data_bazar->potongan;
+            $harga_diskon = $data->hjual - $data_bazar->potongan;
 
             $data_barang = [
                 'id_bazar'     => $id_bazar,
                 'barcode'      => $barang->barcode,
-                'nama_barang'  => $barang->include_barang_masuk->namabrg,
-                'jenis_barang' => $barang->include_barang_masuk->include_jenis->nama_jenis,
-                'tipe_barang'  => $barang->include_barang_masuk->include_tipe->nama_tipe,
-                'hpp'          => "Rp. " . number_format($barang->include_barang_masuk->hjual, 0, '.', ','),
+                'nama_barang'  => $data->namabrg,
+                'jenis_barang' => $data->include_jenis->nama_jenis,
+                'tipe_barang'  => $data->include_tipe->nama_tipe,
+                'hpp'          => "Rp. " . number_format($data->hjual, 0, '.', ','),
                 'hjual'        => "Rp. " . number_format($harga_diskon, 0, '.', ','),
                 'jumlah'       => StockController::get_stock_for_bazar($id_bazar, $barcode),
                 'tanggal'      => $tanggal->format("d-M-Y H:i T"),

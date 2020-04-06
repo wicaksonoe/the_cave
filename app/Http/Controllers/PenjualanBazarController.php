@@ -51,14 +51,14 @@ class PenjualanBazarController extends Controller
 
             $barang = [];
 
-            foreach ($daftar_barang as $key => $val) {
-                $harga_barang = $val->include_barang_masuk->hjual;
+            foreach ($daftar_barang as $val) {
+                $harga_barang = $val->include_barang_masuk()->withTrashed()->first()->hjual;
                 $potongan = $data_bazar->potongan;
                 $hjual = $harga_barang - $potongan;
 
                 array_push($barang, [
                     'barcode'     => $val->barcode,
-                    'nama_barang' => $val->include_barang_masuk->namabrg,
+                    'nama_barang' => $val->include_barang_masuk()->withTrashed()->first()->namabrg,
                     'jumlah'      => $val->jumlah,
                     'hjual'       => $hjual,
                 ]);
