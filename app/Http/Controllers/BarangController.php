@@ -47,10 +47,10 @@ class BarangController extends Controller
                     'tipe_barang'     => $value->include_tipe->nama_tipe,
                     'supplier_barang' => $value->include_supplier->nama_supplier,
                     'jumlah'          => StockController::get_stock($value->barcode),
-                    'hpp'             => 'Rp. '.number_format($value->hpp, 0, '.', ','),
-                    'hjual'           => 'Rp. '.number_format($value->hjual, 0, '.', ','),
-                    'grosir'          => 'Rp. '.number_format($value->grosir, 0, '.', ','),
-                    'partai'          => 'Rp. '.number_format($value->partai, 0, '.', ','),
+                    'hpp'             => 'Rp. ' . number_format($value->hpp, 0, '.', ','),
+                    'hjual'           => 'Rp. ' . number_format($value->hjual, 0, '.', ','),
+                    'grosir'          => 'Rp. ' . number_format($value->grosir, 0, '.', ','),
+                    'partai'          => 'Rp. ' . number_format($value->partai, 0, '.', ','),
                     'tanggal'         => $tanggal->format("d-M-Y H:i T"),
                 ];
             }
@@ -198,6 +198,21 @@ class BarangController extends Controller
     {
         $barang = Barang_masuk::findOrFail($barcode);
 
+        $stock_asal = $barang
+            ->include_detail_barang()
+            ->sum('jumlah');
+
+        $request_jumlah = $request->jumlah;
+
+        $selisih = $request_jumlah - $stock_asal;
+
+        if ($selisih < 0) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Jumlah barang tidak boleh lebih sedikit.'
+            ], 422);
+        }
+
         try {
             $barang->update([
                 'namabrg'  => $request->namabrg,
@@ -209,6 +224,12 @@ class BarangController extends Controller
                 'grosir'   => $request->grosir,
                 'partai'   => $request->partai,
             ]);
+
+            $barang
+                ->include_detail_barang()
+                ->create([
+                    'jumlah' => $selisih
+                ]);
         } catch (QueryException $e) {
             return response()->json([
                 'success' => false,
