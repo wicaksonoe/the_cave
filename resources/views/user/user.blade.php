@@ -27,12 +27,13 @@
                         <table id="tabelUser" class="table table-bordered table-striped table-responsive">
                             <thead>
                                 <tr>
-                                    <th>Aksi</th>
+
                                     <th>Username</th>
                                     <th>Nama</th>
                                     <th>Alamat</th>
                                     <th>Telepon</th>
                                     <th>Jabatan</th>
+                                    <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -78,12 +79,12 @@
             serverSide: true,
             ajax: settings,
             columns: [
-                {width: '10%', data: 'aksi', name: 'aksi'},
                 {width: '20%', data: 'username', name: 'username'},
                 {width: '30%', data: 'nama', name: 'nama'},
                 {width: '20%', data: 'alamat', name: 'alamat'},
                 {width: '10%', data: 'telp', name: 'telp'},
                 {width: '10%', data: 'role', name: 'role'},
+                {width: '10%', data: 'aksi', name: 'aksi'},
             ],
             order: [1, 'asc'],
             responsive: true

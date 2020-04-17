@@ -13,6 +13,7 @@
 
 use App\Barang_masuk;
 use App\Bazar;
+use App\Detail_penjualan;
 use App\Jenis;
 use App\Supplier;
 use App\Tipe;
@@ -108,6 +109,10 @@ Route::group(['middleware' => ['isAlreadyLogin', 'auth.jwt']], function () {
     Route::get('/riwayat_transaksi', function () {
         return view('penjualan.riwayat_transaksi');
     });
+    Route::get('/detil_transaksi/{kode_trx}', function ($kode_trx) {
+        return view('penjualan.detil_transaksi', compact('kode_trx'));
+    })->name('penjualan.detil_penjualan');
+
     Route::get('/biaya', function () {
         $bazar = Bazar::get(['id', 'nama_bazar']);
         return view('biaya.biaya', compact('bazar'));

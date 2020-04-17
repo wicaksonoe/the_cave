@@ -7,7 +7,6 @@
 @stop
 
 @section('content')
-
 <div class="container">
     <div class="row">
         <div class="col">
@@ -17,17 +16,12 @@
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body">
-                    <a onclick="$('#tambahBarang').modal('show')"><button type="button" class="btn btn-primary"
-                            style="margin-bottom: 10px">
-                            <i class="fa fa-plus-square" aria-hidden="true"></i> Tambah
-                        </button></a>
                     <div class="table-responsive">
-                        <table id="tabelBarang" class="table table-bordered table-striped">
+                        <table id="tabelRiwayatTransaksi" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
                                     <th>ID Transaksi</th>
                                     <th>Tanggal</th>
-                                    <th>Total</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
@@ -42,3 +36,42 @@
     </div>
 </div>
 @stop
+
+@section('js')
+<script>
+
+const BASE_URL_API = "{{ url('api/v1/') }}"
+$(document).ready(function () {
+        get_data();
+    });
+
+    $(".form-control").focus(function(e){
+        $(e.target).removeClass("is-invalid").parent().children('.error-msg').remove()
+    })
+
+    function get_data() {
+        var settings = {
+            "url": BASE_URL_API + "/penjualan",
+            "method": "GET",
+            "timeout": 0,
+            "headers": {
+                "Accept": "application/json",
+                "Authorization": "Bearer " + sessionStorage.getItem('access_token')
+            },
+        };
+        $('#tabelRiwayatTransaksi').DataTable().clear().destroy();
+        $('#tabelRiwayatTransaksi').DataTable({
+            processing: false,
+            serverSide: true,
+            ajax: settings,
+            columns: [
+                {width: '20%', data: 'kode_trx', name: 'kode_trx'},
+                {width: '20%', data: 'created_at', name: 'created_at'},
+                {width: '10%', data: 'aksi', name: 'aksi'},
+            ],
+            order: [1, 'asc'],
+            responsive: true
+        });
+    }
+</script>
+@endsection
