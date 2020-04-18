@@ -126,4 +126,11 @@ Route::group([
         Route::delete('/bazar/{id_bazar}/{id}', 'BiayaController@delete_biaya_bazar');
     });
 
+    Route::group([
+        'prefix' => 'laporan',
+        'middleware' => 'auth:api'
+    ], function () {
+        Route::get('/{bulan}/{tahun}/{param}', 'LaporanController@dashboard');
+    });
+
 });
