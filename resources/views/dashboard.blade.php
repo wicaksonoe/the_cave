@@ -109,7 +109,7 @@
             let request = bulan + '/' + tahun + '/' + penjualan;
 
             let settings = {
-                "url": BASE_URL + '/laporan/' + request,
+                "url": BASE_URL + '/laporan/terlaris/' + request,
                 "method": "GET",
                 "timeout": 0,
                 "headers": {
