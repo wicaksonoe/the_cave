@@ -5,6 +5,7 @@ namespace App\Exceptions;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
 class Handler extends ExceptionHandler
@@ -58,11 +59,18 @@ class Handler extends ExceptionHandler
                 'message' => 'Data tidak ditemukan'
             ], 404);
         }
-        
+
         if ($exception instanceof MethodNotAllowedHttpException) {
             return response()->json([
                 'success' => false,
                 'message' => 'Method not allowed'
+            ], 404);
+        }
+
+        if ($exception instanceof NotFoundHttpException) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Your request URL does not exist'
             ], 404);
         }
         return parent::render($request, $exception);
