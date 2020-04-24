@@ -130,7 +130,8 @@ Route::group([
         'prefix' => 'laporan',
         'middleware' => 'auth:api'
     ], function () {
-        Route::get('terlaris/{bulan}/{tahun}/{param}', 'LaporanController@dashboard');
+        Route::get('terlaris/{bulan}/{tahun}/{param}', 'LaporanController@terlaris');
+        Route::get('penjualan/{bulan}/{tahun}', 'LaporanController@penjualan');
     });
 
 });
