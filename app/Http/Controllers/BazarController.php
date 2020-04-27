@@ -25,6 +25,7 @@ class BazarController extends Controller
     public function __construct()
     {
         $this->user = Auth::guard()->user();
+        $this->middleware('isRoleAdmin', ['except' => ['get', 'get_barang']]);
     }
 
     public function create(CreateRequest $request)

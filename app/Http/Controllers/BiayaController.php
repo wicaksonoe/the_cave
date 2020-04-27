@@ -12,6 +12,11 @@ use Yajra\DataTables\Facades\DataTables;
 
 class BiayaController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('isRoleAdmin');
+    }
+
     public function get($id = null)
     {
         if ($id == null) {

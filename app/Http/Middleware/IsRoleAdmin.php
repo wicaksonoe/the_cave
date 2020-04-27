@@ -18,13 +18,13 @@ class IsRoleAdmin
     {
         $user = Auth::guard()->user();
 
-        if ($user->role != 'admin') {
+        if ($user->role == 'admin') {
+            return $next($request);
+        } else {
             return response()->json([
                 'success' => false,
                 'message' => 'Unauthorized'
             ], 401);
-        } else {
-            return $next($request);
         }
     }
 }

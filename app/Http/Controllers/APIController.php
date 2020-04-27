@@ -11,6 +11,7 @@ class APIController extends Controller
     public function __construct()
     {
         $this->middleware('auth:api', ['except' => ['login']]);
+        $this->middleware('isRoleAdmin', ['except' => ['login', 'logout', 'check']]);
     }
 
     protected function respondWithToken($token)

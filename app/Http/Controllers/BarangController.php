@@ -21,6 +21,7 @@ class BarangController extends Controller
     public function __construct()
     {
         $this->user = Auth::guard()->user();
+        $this->middleware('isRoleAdmin', ['except' => ['get', 'get_stock']]);
     }
 
     public function get($barcode = null)

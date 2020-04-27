@@ -19,6 +19,7 @@ class PenjualanController extends Controller
     public function __construct()
     {
         $this->user = Auth::guard()->user();
+        $this->middleware('isRoleAdmin', ['except' => ['get', 'laporan_trx']]);
     }
 
     public function get($kode_trx = null)

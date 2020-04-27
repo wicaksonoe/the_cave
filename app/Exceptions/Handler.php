@@ -6,6 +6,7 @@ use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
 class Handler extends ExceptionHandler
@@ -53,6 +54,14 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+
+        if ($exception instanceof AccessDeniedHttpException) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized.'
+            ], 403);
+        }
+
         if ($exception instanceof ModelNotFoundException) {
             return response()->json([
                 'success' => false,
@@ -73,6 +82,7 @@ class Handler extends ExceptionHandler
                 'message' => 'Your request URL does not exist'
             ], 404);
         }
+
         return parent::render($request, $exception);
     }
 }

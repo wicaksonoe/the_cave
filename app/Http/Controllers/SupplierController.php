@@ -15,6 +15,7 @@ class SupplierController extends Controller
     public function __construct()
     {
         $this->user = Auth::guard()->user();
+        $this->middleware('isRoleAdmin');
     }
 
     public function create(CreateRequest $request)

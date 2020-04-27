@@ -17,6 +17,7 @@ class PenjualanBazarController extends Controller
     public function __construct()
     {
         $this->user = Auth::guard()->user();
+        $this->middleware('isRoleAdmin', ['except' => ['get']]);
     }
 
     public function get($id_bazar, $kode_trx = null)

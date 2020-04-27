@@ -12,6 +12,11 @@ use Illuminate\Support\Facades\DB;
 
 class LaporanController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('isRoleAdmin', ['except' => ['penjualan', 'terlaris']]);
+    }
+
     public function terlaris($bulan, $tahun, $param)
     {
         switch ($param) {
