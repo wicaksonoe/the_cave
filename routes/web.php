@@ -27,10 +27,6 @@ Route::get('/login', function () {
     return view('auth.login');
 })->name('login');
 
-Route::get('/sandbox/{barcode}', function ($barcode) {
-    return StockController::get_stock($barcode);
-});
-
 Route::group(['middleware' => ['isAlreadyLogin', 'auth.jwt']], function () {
 
     Route::get('/', function () {
@@ -47,15 +43,15 @@ Route::group(['middleware' => ['isAlreadyLogin', 'auth.jwt']], function () {
         $supplier  = Supplier::withTrashed()->get();
 
         return view('barang.barang', compact('jenis', "tipe", "supplier"));
-    });
+    })->middleware('webForAdmin');
 
     Route::get('/bazar', function () {
         return view('bazar.bazar');
-    });
+    })->middleware('webForAdmin');
 
     Route::get('/bazar/tambah', function () {
         return view('bazar.tambah-bazar');
-    });
+    })->middleware('webForAdmin');
 
     Route::get('/bazar/kelola-barang/{id_bazar}', function ($id_bazar) {
         $barang = Barang_masuk::all();
@@ -65,37 +61,30 @@ Route::group(['middleware' => ['isAlreadyLogin', 'auth.jwt']], function () {
         $bazar = Bazar::findOrFail($id_bazar);
 
         return view('bazar.kelola-barang.kelola-barang', compact('bazar', 'barang', 'id_bazar', 'jenis', 'tipe', 'supplier'));
-    })->name('bazar.kelola-barang');
+    })->name('bazar.kelola-barang')->middleware('webForAdmin');
 
     Route::get('/bazar/kelola-staff/{id_bazar}', function ($id_bazar) {
         $nama   = User::where(['role' => 'pegawai'])->get();
         $bazar = Bazar::findOrFail($id_bazar);
 
         return view('bazar.kelola-staff.kelola-staff', compact('id_bazar', 'bazar', 'nama'));
-    })->name('bazar.kelola-staff');
-
-    Route::get('/bazar/laporan/{id_bazar}', 'BazarController@laporan')
-        // function ($id_bazar) {
-        //     return $id_bazar;
-        // })
-        ->name('bazar.laporan');
-
+    })->name('bazar.kelola-staff')->middleware('webForAdmin');
 
     Route::get('/user', function () {
         return view('user.user');
-    });
+    })->middleware('webForAdmin');
 
     Route::get('/supplier', function () {
         return view('supplier.supplier');
-    });
+    })->middleware('webForAdmin');
 
     Route::get('/bazar/tambah', function () {
         return view('bazar.tambah-bazar');
-    });
+    })->middleware('webForAdmin');
 
     Route::get('/bazar/tambah/barang-keluar', function () {
         return view('bazar.keluar-bazar');
-    });
+    })->middleware('webForAdmin');
 
     Route::post('/logout', function (Request $request) {
         Cookie::forget('access_token');
@@ -116,5 +105,9 @@ Route::group(['middleware' => ['isAlreadyLogin', 'auth.jwt']], function () {
     Route::get('/biaya', function () {
         $bazar = Bazar::get(['id', 'nama_bazar']);
         return view('biaya.biaya', compact('bazar'));
-    })->name('biaya');
+    })->name('biaya')->middleware('webForAdmin');
+
+    Route::get('/laporan', function() {
+        return view('laporan.laporan');
+    })->name('laporan')->middleware('webForAdmin');
 });
