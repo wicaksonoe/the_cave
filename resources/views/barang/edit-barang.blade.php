@@ -10,7 +10,7 @@
             </div>
 
             <div class="modal-body">
-                <form id="form-edit-barang">
+                <form id="form-edit-barang" onsubmit="return false">
                     <div class="form-group row">
                         <div class="col-2">
                             <label for="tanggal"> Tanggal</label>
@@ -44,7 +44,7 @@
                             <label for="jenis">Jenis Barang</label>
                         </div>
                         <div class="col-10">
-                            <select id="edit-id_jenis" class="form-control">
+                            <select id="edit-id_jenis" class="form-control" style="width: 100%">
                                 <option selected disabled>Pilih Jenis Barang...</option>
                                 @foreach ($jenis as $item)
                                     @if (isset($item->deleted_at))
@@ -57,13 +57,25 @@
                             <small class="text-danger edit-id_jenis"></small>
                         </div>
                     </div>
+                    <div class="form-group row">
+                        <div class="col-10 offset-2">
+                            <div class="row">
+                                <div class="col-8">
+                                    <input type="text" id="edit-input_new_jenis" class="form-control" placeholder="Masukan jenis barang baru...">
+                                </div>
+                                <div class="col-4">
+                                    <button class="btn btn-info" onclick="tambahJenisBaru('edit')">Input Baru</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                     <div class="form-group row">
                         <div class="col-2">
                             <label for="tipe">Tipe Barang</label>
                         </div>
                         <div class="col-10">
-                            <select id="edit-id_tipe" class="form-control">
+                            <select id="edit-id_tipe" class="form-control" style="width: 100%">
                                 <option selected disabled>Pilih Tipe Barang...</option>
                                 @foreach ($tipe as $item)
                                     @if (isset($item->deleted_at))
@@ -76,13 +88,25 @@
                             <small class="text-danger edit-id_tipe"></small>
                         </div>
                     </div>
+                    <div class="form-group row">
+                        <div class="col-10 offset-2">
+                            <div class="row">
+                                <div class="col-8">
+                                    <input type="text" id="edit-input_new_tipe" class="form-control" placeholder="Masukan tipe barang baru...">
+                                </div>
+                                <div class="col-4">
+                                    <button class="btn btn-info" onclick="tambahTipeBaru('edit')">Input Baru</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                     <div class="form-group row">
                         <div class="col-2">
                             <label for="supplier">Supplier</label>
                         </div>
                         <div class="col-10">
-                            <select id="edit-id_sup" class="form-control">
+                            <select id="edit-id_sup" class="form-control" style="width: 100%">
                                 <option selected disabled>Pilih Supplier Barang...</option>
                                 @foreach ($supplier as $item)
                                     @if (isset($item->deleted_at))

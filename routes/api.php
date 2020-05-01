@@ -40,6 +40,9 @@ Route::group([
         Route::delete('/stock/{id}', 'BarangController@delete_stock');
     });
 
+    Route::post('/jenis', 'JenisController@create')->middleware('auth:api');
+    Route::post('/tipe', 'TipeController@create')->middleware('auth:api');
+
     Route::group([
         'prefix' => 'supplier',
         'middleware' => 'auth:api',
