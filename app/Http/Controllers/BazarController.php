@@ -51,6 +51,7 @@ class BazarController extends Controller
                 ->addColumn('aksi', function ($bazar) {
                     if ($bazar->deleted_at == null) {
                         return '
+                            <a href="' . route("bazar.laporan", $bazar->id) . '" class="btn btn-link">Lihat laporan</a><br>
                             <a href="' . route("bazar.kelola-barang", $bazar->id) . '" class="btn btn-sm btn-info" style="margin: 0.25em">Kelola</a>
                             <button class="btn btn-sm btn-warning" value="' . $bazar->id . '" onclick="editBazar(this.value)" style="margin: 0.25em">Edit</button>
                             <button class="btn btn-sm btn-danger" value="' . $bazar->id . '" onclick="deleteBazar(this.value)" style="margin: 0.25em">Tutup Bazar</button>
@@ -58,10 +59,7 @@ class BazarController extends Controller
                     } else {
                         return '
                             Bazar sudah berakhir<br>
-                            <a href="' . $bazar->id . '" >Lihat laporan</a>';
-                        return '
-                            Bazar sudah berakhir<br>
-                            <a href="' . route("bazzar.laporan", $bazar->id) . '" >Lihat laporan</a>';
+                            <a href="' . route("bazar.laporan", $bazar->id) . '" class="btn btn-link">Lihat laporan</a>';
                     }
                 })
                 ->rawColumns(['aksi', 'potongan_harga'])

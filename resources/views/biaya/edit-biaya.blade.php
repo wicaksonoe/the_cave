@@ -17,6 +17,7 @@
                         <div class="col-10">
                             <select id="edit-id_bazar" class="form-control">
                                 <option selected disabled>Pilih Bazar...</option>
+                                <option value="0">Toko</option>
                                 @foreach ($bazar as $item)
                                     @if (isset($item->deleted_at))
                                     <option value="{{ $item->id }}">-- Bazar sudah dihapus -- ({{ ucfirst($item->nama_bazar) }})</option>

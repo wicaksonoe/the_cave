@@ -230,4 +230,53 @@ class LaporanController extends Controller
             ],
         ], 200);
     }
+
+    public function penjualan_bazar($id)
+    {
+        $data_bazar = Bazar::where('id', $id)->withTrashed()->first();
+        if (!$data_bazar) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Data bazar yang anda cari tidak dapat ditemukan.'
+            ], 404);
+        }
+
+        $daftar_biaya_bazar = Biaya::where('id_bazar', $id)->get(['keterangan', 'nominal']);
+        $daftar_transaksi_bazar = DB::table('bazars')
+            ->where('bazars.id', $id)
+            ->join('penjualan_bazars', 'bazars.id', '=', 'penjualan_bazars.id_bazar')
+            ->get([
+                'penjualan_bazars.kode_trx',
+                'bazars.potongan',
+            ]);
+
+        $daftar_penjualan_bazar = [];
+        foreach ($daftar_transaksi_bazar as $trx) {
+            array_push(
+                $daftar_penjualan_bazar,
+                [
+                    'kode_trx' => $trx->kode_trx,
+                    'potongan' => $trx->potongan,
+                    'items' => DB::table('penjualan_bazars')
+                        ->where('penjualan_bazars.kode_trx', $trx->kode_trx)
+                        ->join('detail_penjualan_bazars', 'penjualan_bazars.kode_trx', '=', 'detail_penjualan_bazars.kode_trx')
+                        ->join('barang_masuks', 'detail_penjualan_bazars.barcode', '=', 'barang_masuks.barcode')
+                        ->get([
+                            'detail_penjualan_bazars.barcode',
+                            'detail_penjualan_bazars.jumlah',
+                            'barang_masuks.hjual',
+                            'barang_masuks.namabrg',
+                        ])
+                ]
+            );
+        }
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'daftar_biaya' => $daftar_biaya_bazar,
+                'daftar_penjualan' => $daftar_penjualan_bazar
+            ]
+        ], 200);
+    }
 }

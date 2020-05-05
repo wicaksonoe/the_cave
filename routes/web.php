@@ -86,6 +86,11 @@ Route::group(['middleware' => ['isAlreadyLogin', 'auth.jwt']], function () {
         return view('bazar.keluar-bazar');
     })->middleware('webForAdmin');
 
+    Route::get('/bazar/laporan/{id}', function ($id) {
+        $nama_bazar = Bazar::where('id', $id)->withTrashed()->first()->nama_bazar;
+        return view('bazar.laporan.laporan', compact('id', 'nama_bazar'));
+    })->name('bazar.laporan')->middleware('webForAdmin');
+
     Route::post('/logout', function (Request $request) {
         Cookie::forget('access_token');
         Auth::guard()->logout();
@@ -107,7 +112,7 @@ Route::group(['middleware' => ['isAlreadyLogin', 'auth.jwt']], function () {
         return view('biaya.biaya', compact('bazar'));
     })->name('biaya')->middleware('webForAdmin');
 
-    Route::get('/laporan', function() {
+    Route::get('/laporan', function () {
         return view('laporan.laporan');
     })->name('laporan')->middleware('webForAdmin');
 });

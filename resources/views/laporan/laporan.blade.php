@@ -41,6 +41,11 @@
         </div>
     </div>
     <div id="section-to-print">
+        <div class="row mb-4 ml-2">
+            <div class="col-12">
+                <h2 id="headerLaporan"></h2>
+            </div>
+        </div>
         <div class="row">
             <div class="col">
                 <div class="accordion" id="laporan">
@@ -369,6 +374,7 @@
                 $('#valuePenjualanToko').html("Rp. " + response.data.penjualan_toko.toLocaleString());
 
                 // card total
+                $('#headerLaporan').html("Laporan bulan " + getBulan() + " tahun " + $('#tahun').val() );
                 let total_laba_rugi = (response.data.penjualan_toko + response.data.penjualan_bazar) - (biayaToko + biayaBazar)
                 if (total_laba_rugi > 0) {
                     $('#valueTotal').html("Rp. " + total_laba_rugi.toLocaleString());

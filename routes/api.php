@@ -134,7 +134,7 @@ Route::group([
         'middleware' => 'auth:api'
     ], function () {
         Route::get('terlaris/{bulan}/{tahun}/{param}', 'LaporanController@terlaris');
+        Route::get('penjualan/bazar/{id}', 'LaporanController@penjualan_bazar');
         Route::get('penjualan/{bulan}/{tahun}', 'LaporanController@penjualan');
     });
-
 });
