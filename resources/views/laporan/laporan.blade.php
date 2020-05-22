@@ -284,13 +284,13 @@
                 // card biaya toko
                 let biayaToko = 0;
                 $.each(response.data.biaya_toko, function (index, value) {
-                    biayaToko += value.nominal;
+                    biayaToko += parseInt(value.nominal);
                     let newElem = '<div class="row mt-1">' +
                         '<div class="col-8">' +
                         '<span>' + value.keterangan + '</span>' +
                         '</div>' +
                         '<div class="col-4">' +
-                        '<span class="float-right">Rp. (' + value.nominal.toLocaleString() + ')</span>' +
+                        '<span class="float-right">Rp. (' + parseInt(value.nominal).toLocaleString() + ')</span>' +
                         '</div>' +
                         '</div>';
 
@@ -298,7 +298,7 @@
                 });
                 $('#valueBiayaToko').html("Rp. (" + biayaToko.toLocaleString() + ")");
 
-                // card biaya toko
+                // card biaya bazar
                 let biayaBazar = 0;
                 $.each(response.data.biaya_bazar, function (index, value) {
                     let id_bazar = value.id_bazar;
@@ -330,13 +330,13 @@
 
                     let biayaSatuBazar = 0;
                     $.each(value.biaya, function (index, value) {
-                        biayaSatuBazar += value.nominal;
+                        biayaSatuBazar += parseInt(value.nominal);
                         let newElem = '<div class="row mt-1">' +
                             '<div class="col-8">' +
                             '<span>' + value.keterangan + '</span>' +
                             '</div>' +
                             '<div class="col-4">' +
-                            '<span class="float-right">Rp. (' + value.nominal.toLocaleString() + ')</span>' +
+                            '<span class="float-right">Rp. (' + parseInt(value.nominal).toLocaleString() + ')</span>' +
                             '</div>' +
                             '</div>';
                         $('#biayaBazar' + id_bazar).children().children().children().append(newElem);
@@ -353,12 +353,12 @@
                     '<span>Total penjualan bazar bulan ' + getBulan() + '</span>' +
                     '</div>' +
                     '<div class="col-4">' +
-                    '<span class="float-right">Rp. ' + response.data.penjualan_bazar.toLocaleString() + '</span>' +
+                    '<span class="float-right">Rp. ' + parseInt(response.data.penjualan_bazar).toLocaleString() + '</span>' +
                     '</div>' +
                     '</div>';
 
                 $('#penjualanBazar').children().children().children().append(rowPenjualanBazar);
-                $('#valuePenjualanBazar').html("Rp. " + response.data.penjualan_bazar.toLocaleString());
+                $('#valuePenjualanBazar').html("Rp. " + parseInt(response.data.penjualan_bazar).toLocaleString());
 
                 // card penjualan toko
                 let rowPenjualanToko = '<div class="row mt-1">' +
@@ -366,16 +366,16 @@
                     '<span>Total penjualan toko bulan ' + getBulan() + '</span>' +
                     '</div>' +
                     '<div class="col-4">' +
-                    '<span class="float-right">Rp. ' + response.data.penjualan_toko.toLocaleString() + '</span>' +
+                    '<span class="float-right">Rp. ' + parseInt(response.data.penjualan_toko).toLocaleString() + '</span>' +
                     '</div>' +
                     '</div>';
 
                 $('#penjualanToko').children().children().children().append(rowPenjualanToko);
-                $('#valuePenjualanToko').html("Rp. " + response.data.penjualan_toko.toLocaleString());
+                $('#valuePenjualanToko').html("Rp. " + parseInt(response.data.penjualan_toko).toLocaleString());
 
                 // card total
                 $('#headerLaporan').html("Laporan bulan " + getBulan() + " tahun " + $('#tahun').val() );
-                let total_laba_rugi = (response.data.penjualan_toko + response.data.penjualan_bazar) - (biayaToko + biayaBazar)
+                let total_laba_rugi = (parseInt(response.data.penjualan_toko) + parseInt(response.data.penjualan_bazar)) - (biayaToko + biayaBazar)
                 if (total_laba_rugi > 0) {
                     $('#valueTotal').html("Rp. " + total_laba_rugi.toLocaleString());
                 } else {
