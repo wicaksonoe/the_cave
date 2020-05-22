@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Bazar;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class CreateBarangRequest extends FormRequest
 {
@@ -13,7 +14,7 @@ class CreateBarangRequest extends FormRequest
      */
     public function authorize()
     {
-        return $this->getUser()->role == 'admin';
+        return Auth::guard()->user()->role == 'admin';
     }
 
     /**
