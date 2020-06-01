@@ -108,7 +108,7 @@
                 // card biaya bazar
                 let biayaBazar = 0;
                 $.each(response.data.daftar_biaya, function (index, value) {
-                    biayaBazar += value.nominal;
+                    biayaBazar += parseInt(value.nominal);
                     let newElem = '<div class="row mt-1">' +
                         '<div class="col-8">' +
                         '<span>' + value.keterangan + '</span>' +
@@ -126,7 +126,7 @@
                 let totalTransaksi = 0;
                 $.each(response.data.daftar_penjualan, function (index, value) {
                     let kode_trx = value.kode_trx;
-                    let potongan = value.potongan;
+                    let potongan = parseInt(value.potongan);
                     let newElem = '<div class="card mb-0"> \
                                         <div class="card-header" id="headingPenjualanBazar' + kode_trx + '"> \
                                             <div class="row align-middle"> \
@@ -155,7 +155,7 @@
 
                     let totalTransaksiSatu = 0;
                     $.each(value.items, function (index, value) {
-                        let subTotal = (value.hjual * value.jumlah) - potongan;
+                        let subTotal = (parseInt(value.hjual) * parseInt(value.jumlah)) - potongan;
                         totalTransaksiSatu += subTotal;
                         let newElem = '<div class="row mt-1">' +
                             '<div class="col-8">' +
