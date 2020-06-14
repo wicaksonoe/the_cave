@@ -325,7 +325,7 @@ class BazarController extends Controller
 
             return DataTables::of($daftar_barang)
                 ->addColumn('aksi', function ($barang) {
-                    return '<button class="btn btn-sm btn-info" value="' . $barang['barcode'] . '" onclick="editBarangBazar(this.value)">Edit</button>';
+                    return '<button class="btn btn-sm btn-info" value="' . $barang['barcode'] . '" onclick="editKelolaBarang(this.value)">Edit</button>';
                     // return $barang['barcode'] . 'Button aksi';
                 })
                 ->rawColumns(['aksi'])

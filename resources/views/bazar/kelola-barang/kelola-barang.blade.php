@@ -232,7 +232,7 @@
             .done(function (response) {
                 $('#edit-barcode').val(response.data.barcode)
                 $('#edit-jml').val(response.data.jml)
-                $('#update-button').val(response.data.id)
+                $('#update-button').val(id_KelolaBarang)
                 $('#modal-edit-KelolaBarang').modal('show');
             })
             .fail(function (response) {
@@ -256,7 +256,7 @@
             },
             "data": {
                 "barcode": $('#edit-barcode').val(),
-                "jml": $('#edit-jml').val(),
+                "jumlah": $('#edit-jml').val(),
             }
         };
 
