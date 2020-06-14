@@ -92,7 +92,12 @@ class StockController extends Controller
             ->where('barcode', $barcode)
             ->sum('jumlah');
 
-        return $stock_barang;
+        $stock_terjual = $bazar
+            ->include_detail_penjualan_bazar()
+            ->where('barcode', $barcode)
+            ->sum('jumlah');
+
+        return $stock_barang - $stock_terjual;
     }
 
     public static function validate_stock_for_bazar($id_bazar, $barcode, $requested_stock)

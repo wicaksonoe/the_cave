@@ -76,15 +76,158 @@
     });
 
     $(document).ready(function () {
-        $('#tgl').val(formatDate());
-        $('#edit-tgl').val(formatDate());
+        $('#tanggal').val(formatDate());
+        $('#edit-tanggal').val(formatDate());
         get_data();
+
+        let settings = {
+            width: 'resolve'
+        };
+
+        $('#id_jenis').select2(settings);
+        $('#id_tipe').select2(settings);
+        $('#id_sup').select2(settings);
+        $('#edit-id_jenis').select2(settings);
+        $('#edit-id_tipe').select2(settings);
+        $('#edit-id_sup').select2(settings);
     });
 
     $(".form-control").focus(function(e){
         $('small.text-danger.' + e.target.id).html('');
         $(e.target).removeClass("is-invalid")
     })
+
+    function tambahJenisBaru(param) {
+        let value;
+        let id_elem;
+        switch (param) {
+            case "tambah":
+                value = $('#input_new_jenis').val();
+                id_elem = "id_jenis";
+                break;
+
+            case "edit":
+                value = $('#edit-input_new_jenis').val();
+                id_elem = "edit-id_jenis";
+                break;
+        }
+
+        if (value == "") {
+            swal.fire({
+                title: 'Error!',
+                text: "Nama jenis baru, tidak boleh kosong",
+                type : "error"
+            })
+        } else {
+            kirimDataBaru('jenis', value, id_elem);
+        }
+    }
+
+    function tambahTipeBaru(param) {
+        let value;
+        let id_elem;
+        switch (param) {
+            case "tambah":
+                value = $('#input_new_tipe').val();
+                id_elem = "id_tipe";
+                break;
+
+            case "edit":
+                value = $('#edit-input_new_tipe').val();
+                id_elem = "edit-id_tipe";
+                break;
+        }
+
+        if (value == "") {
+            swal.fire({
+                title: 'Error!',
+                text: "Nama tipe baru, tidak boleh kosong",
+                type : "error"
+            })
+        } else {
+            kirimDataBaru('tipe', value, id_elem);
+        }
+    }
+
+    function kirimDataBaru(method, value, id_elem) {
+        let url;
+        switch (method) {
+            case "jenis":
+                url = BASE_URL_API + '/jenis/';
+                break;
+
+            case "tipe":
+                url = BASE_URL_API + '/tipe/';
+                break;
+        }
+
+        let settings = {
+            "url": url,
+            "method": "POST",
+            "timeout": 0,
+            "headers": {
+                "Accept": "application/json",
+                "Content-Type": "application/x-www-form-urlencoded",
+                "Authorization": "Bearer " + sessionStorage.getItem('access_token')
+            },
+            "data": {
+                "data": value
+            }
+        };
+
+        $.ajax(settings)
+            .done(function (response) {
+                let new_opt;
+
+                if (method === "jenis") {
+                    $('#id_jenis').children().remove();
+                    $('#edit-id_jenis').children().remove();
+
+                    $('#id_jenis').append('<option selected disabled>Pilih Jenis Barang...</option>');
+                    $('#edit-id_jenis').append('<option selected disabled>Pilih Jenis Barang...</option>');
+
+                    $('#input_new_jenis').val('');
+                    $('#edit-input_new_jenis').val('');
+                } else if (method === "tipe") {
+                    $('#id_tipe').children().remove();
+                    $('#edit-id_tipe').children().remove();
+
+                    $('#id_tipe').append('<option selected disabled>Pilih Tipe Barang...</option>');
+                    $('#edit-id_tipe').append('<option selected disabled>Pilih Tipe Barang...</option>');
+
+                    $('#input_new_tipe').val('');
+                    $('#edit-input_new_tipe').val('');
+                }
+
+                $.each(response.data, function (index, value) {
+                    let string;
+                    if (method === "jenis") {
+                        string = value.nama_jenis;
+                        new_opt = '<option value="' + value.id + '">' + string[0].toUpperCase() + string.slice(1) + '</option>'
+                        $('#id_jenis').append(new_opt);
+                        $('#edit-id_jenis').append(new_opt);
+                    } else if (method === "tipe") {
+                        string = value.nama_tipe;
+                        new_opt = '<option value="' + value.id + '">' + string[0].toUpperCase() + string.slice(1) + '</option>'
+                        $('#id_tipe').append(new_opt);
+                        $('#edit-id_tipe').append(new_opt);
+                    }
+                });
+
+                swal.fire({
+                    title: 'Success!',
+                    text: response.message,
+                    type : "success"
+                });
+            })
+            .fail(function (response) {
+                swal.fire({
+                    title: 'Error!',
+                    text: response.responseJSON.message,
+                    type : "error"
+                })
+            });
+    }
 
     function get_data() {
         var settings = {
@@ -108,7 +251,7 @@
                 {width: '10%', data: 'jumlah', name: 'jumlah'},
                 {width: '10%', data: 'hpp', name: 'hpp'},
                 {width: '10%', data: 'hjual', name: 'hjual'},
-                {width: '10%', data: 'tgl', name: 'tgl'},
+                {width: '10%', data: 'tanggal', name: 'tanggal'},
                 {width: '15%', data: 'aksi', name: 'aksi'},
             ],
             order: [0, 'asc'],
@@ -137,7 +280,6 @@
             "hjual"   : $('#hjual').val().replace(',',''),
             "grosir"  : $('#grosir').val().replace(',',''),
             "partai"  : $('#partai').val().replace(',',''),
-            "tgl"     : $('#tgl').val(),
         }
         };
 
@@ -149,8 +291,8 @@
                     type : "success"
                 });
                 document.getElementById("tambahBarangForm").reset();
-                $('#tgl').val(formatDate());
-                $('#edit-tgl').val(formatDate());
+                $('#tanggal').val(formatDate());
+                $('#edit-tanggal').val(formatDate());
                 get_data();
             })
             .fail(function( msg ) {
@@ -224,7 +366,6 @@
                 "hjual"   : $('#edit-hjual').val().replace(',',''),
                 "grosir"  : $('#edit-grosir').val().replace(',',''),
                 "partai"  : $('#edit-partai').val().replace(',',''),
-                "tgl"     : $('#edit-tgl').val(),
             }
         };
 
@@ -237,8 +378,8 @@
                     type: "success"
                 });
                 document.getElementById("form-edit-barang").reset();
-                $('#tgl').val(formatDate());
-                $('#edit-tgl').val(formatDate());
+                $('#tanggal').val(formatDate());
+                $('#edit-tanggal').val(formatDate());
                 get_data();
             })
             .fail(function (msg) {

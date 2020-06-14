@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Bazar;
 use App\Http\Requests\Bazar\CreatePenjualanRequest;
+use Illuminate\Http\Request;
 use DateTime;
 use DateTimeZone;
 use Illuminate\Support\Facades\Auth;
@@ -16,6 +17,7 @@ class PenjualanBazarController extends Controller
     public function __construct()
     {
         $this->user = Auth::guard()->user();
+        $this->middleware('isRoleAdmin', ['except' => ['get']]);
     }
 
     public function get($id_bazar, $kode_trx = null)
@@ -50,14 +52,14 @@ class PenjualanBazarController extends Controller
 
             $barang = [];
 
-            foreach ($daftar_barang as $key => $val) {
-                $harga_barang = $val->include_barang_masuk->hjual;
+            foreach ($daftar_barang as $val) {
+                $harga_barang = $val->include_barang_masuk()->withTrashed()->first()->hjual;
                 $potongan = $data_bazar->potongan;
                 $hjual = $harga_barang - $potongan;
 
                 array_push($barang, [
                     'barcode'     => $val->barcode,
-                    'nama_barang' => $val->include_barang_masuk->namabrg,
+                    'nama_barang' => $val->include_barang_masuk()->withTrashed()->first()->namabrg,
                     'jumlah'      => $val->jumlah,
                     'hjual'       => $hjual,
                 ]);
@@ -82,6 +84,7 @@ class PenjualanBazarController extends Controller
 
     public function create($id_bazar, CreatePenjualanRequest $request)
     {
+        // return print_r($request->all());
         $data_bazar = Bazar::findOrFail($id_bazar);
 
         $username = $this->user->username;
@@ -121,10 +124,7 @@ class PenjualanBazarController extends Controller
                 ->create([
                     'kode_trx' => $kode_trx,
                     'username' => $username,
-                ]);
-
-            $penjualan
-                ->include_detail_penjualan_bazar()
+                ])->include_detail_penjualan_bazar()
                 ->createMany($detail_penjualan);
         } catch (QueryException $e) {
             return response()->json([

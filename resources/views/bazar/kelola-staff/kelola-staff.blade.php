@@ -1,21 +1,21 @@
 @extends ('adminlte::page')
 
-@section('title', 'KELOLA STAFF BAZZAR')
+@section('title', 'KELOLA STAFF BAZAR')
 
 @section('content_header')
-<h1>Kelola Staff Bazzar</h1>
+<h1>Kelola Staff Bazar</h1>
 @stop
 
 @section('content')
 
-@include('bazzar.kelola-staff.tambah-kelola-staff')
-{{-- @include('bazzar.kelola-staff.edit-kelola-staff') --}}
+@include('bazar.kelola-staff.tambah-kelola-staff')
+{{-- @include('bazar.kelola-staff.edit-kelola-staff') --}}
 <div class="container">
     <div class="row">
         <div class="col">
             <div class="card">
                 <div class="card-header">
-                    <h2><span class="badge badge-light">{{$bazzar->nama_bazar}}</span></h2>
+                    <h2><span class="badge badge-light">{{$bazar->nama_bazar}}</span></h2>
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body">
@@ -56,7 +56,7 @@
 
     function get_data() {
         var settings = {
-            "url": "{{ url('api/v1/bazzar/staff').'/'.$id_bazzar }}" ,
+            "url": "{{ url('api/v1/bazar/staff').'/'.$id_bazar }}" ,
             "method": "GET",
             "timeout": 0,
             "headers": {
@@ -84,7 +84,7 @@
 
     function tambahKelolaStaff() {
             var settings = {
-            "url": "{{ url ('api/v1/bazzar/staff').'/'.$id_bazzar }}" ,
+            "url": "{{ url ('api/v1/bazar/staff').'/'.$id_bazar }}" ,
             "method": "POST",
             "timeout": 0,
             "headers": {
@@ -93,7 +93,7 @@
                 "Authorization": "Bearer " + sessionStorage.getItem('access_token')
             },
             data: {
-                "id_bazzar": $('#id_bazzar').val(),
+                "id_bazar": $('#id_bazar').val(),
                 "username": $('#username').val(),
             }
             };
@@ -124,7 +124,7 @@
 
     function deleteKelolaStaff(id_KelolaStaff) {
         var settings = {
-            "url": BASE_URL_API + "/bazzar/staff/"+ "{{$id_bazzar}}" + "/" + id_KelolaStaff,
+            "url": BASE_URL_API + "/bazar/staff/"+ "{{$id_bazar}}" + "/" + id_KelolaStaff,
             "method": "DELETE",
             "timeout": 0,
             "headers": {

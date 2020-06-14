@@ -3,6 +3,7 @@
 namespace App\Http\Requests\BarangMasuk;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class UpdateRequest extends FormRequest
 {
@@ -13,7 +14,7 @@ class UpdateRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return Auth::guard()->user()->role == 'admin';
     }
 
     /**
@@ -34,7 +35,6 @@ class UpdateRequest extends FormRequest
             'hjual'    => 'bail|required|numeric',
             'grosir'   => 'bail|required|numeric',
             'partai'   => 'bail|required|numeric',
-            'tgl'      => 'bail|required|date',
         ];
     }
 
@@ -85,10 +85,6 @@ class UpdateRequest extends FormRequest
             'partai'   => [
                 'required' => 'Kolom harga partai ' . $harus,
                 'numeric'  => 'Kolom harga partai ' . $numeric,
-            ],
-            'tgl'      => [
-                'required' => 'Kolom tanggal ' . $harus,
-                'date'     => 'Kolom tanggal harus berupa tanggal',
             ],
         ];
     }

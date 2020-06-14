@@ -5,7 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Support\Facades\Auth;
 
-class IsRoleAdmin
+class WebForAdmin
 {
     /**
      * Handle an incoming request.
@@ -16,15 +16,10 @@ class IsRoleAdmin
      */
     public function handle($request, Closure $next)
     {
-        $user = Auth::guard()->user();
-
-        if ($user->role == 'admin') {
+        if (Auth::guard()->user()->role == 'admin') {
             return $next($request);
         } else {
-            return response()->json([
-                'success' => false,
-                'message' => 'Unauthorized'
-            ], 401);
+            abort('403', 'You don\'t have access rights to this page.');
         }
     }
 }

@@ -69,6 +69,7 @@ class Kernel extends HttpKernel
         'auth.jwt'         => \Tymon\JWTAuth\Http\Middleware\Authenticate::class,
         'isRoleAdmin'      => \App\Http\Middleware\IsRoleAdmin::class,
         'isAlreadyLogin'   => \App\Http\Middleware\IsAlreadyLogin::class,
+        'webForAdmin'      => \App\Http\Middleware\WebForAdmin::class,
     ];
 
     /**

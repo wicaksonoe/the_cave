@@ -12,14 +12,27 @@ use Yajra\DataTables\Facades\DataTables;
 
 class BiayaController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('isRoleAdmin');
+    }
+
     public function get($id = null)
     {
         if ($id == null) {
-            $data_biaya = Biaya::where('id_bazar', null)->get();
+            $data_biaya = Biaya::all();
 
             return DataTables::of($data_biaya)
                 ->addColumn('aksi', function ($biaya) {
-                    return $biaya->id . 'Button here';
+                    return '<button class="btn btn-sm btn-info" value="' . $biaya->id . '" onclick="editBiaya(this.value)">Edit</button>
+                            <button class="btn btn-sm btn-danger" value="' . $biaya->id . '" onclick="deleteBiaya(this.value)">Delete</button>';
+                })
+                ->addColumn('nama_bazar', function($biaya) {
+                    if ($biaya->id_bazar == null) {
+                        return '--Toko--';
+                    } else {
+                        return $biaya->include_bazar()->withTrashed()->first()->nama_bazar;
+                    }
                 })
                 ->rawColumns(['aksi'])
                 ->make(true);

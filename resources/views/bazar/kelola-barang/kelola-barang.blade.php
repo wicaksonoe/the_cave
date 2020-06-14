@@ -8,14 +8,14 @@
 
 @section('content')
 
-@include('bazzar.kelola-barang.tambah-kelola-barang')
-@include('bazzar.kelola-barang.edit-kelola-barang')
+@include('bazar.kelola-barang.tambah-kelola-barang')
+@include('bazar.kelola-barang.edit-kelola-barang')
 <div class="container">
     <div class="row">
         <div class="col">
             <div class="card">
                 <div class="card-header">
-                    <h2><span class="badge badge-light">{{$bazzar->nama_bazar}}</span></h2>
+                    <h2><span class="badge badge-light">{{$bazar->nama_bazar}}</span></h2>
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body">
@@ -23,7 +23,7 @@
                             style="margin-bottom: 10px">
                             <i class="fa fa-plus-square" aria-hidden="true"></i> Tambah
                         </button></a>
-                    <a href="{{ route('bazzar.kelola-staff', $id_bazzar) }}" class="btn btn-info"
+                    <a href="{{ route('bazar.kelola-staff', $id_bazar) }}" class="btn btn-info"
                         style="margin-bottom: 10px">
                         <i class="fa fa-plus-square" aria-hidden="true"></i> Kelola Staff</a>
                     <div class="table-responsive">
@@ -36,7 +36,7 @@
                                     <th>Jumlah Barang</th>
                                     <th>Harga Pokok Penjualan</th>
                                     <th>Harga Jual <span class="badge badge-danger">Rp.
-                                            {{ number_format($bazzar->potongan, 0, '.', ',') }} Off</span></th>
+                                            {{ number_format($bazar->potongan, 0, '.', ',') }} Off</span></th>
                                     <th>Tanggal</th>
                                     <th>Aksi</th>
                             </thead>
@@ -71,7 +71,7 @@
     }
 
     $(document).ready(function () {
-        $('#date').val(formatDate());
+        $('#tanggal').val(formatDate());
         get_data();
     });
 
@@ -88,7 +88,7 @@
     });
 
     $('#tambahKelolaBarang').on('show.bs.modal', (e) => {
-        $('#date').val(formatDate());
+        $('#tanggal').val(formatDate());
     });
 
     function get_nama_barang(barcode) {
@@ -119,7 +119,7 @@
                                 '<td><input type="text" name="barcode[]" class="form-control" value="' + barcode + '" readonly></td>' +
                                 '<td>' + response.data.namabrg + '</td>' +
                                 '<td><input type="text" name="jumlah[]" class="form-control number"></td>' +
-                                '<td><button class="btn btn-sm btn-danger" onclick="delete_nama_barang(' + barcode + ')"><i class="fas fa-trash-alt"></i></button></td>' +
+                                '<td><button class="btn btn-sm btn-danger" value="'+ barcode +'" onclick="delete_nama_barang(this.value)"><i class="fas fa-trash-alt"></i></button></td>' +
                             '</tr>';
 
                 if ( $('#' + barcode).length ) {
@@ -150,7 +150,7 @@
 
     function get_data() {
         var settings = {
-            "url": "{{ url('api/v1/bazzar/barang').'/'.$id_bazzar }}" ,
+            "url": "{{ url('api/v1/bazar/barang').'/'.$id_bazar }}" ,
             "method": "GET",
             "timeout": 0,
             "headers": {
@@ -170,7 +170,7 @@
                 {width: '10%', data: 'jumlah', name: 'jumlah'},
                 {width: '10%', data: 'hpp', name: 'hpp'},
                 {width: '10%', data: 'hjual', name: 'hjual'},
-                {width: '15%', data: 'date', name: 'date'},
+                {width: '15%', data: 'tanggal', name: 'tanggal'},
                 {width: '15%', data: 'aksi', name: 'aksi'},
 
             ],
@@ -181,7 +181,7 @@
 
     function tambahKelolaBarang() {
             var settings = {
-                "url": "{{ url ('api/v1/bazzar/barang').'/'.$id_bazzar }}" ,
+                "url": "{{ url ('api/v1/bazar/barang').'/'.$id_bazar }}" ,
                 "method": "POST",
                 "timeout": 0,
                 "headers": {
@@ -219,7 +219,7 @@
 
     function editKelolaBarang(id_KelolaBarang) {
         var settings = {
-            "url": BASE_URL_API + "/bazzar/barang/"+ "{{$id_bazzar}}" + "/" + id_KelolaBarang,
+            "url": BASE_URL_API + "/bazar/barang/"+ "{{$id_bazar}}" + "/" + id_KelolaBarang,
             "method": "GET",
             "timeout": 0,
             "headers": {
@@ -246,7 +246,7 @@
 
     function updateKelolaBarang(id_KelolaBarang) {
         var settings = {
-            "url": BASE_URL_API + "/bazzar/barang/"+ "{{$id_bazzar}}" + "/" + id_KelolaBarang,
+            "url": BASE_URL_API + "/bazar/barang/"+ "{{$id_bazar}}" + "/" + id_KelolaBarang,
             "method": "PUT",
             "timeout": 0,
             "headers": {
@@ -286,7 +286,7 @@
 
     function deleteKelolaBarang(id_KelolaBarang) {
         var settings = {
-            "url": BASE_URL_API + "/bazzar/barang/"+ "{{$id_bazzar}}" + "/" + id_KelolaBarang,
+            "url": BASE_URL_API + "/bazar/barang/"+ "{{$id_bazar}}" + "/" + id_KelolaBarang,
             "method": "DELETE",
             "timeout": 0,
             "headers": {

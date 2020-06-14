@@ -19,6 +19,7 @@ class PenjualanController extends Controller
     public function __construct()
     {
         $this->user = Auth::guard()->user();
+        $this->middleware('isRoleAdmin', ['except' => ['get', 'laporan_trx']]);
     }
 
     public function get($kode_trx = null)
@@ -27,7 +28,7 @@ class PenjualanController extends Controller
             $daftar_transaksi = Penjualan::all('kode_trx', 'username', 'created_at');
             return DataTables::of($daftar_transaksi)
                 ->addColumn('aksi', function ($i) {
-                    return '<button class="btn btn-sm btn-info" value="' . $i->kode_trx . '" onclick="funct(this.value)">Lihat Transaksi</button>';
+                    return '<a href="' . route('penjualan.detil_penjualan', $i->kode_trx) . '" class="btn btn-sm btn-info">Lihat Transaksi</a>';
                 })
                 ->addColumn('nama_pegawai', function ($i) {
                     return $i->include_user->nama;

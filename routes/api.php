@@ -22,7 +22,7 @@ Route::group([
     'middleware' => 'api'
 ], function () {
     Route::post('login', 'APIController@login');
-    Route::post('register', 'APIController@register');
+    Route::get('check', 'APIController@check');
     Route::get('logout', 'APIController@logout');
 
     Route::group([
@@ -39,6 +39,9 @@ Route::group([
         Route::put('/stock/{id}', 'BarangController@update_stock');
         Route::delete('/stock/{id}', 'BarangController@delete_stock');
     });
+
+    Route::post('/jenis', 'JenisController@create')->middleware('auth:api');
+    Route::post('/tipe', 'TipeController@create')->middleware('auth:api');
 
     Route::group([
         'prefix' => 'supplier',
@@ -126,4 +129,12 @@ Route::group([
         Route::delete('/bazar/{id_bazar}/{id}', 'BiayaController@delete_biaya_bazar');
     });
 
+    Route::group([
+        'prefix' => 'laporan',
+        'middleware' => 'auth:api'
+    ], function () {
+        Route::get('terlaris/{bulan}/{tahun}/{param}', 'LaporanController@terlaris');
+        Route::get('penjualan/bazar/{id}', 'LaporanController@penjualan_bazar');
+        Route::get('penjualan/{bulan}/{tahun}', 'LaporanController@penjualan');
+    });
 });

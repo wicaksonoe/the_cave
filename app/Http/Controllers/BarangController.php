@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\DataTables;
 use App\Http\Requests\BarangMasuk\CreateRequest;
 use App\Http\Requests\BarangMasuk\UpdateRequest;
+use DateTime;
+use DateTimeZone;
 
 class BarangController extends Controller
 {
@@ -19,6 +21,7 @@ class BarangController extends Controller
     public function __construct()
     {
         $this->user = Auth::guard()->user();
+        $this->middleware('isRoleAdmin', ['except' => ['get', 'get_stock']]);
     }
 
     public function get($barcode = null)
@@ -30,6 +33,14 @@ class BarangController extends Controller
             $data_barang = Barang_masuk::all();
 
             foreach ($data_barang as $key => $value) {
+                $tanggal = new DateTime(
+                    Detail_barang::where('barcode_barang', $value->barcode)
+                        ->latest('created_at')
+                        ->first()
+                        ->created_at
+                );
+                $tanggal->setTimezone(new DateTimeZone('Asia/Makassar'));
+
                 $data[$key] = [
                     'barcode'         => $value->barcode,
                     'namabrg'         => $value->namabrg,
@@ -37,10 +48,11 @@ class BarangController extends Controller
                     'tipe_barang'     => $value->include_tipe->nama_tipe,
                     'supplier_barang' => $value->include_supplier->nama_supplier,
                     'jumlah'          => StockController::get_stock($value->barcode),
-                    'hpp'             => number_format($value->hpp, 0, '.', ','),
-                    'hjual'           => number_format($value->hjual, 0, '.', ','),
-                    'grosir'          => number_format($value->grosir, 0, '.', ','),
-                    'partai'          => number_format($value->partai, 0, '.', ','),
+                    'hpp'             => 'Rp. ' . number_format($value->hpp, 0, '.', ','),
+                    'hjual'           => 'Rp. ' . number_format($value->hjual, 0, '.', ','),
+                    'grosir'          => 'Rp. ' . number_format($value->grosir, 0, '.', ','),
+                    'partai'          => 'Rp. ' . number_format($value->partai, 0, '.', ','),
+                    'tanggal'         => $tanggal->format("d-M-Y H:i T"),
                 ];
             }
             return DataTables::of($data)
@@ -54,24 +66,33 @@ class BarangController extends Controller
         } else {
             $data = Barang_masuk::findOrFail($barcode);
 
-            $data_barang = [
-                'barcode'         => $data->barcode,
-                'namabrg'         => $data->namabrg,
-                'jenis_barang'    => $data->include_jenis->nama_jenis,
-                'tipe_barang'     => $data->include_tipe->nama_tipe,
-                'supplier_barang' => $data->include_supplier->nama,
-                'jumlah'          => StockController::get_stock($data->barcode),
-                'hpp'             => number_format($data->hpp, 0, '.', ','),
-                'hjual'           => number_format($data->hjual, 0, '.', ','),
-                'grosir'          => number_format($data->grosir, 0, '.', ','),
-                'partai'          => number_format($data->partai, 0, '.', ','),
-            ];
-        }
+            $tanggal = new DateTime(
+                Detail_barang::where('barcode_barang', $data->barcode)
+                    ->latest('created_at')
+                    ->first()
+                    ->created_at
+            );
+            $tanggal->setTimezone(new DateTimeZone('Asia/Makassar'));
 
-        return response()->json([
-            'success' => true,
-            'data' => $data_barang
-        ]);
+            $data_barang = [
+                'barcode'  => $data->barcode,
+                'namabrg'  => $data->namabrg,
+                'id_jenis' => $data->id_jenis,
+                'id_tipe'  => $data->id_tipe,
+                'id_sup'   => $data->id_sup,
+                'jumlah'   => StockController::get_stock($data->barcode),
+                'hpp'      => number_format($data->hpp, 0, '.', ','),
+                'hjual'    => number_format($data->hjual, 0, '.', ','),
+                'grosir'   => number_format($data->grosir, 0, '.', ','),
+                'partai'   => number_format($data->partai, 0, '.', ','),
+                'tanggal'  => $tanggal->format("d-M-Y H:i T"),
+            ];
+
+            return response()->json([
+                'success' => true,
+                'data' => $data_barang
+            ]);
+        }
     }
 
     public function get_stock($barcode)
@@ -106,12 +127,11 @@ class BarangController extends Controller
         try {
 
             Detail_barang::create([
-               'barcode' => $data_stock->barcode_barang,
-               'jumlah' => $request->jumlah,
+                'barcode' => $data_stock->barcode_barang,
+                'jumlah' => $request->jumlah,
             ]);
 
             $data_stock->delete();
-
         } catch (QueryException $e) {
             return response()->json([
                 'success' => false,
@@ -179,6 +199,21 @@ class BarangController extends Controller
     {
         $barang = Barang_masuk::findOrFail($barcode);
 
+        $stock_asal = $barang
+            ->include_detail_barang()
+            ->sum('jumlah');
+
+        $request_jumlah = $request->jumlah;
+
+        $selisih = $request_jumlah - $stock_asal;
+
+        if ($selisih < 0) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Jumlah barang tidak boleh lebih sedikit.'
+            ], 422);
+        }
+
         try {
             $barang->update([
                 'namabrg'  => $request->namabrg,
@@ -190,6 +225,12 @@ class BarangController extends Controller
                 'grosir'   => $request->grosir,
                 'partai'   => $request->partai,
             ]);
+
+            $barang
+                ->include_detail_barang()
+                ->create([
+                    'jumlah' => $selisih
+                ]);
         } catch (QueryException $e) {
             return response()->json([
                 'success' => false,

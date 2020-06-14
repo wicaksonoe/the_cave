@@ -9,14 +9,14 @@
             </div>
 
             <div class="modal-body">
-                <form id="tambahBarangForm">
+                <form id="tambahBarangForm" onsubmit="return false">
                     <div class="form-group row">
                         <div class="col-2">
                             <label for="tanggal"> Tanggal</label>
                         </div>
                         <div class="col-10">
-                            <input type='date' class="form-control" id="tgl" readonly>
-                            <small class="tgl text-danger"></small>
+                            <input type='date' class="form-control" id="tanggal" readonly>
+                            <small class="tanggal text-danger"></small>
                         </div>
                     </div>
 
@@ -25,7 +25,7 @@
                             <label for="id">Barcode</label>
                         </div>
                         <div class="col-10">
-                            <input class="form-control" id="barcode" placeholder="Barcode" maxlength="15" >
+                            <input class="form-control" id="barcode" placeholder="Barcode" maxlength="15">
                             <small class="barcode text-danger"></small>
                         </div>
                     </div>
@@ -43,15 +43,27 @@
                             <label for="jenis">Jenis Barang</label>
                         </div>
                         <div class="col-10">
-                            <select id="id_jenis" class="form-control">
+                            <select id="id_jenis" class="form-control" style="width: 100%">
                                 <option selected disabled>Pilih Jenis Barang...</option>
                                 @foreach ($jenis as $item)
-                                    @if (!isset($item->deleted_at))
-                                    <option value="{{ $item->id }}">{{ ucfirst($item->nama_jenis) }}</option>
-                                    @endif
+                                @if (!isset($item->deleted_at))
+                                <option value="{{ $item->id }}">{{ ucfirst($item->nama_jenis) }}</option>
+                                @endif
                                 @endforeach
                             </select>
                             <small class="text-danger id_jenis"></small>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-10 offset-2">
+                            <div class="row">
+                                <div class="col-8">
+                                    <input type="text" id="input_new_jenis" class="form-control" placeholder="Masukan jenis barang baru...">
+                                </div>
+                                <div class="col-4">
+                                    <button class="btn btn-info" onclick="tambahJenisBaru('tambah')">Input Baru</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -60,15 +72,27 @@
                             <label for="tipe">Tipe Barang</label>
                         </div>
                         <div class="col-10">
-                            <select id="id_tipe" class="form-control">
+                            <select id="id_tipe" class="form-control" style="width: 100%">
                                 <option selected disabled>Pilih Tipe Barang...</option>
                                 @foreach ($tipe as $item)
-                                    @if (!isset($item->deleted_at))
-                                    <option value="{{ $item->id }}">{{ ucfirst($item->nama_tipe) }}</option>
-                                    @endif
+                                @if (!isset($item->deleted_at))
+                                <option value="{{ $item->id }}">{{ ucfirst($item->nama_tipe) }}</option>
+                                @endif
                                 @endforeach
                             </select>
                             <small class="text-danger id_tipe"></small>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-10 offset-2">
+                            <div class="row">
+                                <div class="col-8">
+                                    <input type="text" id="input_new_tipe" class="form-control" placeholder="Masukan tipe barang baru...">
+                                </div>
+                                <div class="col-4">
+                                    <button class="btn btn-info" onclick="tambahTipeBaru('tambah')">Input Baru</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -77,15 +101,15 @@
                             <label for="supplier">Supplier</label>
                         </div>
                         <div class="col-10">
-                            <select id="id_sup" class="form-control">
+                            <select id="id_sup" class="form-control" style="width: 100%">
                                 <option selected disabled>Pilih Supplier Barang...</option>
-                                @foreach ($supp as $item)
-                                    @if (!isset($item->deleted_at))
-                                    <option value="{{ $item->id }}">{{ ucfirst($item->nama) }}</option>
-                                    @endif
+                                @foreach ($supplier as $item)
+                                @if (!isset($item->deleted_at))
+                                <option value="{{ $item->id }}">{{ ucfirst($item->nama_supplier) }}</option>
+                                @endif
                                 @endforeach
                             </select>
-                            <small class="text-danger id_sup"></small>
+                            <small class="text-danger id_suppplier"></small>
                         </div>
                     </div>
 
@@ -108,7 +132,8 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text" id="basic-addon2">Rp. </span>
                                 </div>
-                                <input type="text" class="form-control number" id="hpp" placeholder="Harga Pokok Penjualan">
+                                <input type="text" class="form-control number" id="hpp"
+                                    placeholder="Harga Pokok Penjualan">
                             </div>
                             <small class="text-danger hpp"></small>
                         </div>

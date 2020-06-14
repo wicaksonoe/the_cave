@@ -1,36 +1,37 @@
 @extends('adminlte::page')
 
-@section('title', 'SUPPLIER')
+@section('title', 'BIAYA')
 
 @section('content_header')
-<h1>Data Supplier</h1>
+<h1>BIAYA</h1>
 @stop
 
 @section('content')
 
-@include('supplier.edit-supplier')
-@include('supplier.tambah-supplier')
+@include('biaya.edit-biaya')
+@include('biaya.tambah-biaya')
 <div class="container">
     <div class="row">
         <div class="col">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Data Supplier</h3>
+                    <h3 class="card-title">Data Biaya</h3>
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body">
-                    <a onclick="$('#tambahSupplier').modal('show')"><button type="button" class="btn btn-primary"
+                    <a onclick="$('#tambahBiaya').modal('show')"><button type="button" class="btn btn-primary"
                             style="margin-bottom: 10px">
                             <i class="fa fa-plus-square" aria-hidden="true"></i> Tambah
                         </button></a>
                     <div class="table-responsive">
-                        <table id="tabelSupplier" class="table table-bordered table-striped">
+                        <table id="tabelBiaya" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
-                                    <th>Nama Supplier</th>
-                                    <th>Alamat</th>
-                                    <th>Telepon</th>
-                                    <th>Aksi</th>
+                                    <th class="text-center">ID Biaya</th>
+                                    <th class="text-center">Bazar</th>
+                                    <th class="text-center">Keterangan</th>
+                                    <th class="text-center">Nominal</th>
+                                    <th class="text-center">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -59,7 +60,7 @@
 
     function get_data() {
         var settings = {
-            "url": "{{ url('api/v1/supplier') }}",
+            "url": "{{ url('api/v1/biaya') }}",
             "method": "GET",
             "timeout": 0,
             "headers": {
@@ -67,15 +68,16 @@
                 "Authorization": "Bearer " + sessionStorage.getItem('access_token')
             },
         };
-        $('#tabelSupplier').DataTable().clear().destroy();
-        $('#tabelSupplier').DataTable({
+        $('#tabelBiaya').DataTable().clear().destroy();
+        $('#tabelBiaya').DataTable({
             processing: false,
             serverSide: true,
             ajax: settings,
             columns: [
-                {width: '40%', data: 'nama_supplier', name: 'nama_supplier'},
-                {width: '30%', data: 'alamat', name: 'alamat'},
-                {width: '10%', data: 'no_telp', name: 'no_telp'},
+                {width: '10%', data: 'id', name: 'id'},
+                {width: '20%', data: 'nama_bazar', name: 'nama_bazar'},
+                {width: '30%', data: 'keterangan', name: 'keterangan'},
+                {width: '20%', data: 'nominal', name: 'nominal'},
                 {width: '20%', data: 'aksi', name: 'aksi'},
             ],
             order: [0, 'asc'],
@@ -83,31 +85,34 @@
         });
     }
 
-    function tambahSupplier() {
+    function tambahBiaya() {
+        let id_bazar = $('#nama_bazar').val();
+
+        if (id_bazar == 0) {
             var settings = {
-            "url": "{{ url ('api/v1/supplier/') }}",
-            "method": "POST",
-            "timeout": 0,
-            "headers": {
-                "Accept": "application/json",
-                "Content-Type": "application/x-www-form-urlencoded",
-                "Authorization": "Bearer " + sessionStorage.getItem('access_token')
-            },
-            data: {
-                "nama_supplier": $('#nama_supplier').val(),
-                "alamat": $('#alamat').val(),
-                "no_telp": $('#no_telp').val(),
-            }
+                "method": "POST",
+                "url": "{{ url('api/v1/biaya') }}",
+                "timeout": 0,
+                "headers": {
+                    "Accept": "application/json",
+                    "Content-Type": "application/x-www-form-urlencoded",
+                    "Authorization": "Bearer " + sessionStorage.getItem('access_token')
+                },
+                data: {
+                    "id": $('#id').val(),
+                    "keterangan": $('#keterangan').val(),
+                    "nominal": $('#nominal').val(),
+                }
             };
 
             $.ajax(settings).done(function (msg) {
-                    $('#tambahSupplier').modal('hide');
+                    $('#tambahBiaya').modal('hide');
                     swal.fire({
                         title: 'Berhasil',
                         text: msg.message,
                         type: "success"
                     });
-                    document.getElementById("tambahSupplierForm").reset();
+                    document.getElementById("tambahBiayaForm").reset();
                     get_data();
                 })
                 .fail(function (msg) {
@@ -121,12 +126,53 @@
                         $("#" + key).addClass("is-invalid")
                     })
                 });
+        } else {
+            var settings = {
+                "method": "POST",
+                "url": "{{ url('api/v1/biaya/bazar').'/' }}" + id_bazar,
+                "timeout": 0,
+                "headers": {
+                    "Accept": "application/json",
+                    "Content-Type": "application/x-www-form-urlencoded",
+                    "Authorization": "Bearer " + sessionStorage.getItem('access_token')
+                },
+                data: {
+                    "id": $('#id').val(),
+                    "nama_bazar": $('#nama_bazar').val(),
+                    "keterangan": $('#keterangan').val(),
+                    "nominal": $('#nominal').val(),
+                }
+            };
+
+            $.ajax(settings).done(function (msg) {
+                    $('#tambahBiaya').modal('hide');
+                    swal.fire({
+                        title: 'Berhasil',
+                        text: msg.message,
+                        type: "success"
+                    });
+                    document.getElementById("tambahBiayaForm").reset();
+                    get_data();
+                })
+                .fail(function (msg) {
+                    swal.fire({
+                        title: 'Error!',
+                        text: msg.responseJSON.message,
+                        type: "error"
+                    })
+
+                    $.each(msg.responseJSON.errors, function (key, value) {
+                        $("#" + key).addClass("is-invalid")
+                    })
+                });
+        }
+
 
     }
 
-    function editSupplier(id_supplier) {
+    function editBiaya(id_biaya) {
         var settings = {
-            "url": BASE_URL_API + "/supplier/" + id_supplier,
+            "url": BASE_URL_API + "/biaya/" + id_biaya,
             "method": "GET",
             "timeout": 0,
             "headers": {
@@ -137,24 +183,24 @@
 
         $.ajax(settings)
             .done(function (response) {
-                $('#edit-nama_supplier').val(response.data.nama_supplier)
-                $('#edit-alamat').html(response.data.alamat)
-                $('#edit-no_telp').val(response.data.no_telp)
+                $('#edit-id_bazar').val(response.data.id_bazar)
+                $('#edit-keterangan').val(response.data.keterangan)
+                $('#edit-nominal').val(response.data.nominal)
                 $('#update-button').val(response.data.id)
-                $('#modal-edit-supplier').modal('show');
+                $('#modal-edit-biaya').modal('show');
             })
             .fail(function (response) {
                 swal.fire({
                     title: 'Error!',
-                    text: response.responseJSON.message,
+                    text: msg.responseJSON.message,
                     type: "error"
                 })
             });
     }
 
-    function updateSupplier(id_supplier) {
+    function updateBiaya(id_biaya) {
         var settings = {
-            "url": BASE_URL_API + "/supplier/" + id_supplier,
+            "url": BASE_URL_API + "/biaya/" + id_biaya,
             "method": "PUT",
             "timeout": 0,
             "headers": {
@@ -163,21 +209,21 @@
                 "Authorization": "Bearer " + sessionStorage.getItem('access_token')
             },
             "data": {
-                "nama_supplier": $('#edit-nama_supplier').val(),
-                "alamat": $('#edit-alamat').val(),
-                "no_telp": $('#edit-no_telp').val(),
+                "id_bazar" : $('#edit-id_bazar').val(),
+                "keterangan": $('#edit-keterangan').val(),
+                "nominal" : $('#edit-nominal').val(),
             }
         };
 
         $.ajax(settings)
             .done(function (msg) {
-                $('#modal-edit-supplier').modal('hide');
+                $('#modal-edit-biaya').modal('hide');
                 swal.fire({
                     title: 'Berhasil',
                     text: msg.message,
                     type: "success"
                 });
-                document.getElementById("form-edit-supplier").reset();
+                document.getElementById("form-edit-biaya").reset();
                 get_data();
             })
             .fail(function (msg) {
@@ -193,9 +239,9 @@
             });
     }
 
-    function deleteSupplier(id_supplier) {
+    function deleteBiaya(id_biaya) {
         var settings = {
-            "url": BASE_URL_API + "/supplier/" + id_supplier,
+            "url": BASE_URL_API + "/biaya/" + id_biaya,
             "method": "DELETE",
             "timeout": 0,
             "headers": {
@@ -221,6 +267,7 @@
                 });
             });
     }
+
 
 </script>
 @stop
