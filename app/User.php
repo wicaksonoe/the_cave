@@ -46,6 +46,6 @@ class User extends Authenticatable implements JWTSubject
 
     public function include_staff_bazar()
     {
-        return $this->hasMany(Staff_bazar::class, 'username', 'username');
+        return $this->hasMany(Staff_bazar::class, 'username', 'username')->withTrashed();
     }
 }

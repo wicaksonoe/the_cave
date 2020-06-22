@@ -15,7 +15,7 @@ class Staff_bazar extends Model
 
 	public function include_bazar()
 	{
-		return $this->belongsTo(Bazar::class, 'id_bazar');
+		return $this->belongsTo(Bazar::class, 'id_bazar')->withTrashed();
 	}
 
 	public function include_user()
