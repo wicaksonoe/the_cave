@@ -199,15 +199,11 @@ class BarangController extends Controller
     {
         $barang = Barang_masuk::findOrFail($barcode);
 
-        $stock_asal = $barang
-            ->include_detail_barang()
-            ->sum('jumlah');
+        $stock_asal = StockController::get_stock($barang->barcode);
 
-        $request_jumlah = $request->jumlah;
+        $selisih = $request->jumlah - $stock_asal;
 
-        $selisih = $request_jumlah - $stock_asal;
-
-        if ($selisih < 0) {
+        if ($selisih < 1) {
             return response()->json([
                 'success' => false,
                 'message' => 'Jumlah barang tidak boleh lebih sedikit.'
