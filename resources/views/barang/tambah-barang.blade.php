@@ -25,7 +25,7 @@
                             <label for="id">Barcode</label>
                         </div>
                         <div class="col-10">
-                            <input class="form-control" id="barcode" placeholder="Barcode" maxlength="15">
+                            <input class="form-control" id="barcode" placeholder="Barcode" maxlength="15" onkeyup="return caribarcode(event);">
                             <small class="barcode text-danger"></small>
                         </div>
                     </div>
@@ -61,7 +61,7 @@
                                     <input type="text" id="input_new_jenis" class="form-control" placeholder="Masukan jenis barang baru...">
                                 </div>
                                 <div class="col-4">
-                                    <button class="btn btn-info" onclick="tambahJenisBaru('tambah')">Input Baru</button>
+                                    <button class="btn btn-info" onclick="return tambahJenisBaru('tambah',event)">Input Baru</button>
                                 </div>
                             </div>
                         </div>
@@ -90,7 +90,7 @@
                                     <input type="text" id="input_new_tipe" class="form-control" placeholder="Masukan tipe barang baru...">
                                 </div>
                                 <div class="col-4">
-                                    <button class="btn btn-info" onclick="tambahTipeBaru('tambah')">Input Baru</button>
+                                    <button class="btn btn-info" onclick="return tambahTipeBaru('tambah',event)">Input Baru</button>
                                 </div>
                             </div>
                         </div>
@@ -118,7 +118,17 @@
                             <label for="jumlah">Jumlah Barang</label>
                         </div>
                         <div class="col-10">
-                            <input type="text" class="form-control number" id="jumlah" placeholder="Jumlah Barang">
+                            <input type="text" class="form-control number" id="stok" placeholder="Stok" readonly>
+                            <small class="text-danger jumlah"></small>
+                        </div>
+                    </div>
+
+					<div class="form-group row">
+                        <div class="col-2">
+                            <label for="jumlah">Jumlah Barang</label>
+                        </div>
+                        <div class="col-10">
+                            <input type="text" class="form-control number" value="1" id="jumlah" placeholder="Jumlah Barang">
                             <small class="text-danger jumlah"></small>
                         </div>
                     </div>
@@ -187,7 +197,7 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" onclick="tambahBarang()">Simpan</button>
+                <button type="button" id="btntambahbarang" class="btn btn-primary" onclick="tambahBarang()">Simpan</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
             </div>
         </div>

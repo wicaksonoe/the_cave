@@ -25,7 +25,7 @@ class UpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'barcode'  => 'bail|required|string|max:15|min:15',
+            'barcode'  => 'bail|required|string|max:13|min:13',
             'namabrg'  => 'bail|required|string|max:50',
             'id_jenis' => 'bail|required|numeric',
             'id_tipe'  => 'bail|required|numeric',

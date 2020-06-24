@@ -194,7 +194,7 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
                 <button type="button" class="btn btn-warning" value="" id="update-button"
-                    onclick="updateBarang(this.value)">Ubah</button>
+                    onclick="updateBarang(this.value,'ubh')">Ubah</button>
             </div>
         </div>
     </div>

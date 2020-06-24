@@ -97,7 +97,11 @@
         $(e.target).removeClass("is-invalid")
     })
 
-    function tambahJenisBaru(param) {
+    function tambahJenisBaru(param,e) {
+	    if (evt.keyCode==13){
+			return false;
+		}
+		
         let value;
         let id_elem;
         switch (param) {
@@ -121,9 +125,11 @@
         } else {
             kirimDataBaru('jenis', value, id_elem);
         }
+		return true;
     }
 
-    function tambahTipeBaru(param) {
+    function tambahTipeBaru(param,e) {
+		e.preventDefault();
         let value;
         let id_elem;
         switch (param) {
@@ -259,6 +265,47 @@
         });
     }
 
+//fungsi cari barcode	
+	function caribarcode(evt){
+	    if (evt.keyCode==13){
+			var barcode=$('#barcode').val();
+			var settings = {
+				"url": BASE_URL_API + "/barang/" + barcode,
+				"method": "GET",
+				"timeout": 0,
+				"headers": {
+					"Accept": "application/json",
+					"Authorization": "Bearer " + sessionStorage.getItem('access_token')
+				},
+			};
+
+			$.ajax(settings)
+				.done(function (response) {
+					$('#barcode').val(response.data.barcode)
+					$('#namabrg').val(response.data.namabrg)
+					$('#id_jenis').val(response.data.id_jenis)
+					$('#id_jenis').trigger('change')
+
+					$('#id_tipe').val(response.data.id_tipe)
+					$('#id_tipe').trigger('change')
+
+					$('#id_sup').val(response.data.id_sup)
+					$('#id_sup').trigger('change')
+					
+					$('#stok').val(formatNumber(response.data.jumlah))
+					$('#hpp').val(formatNumber(response.data.hpp))
+					$('#hjual').val(formatNumber(response.data.hjual))
+					$('#grosir').val(formatNumber(response.data.grosir))
+					$('#partai').val(formatNumber(response.data.partai))
+					$("#btntambahbarang").attr("onclick","updateBarang('"+barcode+"','tbh')");
+			})
+
+			return true;
+		}
+		$("#btntambahbarang").attr("onclick","tambahBarang()");
+		return false;
+	}
+	
     function tambahBarang() {
         var settings = {
         "url": "{{ url ('api/v1/barang')}}",
@@ -345,55 +392,107 @@
             });
     }
 
-    function updateBarang(barcode) {
-        var settings = {
-            "url": BASE_URL_API + "/barang/" + barcode,
-            "method": "PUT",
-            "timeout": 0,
-            "headers": {
-                "Accept": "application/json",
-                "Content-Type": "application/x-www-form-urlencoded",
-                "Authorization": "Bearer " + sessionStorage.getItem('access_token')
-            },
-            "data": {
-                "barcode" : $('#edit-barcode').val(),
-                "namabrg" : $('#edit-namabrg').val(),
-                "id_jenis": $('#edit-id_jenis').val(),
-                "id_tipe" : $('#edit-id_tipe').val(),
-                "id_sup"  : $('#edit-id_sup').val(),
-                "jumlah"  : $('#edit-jumlah').val().replace(',',''),
-                "hpp"     : $('#edit-hpp').val().replace(',',''),
-                "hjual"   : $('#edit-hjual').val().replace(',',''),
-                "grosir"  : $('#edit-grosir').val().replace(',',''),
-                "partai"  : $('#edit-partai').val().replace(',',''),
-            }
-        };
+    function updateBarang(barcode,st) {
+		if (st=="tbh"){
+			var jumlah=parseInt($('#stok').val().replace(',',''))+parseInt($('#jumlah').val().replace(',',''))
+			var settings = {
+				"url": BASE_URL_API + "/barang/" + barcode,
+				"method": "PUT",
+				"timeout": 0,
+				"headers": {
+					"Accept": "application/json",
+					"Content-Type": "application/x-www-form-urlencoded",
+					"Authorization": "Bearer " + sessionStorage.getItem('access_token')
+				},
+				"data": {
+					"barcode" : $('#barcode').val(),
+					"namabrg" : $('#namabrg').val(),
+					"id_jenis": $('#id_jenis').val(),
+					"id_tipe" : $('#id_tipe').val(),
+					"id_sup"  : $('#id_sup').val(),
+					"jumlah"  : jumlah,
+					"hpp"     : $('#hpp').val().replace(',',''),
+					"hjual"   : $('#hjual').val().replace(',',''),
+					"grosir"  : $('#grosir').val().replace(',',''),
+					"partai"  : $('#partai').val().replace(',',''),
+				}
+			};
 
-        $.ajax(settings)
-            .done(function (msg) {
-                $('#modal-edit-barang').modal('hide');
-                swal.fire({
-                    title: 'Berhasil',
-                    text: msg.message,
-                    type: "success"
-                });
-                document.getElementById("form-edit-barang").reset();
-                $('#tanggal').val(formatDate());
-                $('#edit-tanggal').val(formatDate());
-                get_data();
-            })
-            .fail(function (msg) {
-                swal.fire({
-                    title: 'Error!',
-                    text: msg.responseJSON.message,
-                    type: "error"
-                })
+			$.ajax(settings)
+				.done(function (msg) {
+					$('#modal-edit-barang').modal('hide');
+					swal.fire({
+						title: 'Berhasil',
+						text: msg.message,
+						type: "success"
+					});
+					document.getElementById("tambahBarangForm").reset();
+					$('#tanggal').val(formatDate());
+					get_data();
+					$("#tambahBarang").modal("hide")
+				})
+				.fail(function (msg) {
+					swal.fire({
+						title: 'Error!',
+						text: msg.responseJSON.message,
+						type: "error"
+					})
 
-                $.each(msg.responseJSON.errors, function (key, value) {
-                    $('small.edit-' + key).html(value);
-                    $("#edit-" + key).addClass("is-invalid")
-                })
-            });
+					$.each(msg.responseJSON.errors, function (key, value) {
+						$('small.edit-' + key).html(value);
+						$("#edit-" + key).addClass("is-invalid")
+					})
+				});
+		}else{
+			var settings = {
+				"url": BASE_URL_API + "/barang/" + barcode,
+				"method": "PUT",
+				"timeout": 0,
+				"headers": {
+					"Accept": "application/json",
+					"Content-Type": "application/x-www-form-urlencoded",
+					"Authorization": "Bearer " + sessionStorage.getItem('access_token')
+				},
+				"data": {
+					"barcode" : $('#edit-barcode').val(),
+					"namabrg" : $('#edit-namabrg').val(),
+					"id_jenis": $('#edit-id_jenis').val(),
+					"id_tipe" : $('#edit-id_tipe').val(),
+					"id_sup"  : $('#edit-id_sup').val(),
+					"jumlah"  : $('#edit-jumlah').val().replace(',',''),
+					"hpp"     : $('#edit-hpp').val().replace(',',''),
+					"hjual"   : $('#edit-hjual').val().replace(',',''),
+					"grosir"  : $('#edit-grosir').val().replace(',',''),
+					"partai"  : $('#edit-partai').val().replace(',',''),
+				}
+			};
+
+			$.ajax(settings)
+				.done(function (msg) {
+					$('#modal-edit-barang').modal('hide');
+					swal.fire({
+						title: 'Berhasil',
+						text: msg.message,
+						type: "success"
+					});
+					document.getElementById("form-edit-barang").reset();
+					$('#tanggal').val(formatDate());
+					$('#edit-tanggal').val(formatDate());
+					get_data();
+				})
+				.fail(function (msg) {
+					swal.fire({
+						title: 'Error!',
+						text: msg.responseJSON.message,
+						type: "error"
+					})
+
+					$.each(msg.responseJSON.errors, function (key, value) {
+						$('small.edit-' + key).html(value);
+						$("#edit-" + key).addClass("is-invalid")
+					})
+				});			
+		}
     }
 
     function deleteBarang(id_barang) {
